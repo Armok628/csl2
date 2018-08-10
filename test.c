@@ -54,14 +54,22 @@ void test_table(void)
 			break;
 		obj_t *s=read(buf);
 		incr_refs(s);
+		obj_t *r;
 		if (!strcmp(CAR(s)->data.sym,"set")) {
-			print_obj(set(CAR(CDR(s)),CAR(CDR(CDR(s)))));
+			r=set(CAR(CDR(s)),CAR(CDR(CDR(s))));
+			incr_refs(r);
+			print_obj(r);
 		} else if (!strcmp(CAR(s)->data.sym,"get")) {
-			print_obj(get(CAR(CDR(s))));
+			r=get(CAR(CDR(s)));
+			incr_refs(r);
+			print_obj(r);
 		} else if (!strcmp(CAR(s)->data.sym,"unset")) {
-			print_obj(unset(CAR(CDR(s))));
+			r=unset(CAR(CDR(s)));
+			incr_refs(r);
+			print_obj(r);
 		}
 		putchar('\n');
+		decr_refs(r);
 		decr_refs(s);
 	}
 	free_table(dict);
@@ -83,5 +91,6 @@ void test_rpn(void)
 }
 int main(int argc,char **argv)
 {
-	test_rpn();
+	//test_rpn();
+	test_table();
 }
