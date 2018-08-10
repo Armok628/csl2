@@ -3,11 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "hash.h"
 typedef enum {false,true} bool;
 typedef enum {
 	CELL,
 	DOUBLE,
 	ERROR,
+	HASHTABLE,
 	INTEGER,
 	FUNCTION,
 	SYMBOL,
@@ -31,6 +33,7 @@ typedef struct obj_s {
 		char *sym;
 		long i;
 		double d;
+		table_t *table;
 	} data;
 } obj_t;
 #define CAR(x) ((x)->data.cell.car)
@@ -40,6 +43,7 @@ obj_t *new_obj(void);
 obj_t *new_symbol(char *);
 obj_t *new_integer(long);
 obj_t *new_double(double);
+obj_t *new_hashtable(int);
 void destroy(obj_t *);
 void incr_refs(obj_t *);
 void decr_refs(obj_t *);

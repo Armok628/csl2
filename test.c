@@ -4,9 +4,9 @@
 #include "src/compile.h"
 #include "src/parser.h"
 #include "src/types.h"
-obj_t *sym(char *str)
+obj_t *sym(const char *str)
 {
-	return new_symbol(strclone(str));
+	return new_symbol(strdup(str));
 }
 void puts_type(type_t t)
 {
@@ -29,6 +29,8 @@ void puts_type(type_t t)
 	case DOUBLE:
 		puts("DOUBLE");
 		break;
+	case HASHTABLE:
+		puts("HASHTABLE");
 	default:
 		puts("???");
 		break;
@@ -99,5 +101,5 @@ void test_rpn(void)
 }
 int main(int argc,char **argv)
 {
-	test_rpn();
+	test_print();
 }

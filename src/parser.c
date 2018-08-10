@@ -1,9 +1,4 @@
 #include "parser.h"
-char *strclone(char *str)
-{
-	int n=strlen(str);
-	return strncpy(calloc(n+1,1),str,n);
-}
 bool valid_list(char *str)
 { // Matching number of parentheses
 	int parens=0;

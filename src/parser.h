@@ -5,7 +5,6 @@
 #include <string.h>
 #include "types.h"
 
-char *strclone(char *);
 bool valid_list(char *);
 char *trim_left(char *);
 char *trim_right(char *);

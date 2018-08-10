@@ -27,6 +27,13 @@ obj_t *new_double(double d)
 	o->data.d=d;
 	return o;
 }
+obj_t *new_hashtable(int size)
+{
+	obj_t *o=new_obj();
+	o->type=HASHTABLE;
+	o->data.table=new_table(size,(dtor_t)&decr_refs);
+	return o;
+}
 void destroy_func(obj_t *o)
 {
 	if (o->data.func.size<0) {
@@ -53,6 +60,9 @@ void destroy(obj_t *o)
 		break;
 	case FUNCTION:
 		destroy_func(o);
+		break;
+	case HASHTABLE:
+		free_table(o->data.table);
 		break;
 	case INTEGER:
 	case DOUBLE:
@@ -118,6 +128,9 @@ void print(obj_t *obj)
 		break;
 	case SYMBOL:
 		fputs(obj->data.sym,stdout);
+		break;
+	case HASHTABLE:
+		printf("{Hashtable:%p}",(void *)obj);
 		break;
 	default:
 		fputs("ERROR",stdout);
