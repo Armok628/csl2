@@ -15,6 +15,16 @@ obj_t *new_obj(void)
 	obj->type=ERROR;
 	return obj;
 }
+obj_t *new_cell(obj_t *a,obj_t *b)
+{
+	obj_t *c=new_obj();
+	c->type=CELL;
+	CAR(c)=a;
+	incr_refs(a);
+	CDR(c)=b;
+	incr_refs(b);
+	return c;
+}
 obj_t *new_symbol(char *s)
 {
 	obj_t *o=new_obj();
@@ -91,28 +101,6 @@ void decr_refs(obj_t *o)
 	o->refs-=o->refs>0;
 	if (!o->refs)
 		destroy(o);
-}
-obj_t *cons(obj_t *a,obj_t *b)
-{
-	obj_t *c=new_obj();
-	c->type=CELL;
-	c->data.cell.car=a;
-	incr_refs(a);
-	c->data.cell.cdr=b;
-	incr_refs(b);
-	return c;
-}
-void rplaca(obj_t *c,obj_t *v)
-{
-	decr_refs(CAR(c));
-	incr_refs(v);
-	CAR(c)=v;
-}
-void rplacd(obj_t *c,obj_t *v)
-{
-	decr_refs(CDR(c));
-	incr_refs(v);
-	CDR(c)=v;
 }
 void print_cell(obj_t *o)
 {

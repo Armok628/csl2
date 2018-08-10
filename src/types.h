@@ -41,6 +41,7 @@ typedef struct obj_s {
 #define CDR(x) ((x)->data.cell.cdr)
 
 obj_t *new_obj(void);
+obj_t *new_cell(obj_t *,obj_t *);
 obj_t *new_symbol(char *);
 obj_t *new_integer(long);
 obj_t *new_double(double);
@@ -48,8 +49,5 @@ obj_t *new_hashtable(int);
 void destroy(obj_t *);
 void incr_refs(obj_t *);
 void decr_refs(obj_t *);
-obj_t *cons(obj_t *,obj_t *);
-void rplaca(obj_t *,obj_t *);
-void rplacd(obj_t *,obj_t *);
 void print_obj(obj_t *);
 #endif

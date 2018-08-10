@@ -123,10 +123,10 @@ obj_t *readlist(char *str)
 		}
 		obj_t *r=read(tok);
 		if (!ret) {
-			ret=dotted?r:cons(r,NULL);
+			ret=dotted?r:new_cell(r,NULL);
 			tail=&CDR(ret);
 		} else {
-			*tail=dotted?r:cons(r,NULL);
+			*tail=dotted?r:new_cell(r,NULL);
 			tail=&CDR(*tail);
 		}
 	}
@@ -134,7 +134,7 @@ obj_t *readlist(char *str)
 }
 obj_t *quote(obj_t *obj)
 {
-	return cons(new_symbol(strdup("QUOTE")),cons(obj,NULL));
+	return new_cell(new_symbol(strdup("QUOTE")),new_cell(obj,NULL));
 }
 obj_t *read(char *str)
 { // Error checking through infer_type

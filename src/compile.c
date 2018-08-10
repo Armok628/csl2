@@ -14,7 +14,7 @@ obj_t *rpn(obj_t *body)
 	if (!body)
 		return NULL;
 	if (body->type!=CELL)
-		return cons(body,NULL);
+		return new_cell(body,NULL);
 	if (CAR(body)->type==SYMBOL&&!strcmp(CAR(body)->data.sym,"QUOTE"))
 		return CDR(body);
 	obj_t *list=NULL;
@@ -24,10 +24,12 @@ obj_t *rpn(obj_t *body)
 			list=rpn(CAR(o));
 			tail=list;
 		} else {
-			rplacd(tail,rpn(CAR(o)));
+			CDR(tail)=rpn(CAR(o));
+			incr_refs(CDR(tail));
 		}
 		for (;CDR(tail);tail=CDR(tail));
 	}
-	rplacd(tail,rpn(CAR(body)));
+	CDR(tail)=rpn(CAR(body));
+	incr_refs(CDR(tail));
 	return list;
 }
