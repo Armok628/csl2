@@ -47,9 +47,7 @@ void destroy_func(obj_t *o)
 }
 void destroy(obj_t *o)
 {
-	printf("Destroying ");
-	print(o);
-	printf(" {%p}\n",(void *)o);
+	//printf("Destroying "); print(o); printf(" {%p}\n",(void *)o);
 	switch (o->type) {
 	case SYMBOL:
 		free(o->data.sym);

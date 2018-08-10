@@ -132,20 +132,31 @@ obj_t *readlist(char *str)
 	}
 	return ret;
 }
+obj_t *quote(obj_t *obj)
+{
+	return cons(new_symbol(strdup("QUOTE")),cons(obj,NULL));
+}
 obj_t *read(char *str)
 { // Error checking through infer_type
+	obj_t *obj;
 	str=trim(str); // Trims input
+	bool quote=*str=='\'';
+	str+=quote;
 	switch (infer_type(str)) {
 	case CELL:
-		return readlist(str);
-	case SYMBOL:
-		return new_symbol(strdup(str));
-	case INTEGER:
-		return new_integer(atol(str));
-	case DOUBLE:
-		return new_double(strtod(str,NULL));
-	default:
+		obj=readlist(str);
 		break;
+	case SYMBOL:
+		obj=new_symbol(strdup(str));
+		break;
+	case INTEGER:
+		obj=new_integer(atol(str));
+		break;
+	case DOUBLE:
+		obj=new_double(strtod(str,NULL));
+		break;
+	default:
+		return new_symbol(strdup("ERROR"));
 	} // String must be freed by caller if necessary
-	return new_symbol(strdup("ERROR"));
+	return quote?quote(obj):obj;
 }
