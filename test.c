@@ -101,5 +101,5 @@ void test_rpn(void)
 }
 int main(int argc,char **argv)
 {
-	test_read();
+	test_rpn();
 }

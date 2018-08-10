@@ -13,6 +13,8 @@ obj_t *rpn(obj_t *body)
 {
 	if (body->type!=CELL)
 		return cons(body,NULL);
+	if (CAR(body)->type==SYMBOL&&!strcmp(CAR(body)->data.sym,"QUOTE"))
+		return CDR(body);
 	obj_t *list=NULL;
 	obj_t **tail=NULL;
 	for (obj_t *o=CDR(body);o;o=CDR(o)) {

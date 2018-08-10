@@ -140,8 +140,8 @@ obj_t *read(char *str)
 { // Error checking through infer_type
 	obj_t *obj;
 	str=trim(str); // Trims input
-	bool quote=*str=='\'';
-	str+=quote;
+	bool q=*str=='\'';
+	str+=q;
 	switch (infer_type(str)) {
 	case CELL:
 		obj=readlist(str);
@@ -158,5 +158,5 @@ obj_t *read(char *str)
 	default:
 		return new_symbol(strdup("ERROR"));
 	} // String must be freed by caller if necessary
-	return quote?quote(obj):obj;
+	return q?quote(obj):obj;
 }
