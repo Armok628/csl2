@@ -80,6 +80,7 @@ void test_rpn(void)
 	fgets(buf,250,stdin);
 	obj_t *input=read(buf);
 	incr_refs(input);
+	fputs("Read: ",stdout);
 	print_obj(input);
 	putchar('\n');
 	obj_t *translated=rpn(input);
@@ -91,6 +92,5 @@ void test_rpn(void)
 }
 int main(int argc,char **argv)
 {
-	//test_rpn();
-	test_table();
+	test_rpn();
 }

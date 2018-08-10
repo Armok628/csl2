@@ -11,9 +11,7 @@ obj_t *compile(obj_t *list,int size)
 }
 obj_t *rpn(obj_t *body)
 {
-	if (!body)
-		return NULL;
-	if (body->type!=CELL)
+	if (!body||body->type!=CELL)
 		return new_cell(body,NULL);
 	if (CAR(body)->type==SYMBOL&&!strcmp(CAR(body)->data.sym,"QUOTE"))
 		return CDR(body);

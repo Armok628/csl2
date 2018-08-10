@@ -34,6 +34,10 @@ obj_t *rplacd(obj_t *c,obj_t *v)
 	incr_refs(v);
 	return c;
 }
+obj_t *atom(obj_t *obj)
+{
+	return obj->type==CELL?NULL:obj;
+}
 obj_t *set(obj_t *sym,obj_t *val)
 {
 	if (sym->type!=SYMBOL)
