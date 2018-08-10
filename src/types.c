@@ -27,6 +27,17 @@ obj_t *new_double(double d)
 	o->data.d=d;
 	return o;
 }
+void destroy_func(obj_t *o)
+{
+	if (o->data.func.size<0) {
+		free(o);
+		return;
+	}
+	for (int i=0;i<o->data.func.size;i++)
+		decr_refs(&o->data.func.rep.lisp[i]);
+	free(o->data.func.rep.lisp);
+	return;
+}
 void destroy(obj_t *o)
 {
 	printf("Destroying ");
@@ -41,7 +52,7 @@ void destroy(obj_t *o)
 		decr_refs(o->data.cell.cdr);
 		break;
 	case FUNCTION:
-		// TODO
+		destroy_func(o);
 		break;
 	case INTEGER:
 	case DOUBLE:

@@ -48,6 +48,7 @@ char *trim(char *s)
 }
 type_t infer_type(char *s)
 { // Token argument checked as-is
+	bool number=false;
 	int periods=0;
 	if (*s=='(') {
 		if (valid_list(s))
@@ -56,15 +57,18 @@ type_t infer_type(char *s)
 	}
 	s+=*s=='-';
 	for (;*s;s++) {
-		if ('0'<=*s&&*s<='9')
+		if ('0'<=*s&&*s<='9') {
+			number=true;
 			continue;
-		else if (*s=='.') {
+		} else if (*s=='.') {
 			periods++;
 			if (periods>1)
 				return SYMBOL;
 		} else
 			return SYMBOL;
 	}
+	if (!number)
+		return SYMBOL;
 	return periods?DOUBLE:INTEGER;
 }
 int delimit(char *str)

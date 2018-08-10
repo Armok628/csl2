@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "src/core.h"
+#include "src/compile.h"
 #include "src/parser.h"
 #include "src/types.h"
 obj_t *sym(char *str)
@@ -54,13 +55,14 @@ void test_read(void)
 	char buf[250];
 	fgets(buf,250,stdin);
 	obj_t *o=read(buf);
+	incr_refs(o);
 	fputs("Read: ",stdout);
 	print(o);
 	putchar('\n');
 	puts_type(o->type);
 	decr_refs(o);
 }
-int main(int argc,char **argv)
+void test_table(void)
 {
 	dict=new_table(1000,(dtor_t)&decr_refs);
 	char buf[250];
@@ -81,4 +83,21 @@ int main(int argc,char **argv)
 		decr_refs(s);
 	}
 	free_table(dict);
+}
+void test_rpn(void)
+{
+	char buf[250];
+	fgets(buf,250,stdin);
+	obj_t *input=read(buf);
+	incr_refs(input);
+	obj_t *translated=rpn(input);
+	incr_refs(translated);
+	print(translated);
+	putchar('\n');
+	decr_refs(input);
+	decr_refs(translated);
+}
+int main(int argc,char **argv)
+{
+	test_rpn();
 }

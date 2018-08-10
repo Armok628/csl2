@@ -20,6 +20,14 @@ typedef struct obj_s {
 			struct obj_s *car;
 			struct obj_s *cdr;
 		} cell;
+		struct {
+			int args;
+			int size;
+			union {
+				struct obj_s *lisp;
+				struct obj_s *(*c)();
+			} rep;
+		} func;
 		char *sym;
 		long i;
 		double d;
