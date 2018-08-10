@@ -14,6 +14,7 @@ typedef enum {
 	FUNCTION,
 	SYMBOL,
 } type_t;
+extern const char *type_names[];
 typedef struct obj_s {
 	int refs;
 	type_t type;
@@ -48,5 +49,7 @@ void destroy(obj_t *);
 void incr_refs(obj_t *);
 void decr_refs(obj_t *);
 obj_t *cons(obj_t *,obj_t *);
+void rplaca(obj_t *,obj_t *);
+void rplacd(obj_t *,obj_t *);
 void print(obj_t *);
 #endif

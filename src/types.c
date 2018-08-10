@@ -1,4 +1,13 @@
 #include "types.h"
+const char *type_names[]={
+	"CELL",
+	"DOUBLE",
+	"ERROR",
+	"HASHTABLE",
+	"INTEGER",
+	"FUNCTION",
+	"SYMBOL",
+};
 obj_t *new_obj(void)
 {
 	obj_t *obj=calloc(1,sizeof(obj_t));
@@ -92,6 +101,18 @@ obj_t *cons(obj_t *a,obj_t *b)
 	c->data.cell.cdr=b;
 	incr_refs(b);
 	return c;
+}
+void rplaca(obj_t *c,obj_t *v)
+{
+	decr_refs(CAR(c));
+	incr_refs(v);
+	CAR(c)=v;
+}
+void rplacd(obj_t *c,obj_t *v)
+{
+	decr_refs(CDR(c));
+	incr_refs(v);
+	CDR(c)=v;
 }
 void print_cell(obj_t *o)
 {

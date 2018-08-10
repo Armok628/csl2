@@ -11,21 +11,23 @@ obj_t *compile(obj_t *list,int size)
 }
 obj_t *rpn(obj_t *body)
 {
+	if (!body)
+		return NULL;
 	if (body->type!=CELL)
 		return cons(body,NULL);
 	if (CAR(body)->type==SYMBOL&&!strcmp(CAR(body)->data.sym,"QUOTE"))
 		return CDR(body);
 	obj_t *list=NULL;
-	obj_t **tail=NULL;
+	obj_t *tail=NULL;
 	for (obj_t *o=CDR(body);o;o=CDR(o)) {
 		if (!list) {
 			list=rpn(CAR(o));
-			tail=&CDR(list);
+			tail=list;
 		} else {
-			*tail=rpn(CAR(o));
+			rplacd(tail,rpn(CAR(o)));
 		}
-		for (;*tail;tail=&CDR(*tail));
+		for (;CDR(tail);tail=CDR(tail));
 	}
-	*tail=rpn(CAR(body));
+	rplacd(tail,rpn(CAR(body)));
 	return list;
 }

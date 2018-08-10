@@ -140,6 +140,8 @@ obj_t *read(char *str)
 { // Error checking through infer_type
 	obj_t *obj;
 	str=trim(str); // Trims input
+	if (!*str||!strcasecmp(str,"NIL"))
+		return NULL;
 	bool q=*str=='\'';
 	str+=q;
 	switch (infer_type(str)) {

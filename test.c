@@ -8,33 +8,13 @@ obj_t *sym(const char *str)
 {
 	return new_symbol(strdup(str));
 }
-void puts_type(type_t t)
+void puts_type(obj_t *o)
 {
-	switch (t) {
-	case SYMBOL:
-		puts("SYMBOL");
-		break;
-	case CELL:
-		puts("CELL");
-		break;
-	case ERROR:
-		puts("ERROR");
-		break;
-	case FUNCTION:
-		puts("FUNCTION");
-		break;
-	case INTEGER:
-		puts("INTEGER");
-		break;
-	case DOUBLE:
-		puts("DOUBLE");
-		break;
-	case HASHTABLE:
-		puts("HASHTABLE");
-	default:
-		puts("???");
-		break;
+	if (!o) {
+		puts("NIL");
+		return;
 	}
+	puts(type_names[o->type]);
 }
 void test_infer_type(void)
 {
@@ -42,7 +22,7 @@ void test_infer_type(void)
 	fgets(buf,250,stdin);
 	char *tok=trim(buf);
 	printf("Token read: '%s'\n",tok);
-	puts_type(infer_type(tok));
+	puts(type_names[infer_type(tok)]);
 }
 void test_print(void)
 {
@@ -61,7 +41,7 @@ void test_read(void)
 	fputs("Read: ",stdout);
 	print(o);
 	putchar('\n');
-	puts_type(o->type);
+	puts_type(o);
 	decr_refs(o);
 }
 void test_table(void)
@@ -101,5 +81,6 @@ void test_rpn(void)
 }
 int main(int argc,char **argv)
 {
-	test_rpn();
+	test_read();
+	//test_rpn();
 }
