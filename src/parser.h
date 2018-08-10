@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "core.h"
 #include "types.h"
 
 char *strclone(char *);

@@ -35,4 +35,5 @@ void destroy(obj_t *);
 void incr_refs(obj_t *);
 void decr_refs(obj_t *);
 obj_t *cons(obj_t *,obj_t *);
+void print(obj_t *);
 #endif
