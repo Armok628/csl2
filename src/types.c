@@ -56,7 +56,7 @@ void destroy_func(obj_t *o)
 }
 void destroy(obj_t *o)
 {
-	//printf("Destroying "); print(o); printf(" {%p}\n",(void *)o);
+	printf("Destroying "); print_obj(o); printf(" {%p}\n",(void *)o);
 	switch (o->type) {
 	case SYMBOL:
 		free(o->data.sym);
@@ -118,18 +118,18 @@ void print_cell(obj_t *o)
 {
 	putchar('(');
 	for (;o&&o->type==CELL;o=CDR(o)) {
-		print(CAR(o));
+		print_obj(CAR(o));
 		if (CDR(o))
 			putchar(' ');
 	}
 	if (o) {
 		putchar('.');
 		putchar(' ');
-		print(o);
+		print_obj(o);
 	}
 	putchar(')');
 }
-void print(obj_t *obj)
+void print_obj(obj_t *obj)
 {
 	if (!obj) {
 		printf("NIL");

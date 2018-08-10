@@ -51,5 +51,5 @@ void decr_refs(obj_t *);
 obj_t *cons(obj_t *,obj_t *);
 void rplaca(obj_t *,obj_t *);
 void rplacd(obj_t *,obj_t *);
-void print(obj_t *);
+void print_obj(obj_t *);
 #endif
