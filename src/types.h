@@ -2,6 +2,7 @@
 #define TYPES_H
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 typedef enum {false,true} bool;
 typedef enum {
 	CELL,
@@ -27,7 +28,7 @@ typedef struct obj_s {
 #define CAR(x) ((x)->data.cell.car)
 #define CDR(x) ((x)->data.cell.cdr)
 
-obj_t *new_obj();
+obj_t *new_obj(void);
 obj_t *new_symbol(char *);
 obj_t *new_integer(long);
 obj_t *new_double(double);

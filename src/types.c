@@ -1,5 +1,5 @@
 #include "types.h"
-obj_t *new_obj()
+obj_t *new_obj(void)
 {
 	obj_t *obj=calloc(1,sizeof(obj_t));
 	obj->refs=0;
@@ -29,7 +29,9 @@ obj_t *new_double(double d)
 }
 void destroy(obj_t *o)
 {
-	fprintf(stderr,"Destroying %p\n",(void *)o);
+	printf("Destroying ");
+	print(o);
+	printf(" {%p}\n",(void *)o);
 	switch (o->type) {
 	case SYMBOL:
 		free(o->data.sym);
@@ -89,6 +91,10 @@ void print_cell(obj_t *o)
 }
 void print(obj_t *obj)
 {
+	if (!obj) {
+		printf("NIL");
+		return;
+	}
 	switch (obj->type) {
 	case CELL:
 		print_cell(obj);

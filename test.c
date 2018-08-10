@@ -33,7 +33,7 @@ void puts_type(type_t t)
 		break;
 	}
 }
-void test_infer_type()
+void test_infer_type(void)
 {
 	char buf[250];
 	fgets(buf,250,stdin);
@@ -41,7 +41,7 @@ void test_infer_type()
 	printf("Token read: '%s'\n",tok);
 	puts_type(infer_type(tok));
 }
-void test_print()
+void test_print(void)
 {
 	obj_t *o=cons(sym("a"),cons(sym("b"),NULL));
 	incr_refs(o);
@@ -49,7 +49,7 @@ void test_print()
 	putchar('\n');
 	decr_refs(o);
 }
-int main(int argc,char **argv)
+void test_read(void)
 {
 	char buf[250];
 	fgets(buf,250,stdin);
@@ -59,4 +59,26 @@ int main(int argc,char **argv)
 	putchar('\n');
 	puts_type(o->type);
 	decr_refs(o);
+}
+int main(int argc,char **argv)
+{
+	dict=new_table(1000,(dtor_t)&decr_refs);
+	char buf[250];
+	for (;;) {
+		fgets(buf,250,stdin);
+		if (!strcmp(buf,"(quit)\n"))
+			break;
+		obj_t *s=read(buf);
+		incr_refs(s);
+		if (!strcmp(CAR(s)->data.sym,"set")) {
+			print(set(CAR(CDR(s)),CAR(CDR(CDR(s)))));
+		} else if (!strcmp(CAR(s)->data.sym,"get")) {
+			print(get(CAR(CDR(s))));
+		} else if (!strcmp(CAR(s)->data.sym,"unset")) {
+			print(unset(CAR(CDR(s))));
+		}
+		putchar('\n');
+		decr_refs(s);
+	}
+	free_table(dict);
 }
