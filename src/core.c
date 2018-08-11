@@ -87,3 +87,15 @@ obj_t *eq(obj_t *a,obj_t *b)
 	else
 		return NULL;
 }
+STACK(copy,1_ARG)
+obj_t *copy(obj_t *obj)
+{
+	return copy_obj(obj);
+}
+STACK(length,1_ARG)
+obj_t *length(obj_t *list)
+{
+	if (list->type!=CELL)
+		return new_obj();
+	return new_integer(list_length(list));
+}

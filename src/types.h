@@ -46,9 +46,11 @@ obj_t *new_integer(long);
 obj_t *new_double(double);
 obj_t *new_hashtable(int);
 obj_t *new_cfunction(void (*)(void));
-void destroy(obj_t *);
 obj_t *incr_refs(obj_t *);
 void decr_refs(obj_t *);
 void print_obj(obj_t *);
 bool eq_objs(obj_t *,obj_t *);
+bool symbol_match(obj_t *,const char *);
+int list_length(obj_t *);
+obj_t *copy_obj(obj_t *);
 #endif

@@ -48,4 +48,6 @@ CORE(set,obj_t *,obj_t *)
 CORE(get,obj_t *)
 CORE(unset,obj_t *)
 CORE(eq,obj_t *,obj_t *)
+CORE(copy,obj_t *)
+CORE(length,obj_t *)
 #endif

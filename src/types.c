@@ -168,3 +168,39 @@ bool eq_objs(obj_t *a,obj_t *b)
 		return false;
 	}
 }
+bool symbol_match(obj_t *sym,const char *string)
+{
+	return sym->type==SYMBOL&&!strcmp(sym->data.sym,string);
+}
+int list_length(obj_t *list)
+{
+	int l=0;
+	for (obj_t *o=list;o;o=CDR(o))
+		l++;
+	return l;
+}
+obj_t *copy_obj(obj_t *o)
+{
+	obj_t *c=new_obj();
+	c->type=o->type;
+	switch (o->type) {
+	case INTEGER:
+		c->data.i=o->data.i;
+		break;
+	case DOUBLE:
+		c->data.d=o->data.d;
+		break;
+	case CELL:
+		c->data.cell.car=o->data.cell.car;
+		incr_refs(o->data.cell.car);
+		c->data.cell.cdr=o->data.cell.cdr;
+		incr_refs(o->data.cell.cdr);
+		break;
+	case SYMBOL:
+		c->data.sym=strdup(o->data.sym);
+		break;
+	default:
+		return NULL;
+	}
+	return c;
+}
