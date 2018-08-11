@@ -23,9 +23,12 @@ typedef struct obj_s {
 			struct obj_s *car;
 			struct obj_s *cdr;
 		} cell;
-		union {
-			struct obj_s *(*c)(void);
-			struct obj_s **lisp;
+		struct {
+			bool lambda;
+			union {
+				void (*c)(void);
+				struct obj_s **lisp;
+			} rep;
 		} func;
 		char *sym;
 		long i;
@@ -42,8 +45,9 @@ obj_t *new_symbol(char *);
 obj_t *new_integer(long);
 obj_t *new_double(double);
 obj_t *new_hashtable(int);
+obj_t *new_cfunction(void (*)(void));
 void destroy(obj_t *);
-void incr_refs(obj_t *);
+obj_t *incr_refs(obj_t *);
 void decr_refs(obj_t *);
 void print_obj(obj_t *);
 #endif

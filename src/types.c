@@ -53,19 +53,20 @@ obj_t *new_hashtable(int size)
 	o->data.table=new_table(size,(dtor_t)&decr_refs);
 	return o;
 }
-obj_t *new_cfunction(obj_t *(*f)(void))
+obj_t *new_cfunction(void (*f)(void))
 {
 	obj_t *o=new_obj();
-	o->refs=-1;
 	o->type=FUNCTION;
-	o->data.func.c=f;
+	o->data.func.rep.c=f;
 	return o;
 }
 void destroy_func(obj_t *o)
-{ // Argument is assumed to be from lambda
-	for (int i=0;o->data.func.lisp[i];i++)
-		decr_refs(o->data.func.lisp[i]);
-	free(o->data.func.lisp);
+{
+	if (!o->data.func.lambda)
+		return;
+	for (int i=0;o->data.func.rep.lisp[i];i++)
+		decr_refs(o->data.func.rep.lisp[i]);
+	free(o->data.func.rep.lisp);
 	return;
 }
 void destroy(obj_t *o)
@@ -92,11 +93,12 @@ void destroy(obj_t *o)
 	}
 	free(o);
 }
-void incr_refs(obj_t *o)
+obj_t *incr_refs(obj_t *o)
 {
 	if (!o)
-		return;
+		return NULL;
 	o->refs+=o->refs>=0;
+	return o;
 }
 void decr_refs(obj_t *o)
 {

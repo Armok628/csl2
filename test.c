@@ -5,6 +5,7 @@
 #include "src/parser.h"
 #include "src/stack.h"
 #include "src/types.h"
+#include "init.h"
 obj_t *sym(const char *str)
 {
 	return new_symbol(strdup(str));
@@ -106,5 +107,7 @@ void test_stack()
 }
 int main(int argc,char **argv)
 {
+	init();
 	test_stack();
+	free_table(dict);
 }
