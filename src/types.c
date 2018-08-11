@@ -70,7 +70,7 @@ void destroy_func(obj_t *o)
 }
 void destroy(obj_t *o)
 { // Argument is assumed to be destroyable
-	printf("Destroying "); print_obj(o); printf(" {%p}\n",(void *)o);
+	//printf("Destroying "); print_obj(o); printf(" {%p}\n",(void *)o);
 	switch (o->type) {
 	case SYMBOL:
 		free(o->data.sym);
@@ -147,4 +147,5 @@ void print_obj(obj_t *obj)
 		fputs("ERROR",stdout);
 		break;
 	}
+	return;
 }

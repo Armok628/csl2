@@ -3,6 +3,7 @@
 #include "src/core.h"
 #include "src/compile.h"
 #include "src/parser.h"
+#include "src/stack.h"
 #include "src/types.h"
 obj_t *sym(const char *str)
 {
@@ -10,11 +11,10 @@ obj_t *sym(const char *str)
 }
 void puts_type(obj_t *o)
 {
-	if (!o) {
+	if (!o)
 		puts("NIL");
-		return;
-	}
-	puts(type_names[o->type]);
+	else
+		puts(type_names[o->type]);
 }
 void test_infer_type(void)
 {
@@ -90,7 +90,21 @@ void test_rpn(void)
 	decr_refs(input);
 	decr_refs(translated);
 }
+void test_stack()
+{
+	push(new_integer(1));
+	push(new_integer(2));
+	push(new_integer(3));
+	push(NULL);
+	stack_cons();
+	stack_cons();
+	stack_cons();
+	stack_print();
+	drop();
+	stack_terpri();
+	drop();
+}
 int main(int argc,char **argv)
 {
-	test_rpn();
+	test_stack();
 }
