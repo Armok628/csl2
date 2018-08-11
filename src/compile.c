@@ -29,5 +29,8 @@ obj_t *rpn(obj_t *body)
 	}
 	CDR(tail)=rpn(CAR(body));
 	incr_refs(CDR(tail));
+	tail=CDR(tail);
+	CDR(tail)=new_cell(new_symbol(strdup("CALL")),NULL);
+	incr_refs(CDR(tail));
 	return list;
 }

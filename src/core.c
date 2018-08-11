@@ -79,3 +79,11 @@ obj_t *unset(obj_t *sym)
 		expunge(dict,sym->data.sym);
 	return NULL;
 }
+STACK(eq,2_ARGS)
+obj_t *eq(obj_t *a,obj_t *b)
+{
+	if (eq_objs(a,b))
+		return new_symbol(strdup("T"));
+	else
+		return NULL;
+}

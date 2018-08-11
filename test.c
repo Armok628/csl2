@@ -108,6 +108,6 @@ void test_stack()
 int main(int argc,char **argv)
 {
 	init();
-	test_stack();
+	test_rpn();
 	free_table(dict);
 }

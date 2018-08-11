@@ -47,4 +47,5 @@ CORE(atom,obj_t *)
 CORE(set,obj_t *,obj_t *)
 CORE(get,obj_t *)
 CORE(unset,obj_t *)
+CORE(eq,obj_t *,obj_t *)
 #endif

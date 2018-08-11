@@ -50,4 +50,5 @@ void destroy(obj_t *);
 obj_t *incr_refs(obj_t *);
 void decr_refs(obj_t *);
 void print_obj(obj_t *);
+bool eq_objs(obj_t *,obj_t *);
 #endif

@@ -151,3 +151,20 @@ void print_obj(obj_t *obj)
 	}
 	return;
 }
+bool eq_objs(obj_t *a,obj_t *b)
+{
+	if (a==b)
+		return true;
+	if (!a)
+		return false;
+	switch (a->type) {
+	case SYMBOL:
+		return !strcmp(a->data.sym,b->data.sym);
+	case DOUBLE:
+		return a->data.d==b->data.d;
+	case INTEGER:
+		return a->data.i==b->data.i;
+	default:
+		return false;
+	}
+}
