@@ -142,11 +142,8 @@ void print_obj(obj_t *obj)
 	case SYMBOL:
 		fputs(obj->data.sym,stdout);
 		break;
-	case HASHTABLE:
-		printf("{Hashtable:%p}",(void *)obj);
-		break;
 	default:
-		fputs("ERROR",stdout);
+		printf("{%s:%p}",type_names[obj->type],(void *)obj);
 		break;
 	}
 	return;
@@ -159,7 +156,7 @@ bool eq_objs(obj_t *a,obj_t *b)
 		return false;
 	switch (a->type) {
 	case SYMBOL:
-		return !strcmp(a->data.sym,b->data.sym);
+		return !strcasecmp(a->data.sym,b->data.sym);
 	case DOUBLE:
 		return a->data.d==b->data.d;
 	case INTEGER:
@@ -170,7 +167,9 @@ bool eq_objs(obj_t *a,obj_t *b)
 }
 bool symbol_match(obj_t *sym,const char *string)
 {
-	return sym->type==SYMBOL&&!strcmp(sym->data.sym,string);
+	if (!sym)
+		return false;
+	return sym->type==SYMBOL&&!strcasecmp(sym->data.sym,string);
 }
 int list_length(obj_t *list)
 {
@@ -181,6 +180,8 @@ int list_length(obj_t *list)
 }
 obj_t *copy_obj(obj_t *o)
 {
+	if (!o)
+		return NULL;
 	obj_t *c=new_obj();
 	c->type=o->type;
 	switch (o->type) {

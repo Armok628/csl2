@@ -9,6 +9,25 @@ obj_t *compile(obj_t *list)
 	}
 	return mem;
 }
+obj_t *translate_progn(obj_t *body)
+{
+	obj_t *list=NULL;
+	obj_t *tail=NULL;
+	for (obj_t *f=CDR(body);f;f=CDR(f)) {
+		if (!list) {
+			list=rpn(CAR(f));
+			tail=list;
+		} else {
+			CDR(tail)=rpn(CAR(f));
+		}
+		for (;CDR(tail);tail=CDR(tail));
+		if (CDR(f)) {
+			CDR(tail)=new_cell(new_symbol(strdup("DROP")),NULL);
+			tail=CDR(tail);
+		}
+	}
+	return list;
+}
 obj_t *rpn(obj_t *body)
 {
 	if (!body||body->type!=CELL)
@@ -17,6 +36,8 @@ obj_t *rpn(obj_t *body)
 		return body;
 	if (symbol_match(CAR(body),"COND"))
 		return body;
+	if (symbol_match(CAR(body),"PROGN"))
+		return translate_progn(body);
 	obj_t *list=NULL;
 	obj_t *tail=NULL;
 	for (obj_t *o=CDR(body);o;o=CDR(o)) {
@@ -29,9 +50,14 @@ obj_t *rpn(obj_t *body)
 		}
 		for (;CDR(tail);tail=CDR(tail));
 	}
-	CDR(tail)=rpn(CAR(body));
-	incr_refs(CDR(tail));
-	tail=CDR(tail);
+	if (list) {
+		CDR(tail)=rpn(CAR(body));
+		incr_refs(CDR(tail));
+		tail=CDR(tail);
+	} else {
+		list=rpn(CAR(body));
+		tail=list;
+	}
 	CDR(tail)=new_cell(new_symbol(strdup("CALL")),NULL);
 	incr_refs(CDR(tail));
 	return list;

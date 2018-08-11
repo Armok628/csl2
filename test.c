@@ -51,20 +51,20 @@ void test_table(void)
 	char buf[250];
 	for (;;) {
 		fgets(buf,250,stdin);
-		if (!strcmp(buf,"(quit)\n"))
+		if (!strcasecmp(buf,"(quit)\n"))
 			break;
 		obj_t *s=read(buf);
 		incr_refs(s);
 		obj_t *r;
-		if (!strcmp(CAR(s)->data.sym,"set")) {
+		if (!strcasecmp(CAR(s)->data.sym,"set")) {
 			r=set(CAR(CDR(s)),CAR(CDR(CDR(s))));
 			incr_refs(r);
 			print_obj(r);
-		} else if (!strcmp(CAR(s)->data.sym,"get")) {
+		} else if (!strcasecmp(CAR(s)->data.sym,"get")) {
 			r=get(CAR(CDR(s)));
 			incr_refs(r);
 			print_obj(r);
-		} else if (!strcmp(CAR(s)->data.sym,"unset")) {
+		} else if (!strcasecmp(CAR(s)->data.sym,"unset")) {
 			r=unset(CAR(CDR(s)));
 			incr_refs(r);
 			print_obj(r);
@@ -91,7 +91,7 @@ void test_rpn(void)
 	decr_refs(input);
 	decr_refs(translated);
 }
-void test_stack()
+void test_stack(void)
 {
 	push(new_integer(1));
 	push(new_integer(2));
@@ -105,9 +105,42 @@ void test_stack()
 	stack_terpri();
 	drop();
 }
+void interpret_list(obj_t *list) // Prototype
+{
+	list=rpn(list);
+	incr_refs(list);
+	for (obj_t *o=list;o;o=CDR(o)) {
+		if (symbol_match(CAR(o),"DROP")) {
+			drop();
+		} else if (symbol_match(CAR(o),"CALL")) {
+			obj_t *f=pop();
+			f->data.func.rep.c();
+			decr_refs(f);
+		} else if (symbol_match(CAR(o),"QUOTE")) {
+			o=CDR(o);
+			push(CAR(o));
+			continue;
+		} else
+			push(get(CAR(o)));
+	}
+	decr_refs(list);
+	fputs("=> ",stdout);
+	stack_print();
+	drop();
+	terpri();
+}
+void test_interpret_list(void)
+{
+	char buf[250];
+	fgets(buf,250,stdin);
+	obj_t *r=read(buf);
+	incr_refs(r);
+	interpret_list(r);
+	decr_refs(r);
+}
 int main(int argc,char **argv)
 {
 	init();
-	test_rpn();
+	test_interpret_list();
 	free_table(dict);
 }
