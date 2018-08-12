@@ -91,6 +91,7 @@ int main(int argc,char **argv)
 		push(read(script));
 		stack_eval();
 		drop();
+		free(script);
 	} else
 		test_eval();
 	free_table(dict);
