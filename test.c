@@ -106,7 +106,20 @@ void test_stack(void)
 	stack_terpri();
 	drop();
 }
-void test_interpret_list(void)
+void test_interpret(void)
+{
+	char buf[250];
+	fgets(buf,250,stdin);
+	obj_t *r=read(buf);
+	incr_refs(r);
+	interpret(r);
+	decr_refs(r);
+	fputs("=> ",stdout);
+	stack_print();
+	terpri();
+	drop();
+}
+void test_compile_interpret(void)
 {
 	char buf[250];
 	fgets(buf,250,stdin);
@@ -115,15 +128,19 @@ void test_interpret_list(void)
 	obj_t *t=rpn(r);
 	incr_refs(t);
 	decr_refs(r);
+	fputs("Compiled: ",stdout);
+	print_obj(t);
+	terpri();
 	interpret(t);
 	decr_refs(t);
 	fputs("=> ",stdout);
 	stack_print();
 	terpri();
+	drop();
 }
 int main(int argc,char **argv)
 {
 	init();
-	test_interpret_list();
+	test_compile_interpret();
 	free_table(dict);
 }

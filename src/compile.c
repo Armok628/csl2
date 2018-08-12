@@ -18,6 +18,24 @@ obj_t *translate_progn(obj_t *body)
 	}
 	return list;
 }
+obj_t *translate_cond(obj_t *body)
+{
+	obj_t *list=new_cell(CAR(body),NULL);
+	obj_t *tail=list;
+	for (obj_t *c=CDR(body);c;c=CDR(c)) {
+		obj_t *condition=CAR(CAR(c));
+		obj_t *result=CAR(CDR(CAR(c)));
+		CDR(tail)=new_cell(rpn(condition),NULL);
+		tail=CDR(tail);
+		incr_refs(tail);
+		CDR(tail)=new_cell(rpn(result),NULL);
+		tail=CDR(tail);
+		incr_refs(tail);
+	}
+	CDR(tail)=new_cell(new_symbol(strdup("COND_END")),NULL);
+	incr_refs(CDR(tail));
+	return list;
+}
 obj_t *rpn(obj_t *body)
 {
 	if (!body||body->type!=CELL)
@@ -25,7 +43,7 @@ obj_t *rpn(obj_t *body)
 	if (symbol_match(CAR(body),"QUOTE"))
 		return body;
 	if (symbol_match(CAR(body),"COND"))
-		return body;
+		return translate_cond(body);
 	if (symbol_match(CAR(body),"PROGN"))
 		return translate_progn(body);
 	obj_t *list=NULL;

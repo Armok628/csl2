@@ -167,9 +167,7 @@ bool eq_objs(obj_t *a,obj_t *b)
 }
 bool symbol_match(obj_t *sym,const char *string)
 {
-	if (!sym)
-		return false;
-	return sym->type==SYMBOL&&!strcasecmp(sym->data.sym,string);
+	return sym&&sym->type==SYMBOL&&!strcasecmp(sym->data.sym,string);
 }
 int list_length(obj_t *list)
 {
