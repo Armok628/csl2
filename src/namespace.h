@@ -5,6 +5,7 @@
 #include "object.h"
 extern table_t *dict;
 
+void init_dict(void);
 void push_namespace(table_t *);
 table_t *pop_namespace(void);
 void drop_namespace(void);

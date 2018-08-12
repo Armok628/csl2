@@ -3,6 +3,14 @@
 table_t *dict=NULL;
 table_t *namespaces[STACK_SIZE];
 int level=-1; // Unlike stack_index, level is last *filled* slot
+void init_dict(void)
+{
+	dict=new_namespace();
+	push_namespace(dict);
+	hash_function=&nocase_hash_key;
+	init_core();
+	init_arith();
+}
 void push_namespace(table_t *env)
 {
 	namespaces[++level]=env;

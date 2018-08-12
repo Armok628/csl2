@@ -1,4 +1,8 @@
 #include "arith.h"
+void init_arith(void)
+{
+	INIT(+,add);
+}
 static inline double dub(obj_t *n)
 {
 	return n->type==INTEGER?(double)n->data.i:n->data.d;

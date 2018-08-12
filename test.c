@@ -7,7 +7,6 @@
 #include "src/parser.h"
 #include "src/stack.h"
 #include "src/object.h"
-#include "init.h"
 void test_read(void)
 {
 	char buf[250];

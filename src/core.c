@@ -1,4 +1,23 @@
 #include "core.h"
+void init_core(void)
+{
+	INIT(PRINT,print)
+	INIT(TERPRI,terpri)
+	INIT(CONS,cons)
+	INIT(CAR,car)
+	INIT(CDR,cdr)
+	INIT(RPLACA,rplaca)
+	INIT(RPLACD,rplacd)
+	INIT(ATOM,atom)
+	INIT(SET,set)
+	INIT(GET,get)
+	INIT(UNSET,unset)
+	INIT(EQ,eq)
+	INIT(COPY,copy)
+	INIT(LENGTH,length)
+	INIT(LAMBDA,lambda)
+	INIT(EVAL,eval)
+}
 STACK(print,1_ARG)
 obj_t *print(obj_t *obj)
 {
