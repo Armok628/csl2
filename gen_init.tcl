@@ -7,7 +7,7 @@ proc puts_init_lines {file} {
 	set lines [split [read $fh] "\n"]
 	close $fh
 	foreach line $lines {
-		if {[regexp {^CORE\((\w+),(\w+),} $line -> name func]} {
+		if {[regexp {^CORE\(([^,]+),([^,]+),} $line -> name func]} {
 			puts "\tinsert(dict,\"$name\",incr_refs(new_cfunction(&stack_$func)));"
 		}
 	}
@@ -15,9 +15,10 @@ proc puts_init_lines {file} {
 
 puts \
 "#ifndef INIT
-#define INIT
-#include \"src/object.h\"
-void init_dict(void)
+#define INIT"
+foreach file $argv {puts "#include \"$file\""}
+puts \
+"void init_dict(void)
 {
 	dict=new_namespace();
 	push_namespace(dict);
