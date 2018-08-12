@@ -19,10 +19,8 @@ obj_t *new_cell(obj_t *a,obj_t *b)
 {
 	obj_t *c=new_obj();
 	c->type=CELL;
-	CAR(c)=a;
-	incr_refs(a);
-	CDR(c)=b;
-	incr_refs(b);
+	CAR(c)=incr_refs(a);
+	CDR(c)=incr_refs(b);
 	return c;
 }
 obj_t *new_symbol(char *s)
@@ -190,10 +188,8 @@ obj_t *copy_obj(obj_t *o)
 		c->data.d=o->data.d;
 		break;
 	case CELL:
-		c->data.cell.car=o->data.cell.car;
-		incr_refs(o->data.cell.car);
-		c->data.cell.cdr=o->data.cell.cdr;
-		incr_refs(o->data.cell.cdr);
+		c->data.cell.car=incr_refs(o->data.cell.car);
+		c->data.cell.cdr=incr_refs(o->data.cell.cdr);
 		break;
 	case SYMBOL:
 		c->data.sym=strdup(o->data.sym);

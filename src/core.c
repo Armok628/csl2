@@ -41,8 +41,7 @@ obj_t *rplaca(obj_t *c,obj_t *v)
 	if (!c||c->type!=CELL)
 		return new_obj();
 	decr_refs(CAR(c));
-	CAR(c)=v;
-	incr_refs(v);
+	CAR(c)=incr_refs(v);
 	return c;
 }
 STACK(rplacd,2_ARGS)
@@ -51,8 +50,7 @@ obj_t *rplacd(obj_t *c,obj_t *v)
 	if (!c||c->type!=CELL)
 		return new_obj();
 	decr_refs(CDR(c));
-	CDR(c)=v;
-	incr_refs(v);
+	CDR(c)=incr_refs(v);
 	return c;
 }
 STACK(atom,1_ARG)
@@ -67,8 +65,7 @@ obj_t *set(obj_t *sym,obj_t *val)
 {
 	if (!sym||sym->type!=SYMBOL)
 		return new_obj();
-	insert(dict,sym->data.sym,val);
-	incr_refs(val);
+	insert(dict,sym->data.sym,incr_refs(val));
 	return sym;
 }
 STACK(get,1_ARG)

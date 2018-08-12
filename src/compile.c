@@ -25,15 +25,12 @@ obj_t *translate_cond(obj_t *body)
 	for (obj_t *c=CDR(body);c;c=CDR(c)) {
 		obj_t *condition=CAR(CAR(c));
 		obj_t *result=CAR(CDR(CAR(c)));
-		CDR(tail)=new_cell(rpn(condition),NULL);
+		CDR(tail)=incr_refs(new_cell(rpn(condition),NULL));
 		tail=CDR(tail);
-		incr_refs(tail);
-		CDR(tail)=new_cell(rpn(result),NULL);
+		CDR(tail)=incr_refs(new_cell(rpn(result),NULL));
 		tail=CDR(tail);
-		incr_refs(tail);
 	}
-	CDR(tail)=new_cell(new_symbol(strdup("COND_END")),NULL);
-	incr_refs(CDR(tail));
+	CDR(tail)=incr_refs(new_cell(new_symbol(strdup("COND_END")),NULL));
 	return list;
 }
 obj_t *rpn(obj_t *body)
