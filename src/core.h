@@ -62,4 +62,5 @@ CORE(length,obj_t *)
 CORE(lambda,obj_t *,obj_t *)
 CORE(eval,obj_t *)
 CORE(read,obj_t *)
+CORE(null,obj_t *)
 #endif
