@@ -70,9 +70,28 @@ void test_eval(void)
 	terpri();
 	drop();
 }
+char *slurp(char *filename)
+{
+	FILE *fh=fopen(filename,"r");
+	if (!fh)
+		return NULL;
+	fseek(fh,0,SEEK_END);
+	long len=ftell(fh);
+	fseek(fh,0,SEEK_SET);
+	char *buf=calloc(len+1,1);
+	fread(buf,1,len,fh);
+	fclose(fh);
+	return buf;
+}
 int main(int argc,char **argv)
 {
 	init_dict();
-	test_eval();
+	if (argc>1) {
+		char *script=slurp(argv[1]);
+		push(read(script));
+		stack_eval();
+		drop();
+	} else
+		test_eval();
 	free_table(dict);
 }
