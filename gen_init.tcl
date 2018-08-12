@@ -17,7 +17,7 @@ puts \
 "#ifndef INIT
 #define INIT
 #include \"src/types.h\"
-void init(void)
+void init_dict(void)
 {
 	dict=new_table(STACK_SIZE,(dtor_t)&decr_refs);
 	obj_t *f=NULL;"
