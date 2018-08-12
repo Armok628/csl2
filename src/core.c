@@ -50,8 +50,8 @@ obj_t *cdr(obj_t *c)
 	if (!c)
 		return NULL;
 	if (!type_check(c,CELL,"CDR: "))
-		return CDR(c);
-	return new_object();
+		return new_object();
+	return CDR(c);
 }
 STACK(rplaca,2_ARGS)
 obj_t *rplaca(obj_t *c,obj_t *v)
