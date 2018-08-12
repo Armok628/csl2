@@ -61,6 +61,7 @@ obj_t *rpn(obj_t *body)
 		tail=list;
 	}
 	for (;CDR(tail);tail=CDR(tail));
-	CDR(tail)=incr_refs(new_cell(new_symbol(strdup("CALL")),NULL));
+	if (!symbol_match(CAR(tail),"COND_END"))
+		CDR(tail)=incr_refs(new_cell(new_symbol(strdup("CALL")),NULL));
 	return list;
 }
