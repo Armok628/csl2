@@ -38,9 +38,9 @@ bool type_check(obj_t *obj,type_t types,const char *err_prefix)
 			continue;
 		fputs(type_name(1<<i),stdout);
 		if (types>>i>1)
-			putchar('|');
+			fputs(" or ",stdout);
 	}
-	printf(", received %s: ",obj_type_name(obj));
+	printf(", but got %s: ",obj_type_name(obj));
 	print_obj(obj);
 	putchar('\n');
 	return false;
