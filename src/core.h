@@ -40,7 +40,6 @@
 		decr_refs(arg2); \
 	}
 
-extern table_t *dict;
 
 CORE(PRINT,print,obj_t *)
 CORE(TERPRI,terpri,void)

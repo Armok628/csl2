@@ -3,6 +3,7 @@
 #define NAMESPACE_H
 #include "core.h"
 #include "object.h"
+extern table_t *dict;
 
 void push_namespace(table_t *);
 table_t *pop_namespace(void);

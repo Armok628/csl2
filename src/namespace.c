@@ -1,5 +1,6 @@
 #include "namespace.h"
 // TODO: Do I want an equivalent to Tcl's upvar/uplevel?
+table_t *dict=NULL;
 table_t *namespaces[STACK_SIZE];
 int level=-1; // Unlike stack_index, level is last *filled* slot
 void push_namespace(table_t *env)

@@ -1,5 +1,4 @@
 #include "core.h"
-table_t *dict=NULL;
 STACK(print,1_ARG)
 obj_t *print(obj_t *obj)
 {
