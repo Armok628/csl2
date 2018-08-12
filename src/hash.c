@@ -1,4 +1,5 @@
 #include "hash.h"
+unsigned long (*hash_function)(char *)=&hash_key;
 unsigned long hash_key(char *str)
 {
 	unsigned long key=0;
@@ -7,6 +8,18 @@ unsigned long hash_key(char *str)
 		key*=*c;
 		key<<=1;
 		key-=*c;
+	}
+	return key;
+}
+unsigned long nocase_hash_key(char *str)
+{
+	unsigned long key=0;
+	for (char *s=str;*s;s++) {
+		char c='a'<=*s&&*s<='z'?*s-('a'-'A'):*s;
+		key+=c;
+		key*=c;
+		key<<=1;
+		key-=c;
 	}
 	return key;
 }
@@ -47,7 +60,7 @@ void free_table(table_t *table)
 }
 void insert(table_t *table,char *str,void *val)
 {
-	unsigned long key=hash_key(str);
+	unsigned long key=hash_function(str);
 	bucket_t *entry=new_bucket(key,val);
 	bucket_t **loc=&table->pool[key%table->size]; // : Bucket location in pool
 	if (*loc) { // Bucket(s) already in location
@@ -66,7 +79,7 @@ void insert(table_t *table,char *str,void *val)
 }
 void *lookup(table_t *table,char *str)
 {
-	unsigned long key=hash_key(str);
+	unsigned long key=hash_function(str);
 	bucket_t *b=table->pool[key%table->size]; // : Bucket in pool
 	while (b&&b->key!=key) // Look for identical bucket or end
 		b=b->cdr;
@@ -76,7 +89,7 @@ void *lookup(table_t *table,char *str)
 }
 void expunge(table_t *table,char *str)
 {
-	unsigned long key=hash_key(str);
+	unsigned long key=hash_function(str);
 	bucket_t **loc=&table->pool[key%table->size];
 	bucket_t *p=NULL,*b=*loc;
 	while (b&&b->key!=key) { // Look for entry

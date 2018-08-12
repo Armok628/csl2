@@ -7,8 +7,8 @@ proc puts_init_lines {file} {
 	set lines [split [read $fh] "\n"]
 	close $fh
 	foreach line $lines {
-		if {[regexp {^CORE\((\w+),} $line -> name]} {
-			puts "\tinsert(dict,\"$name\",incr_refs(new_cfunction(&stack_$name)));"
+		if {[regexp {^CORE\((\w+),(\w+),} $line -> name func]} {
+			puts "\tinsert(dict,\"$name\",incr_refs(new_cfunction(&stack_$func)));"
 		}
 	}
 }
@@ -21,6 +21,7 @@ void init_dict(void)
 {
 	dict=new_namespace();
 	push_namespace(dict);
+	hash_function=&nocase_hash_key;
 	obj_t *f=NULL;"
 foreach file $argv {puts_init_lines $file}
 puts \
