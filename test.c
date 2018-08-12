@@ -30,13 +30,11 @@ void test_compile(void)
 {
 	char buf[250];
 	fgets(buf,250,stdin);
-	obj_t *input=read(buf);
-	incr_refs(input);
+	obj_t *input=incr_refs(read(buf));
 	print_obj(input);
 	putchar('\n');
-	obj_t *translated=rpn(input);
+	obj_t *translated=incr_refs(rpn(input));
 	decr_refs(input);
-	incr_refs(translated);
 	print_obj(translated);
 	putchar('\n');
 	decr_refs(translated);
