@@ -14,7 +14,7 @@ obj_t *interpret_cond(obj_t *l)
 	}
 	if (!ret)
 		push(NULL);
-	while (!symbol_match(CAR(l),"COND_END"))
+	while (l&&!symbol_match(CAR(l),"COND_END"))
 		l=CDR(l);
 	return l;
 }
