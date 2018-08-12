@@ -20,12 +20,10 @@ table_t *new_namespace(void)
 }
 obj_t *get_binding(obj_t *sym)
 {
-	for (int i=level;i>=0;i--) {
-		obj_t *l=lookup(namespaces[i],sym->data.sym);
-		if (l)
-			return l;
-	}
-	return NULL; 
+	obj_t *l=lookup(namespaces[level],sym->data.sym);
+	if (!l)
+		l=lookup(dict,sym->data.sym);
+	return l;
 }
 void set_binding(obj_t *sym,obj_t *val)
 {
