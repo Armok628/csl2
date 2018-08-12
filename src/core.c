@@ -140,6 +140,7 @@ obj_t *eval(obj_t *expr)
 	interpret(r);
 	decr_refs(r);
 	r=pop();
-	r->refs-=r->refs>0;
+	if (r)
+		r->refs-=r->refs>0;
 	return r;
 }
