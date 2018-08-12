@@ -20,10 +20,16 @@ table_t *new_namespace(void)
 }
 obj_t *get_binding(obj_t *sym)
 {
-	return lookup(namespaces[level],sym->data.sym);
+	for (int i=level;i>=0;i--) {
+		obj_t *l=lookup(namespaces[i],sym->data.sym);
+		if (l)
+			return l;
+	}
+	return NULL; 
 }
 void set_binding(obj_t *sym,obj_t *val)
 {
+	incr_refs(val);
 	insert(namespaces[level],sym->data.sym,val);
 }
 void unset_binding(obj_t *sym)

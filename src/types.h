@@ -27,7 +27,7 @@ typedef struct obj_s {
 			bool lambda;
 			union {
 				void (*c)(void);
-				struct obj_s **lisp;
+				struct obj_s *lisp; // (namespace_obj args_list body)
 			} rep;
 		} func;
 		char *sym;
@@ -44,7 +44,7 @@ obj_t *new_cell(obj_t *,obj_t *);
 obj_t *new_symbol(char *);
 obj_t *new_integer(long);
 obj_t *new_double(double);
-obj_t *new_hashtable(int);
+obj_t *new_hashtable(table_t *);
 obj_t *new_cfunction(void (*)(void));
 obj_t *incr_refs(obj_t *);
 void decr_refs(obj_t *);

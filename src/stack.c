@@ -1,6 +1,6 @@
 #include "stack.h"
 static obj_t *stack[STACK_SIZE];
-int stack_index=0;
+static int stack_index=0;
 void push(obj_t *obj)
 {
 	incr_refs(obj);
@@ -13,4 +13,8 @@ obj_t *pop(void)
 void drop(void)
 {
 	decr_refs(stack[--stack_index]);
+}
+obj_t *stack_obj(int n)
+{
+	return stack[stack_index-n-1];
 }

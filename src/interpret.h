@@ -5,4 +5,5 @@
 #include "types.h"
 
 void interpret(obj_t *);
+void funcall(obj_t *);
 #endif

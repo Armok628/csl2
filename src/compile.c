@@ -56,11 +56,11 @@ obj_t *rpn(obj_t *body)
 	}
 	if (list) {
 		CDR(tail)=incr_refs(rpn(CAR(body)));
-		tail=CDR(tail);
 	} else {
 		list=rpn(CAR(body));
 		tail=list;
 	}
+	for (;CDR(tail);tail=CDR(tail));
 	CDR(tail)=incr_refs(new_cell(new_symbol(strdup("CALL")),NULL));
 	return list;
 }

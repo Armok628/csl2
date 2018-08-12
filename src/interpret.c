@@ -1,5 +1,4 @@
 #include "interpret.h"
-// These functions are prototypes
 obj_t *interpret_cond(obj_t *l)
 { // Returns list at COND_END
 	l=CDR(l);
@@ -20,13 +19,15 @@ obj_t *interpret_cond(obj_t *l)
 	return l;
 }
 void interpret(obj_t *list)
-{
+{ // Requires RPN list as argument
 	for (obj_t *o=list;o;o=CDR(o)) {
-		if (symbol_match(CAR(o),"DROP")) {
+		if (!CAR(o)) {
+			push(NULL);
+		} else if (symbol_match(CAR(o),"DROP")) {
 			drop();
 		} else if (symbol_match(CAR(o),"CALL")) {
 			obj_t *f=pop();
-			f->data.func.rep.c();
+			funcall(f);
 			decr_refs(f);
 		} else if (symbol_match(CAR(o),"QUOTE")) {
 			o=CDR(o);
@@ -36,6 +37,34 @@ void interpret(obj_t *list)
 			o=interpret_cond(o);
 			// COND_END skipped by o=CDR(o) in for-loop
 		} else
-			push(get(CAR(o)));
+			push(get_binding(CAR(o)));
 	}
+}
+void bind_args(obj_t *argl)
+{
+	int l=list_length(argl);
+	for (int i=l-1;i>=0;i--) {
+		set_binding(CAR(argl),stack_obj(i));
+		argl=CDR(argl);
+	}
+	for (int i=0;i<l;i++)
+		drop();
+}
+void funcall(obj_t *func)
+{
+	if (!func->data.func.lambda) {
+		func->data.func.rep.c();
+		return;
+	}
+	obj_t *rep=func->data.func.rep.lisp;
+	obj_t *local_env=CAR(rep);
+	rep=CDR(rep);
+	obj_t *args=CAR(rep);
+	rep=CDR(rep);
+	obj_t *body=CAR(rep);
+	push_namespace(local_env->data.table);
+	if (args)
+		bind_args(args);
+	interpret(body);
+	pop_namespace();
 }

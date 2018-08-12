@@ -102,3 +102,25 @@ obj_t *length(obj_t *list)
 		return new_obj();
 	return new_integer(list_length(list));
 }
+STACK(lambda,2_ARGS)
+obj_t *lambda(obj_t *args,obj_t *body)
+{
+	obj_t *func=new_obj();
+	func->type=FUNCTION;
+	func->data.func.lambda=true;
+	obj_t *rep=NULL;
+	rep=new_cell(rpn(body),rep);
+	rep=new_cell(args,rep);
+	rep=new_cell(new_hashtable(new_namespace()),rep);
+	func->data.func.rep.lisp=rep;
+	return func;
+}
+STACK(eval,1_ARG)
+obj_t *eval(obj_t *expr)
+{
+	obj_t *r=rpn(expr);
+	incr_refs(r);
+	interpret(r);
+	decr_refs(r);
+	return pop();
+}

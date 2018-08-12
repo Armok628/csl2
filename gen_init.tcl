@@ -20,6 +20,7 @@ puts \
 void init_dict(void)
 {
 	dict=new_namespace();
+	push_namespace(dict);
 	obj_t *f=NULL;"
 foreach file $argv {puts_init_lines $file}
 puts \

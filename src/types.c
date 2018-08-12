@@ -44,28 +44,20 @@ obj_t *new_double(double d)
 	o->data.d=d;
 	return o;
 }
-obj_t *new_hashtable(int size)
+obj_t *new_hashtable(table_t *table)
 {
 	obj_t *o=new_obj();
 	o->type=HASHTABLE;
-	o->data.table=new_table(size,(dtor_t)&decr_refs);
+	o->data.table=table;
 	return o;
 }
 obj_t *new_cfunction(void (*f)(void))
 {
 	obj_t *o=new_obj();
 	o->type=FUNCTION;
+	o->data.func.lambda=false;
 	o->data.func.rep.c=f;
 	return o;
-}
-void destroy_func(obj_t *o)
-{
-	if (!o->data.func.lambda)
-		return;
-	for (int i=0;o->data.func.rep.lisp[i];i++)
-		decr_refs(o->data.func.rep.lisp[i]);
-	free(o->data.func.rep.lisp);
-	return;
 }
 void destroy(obj_t *o)
 { // Argument is assumed to be destroyable
@@ -79,7 +71,9 @@ void destroy(obj_t *o)
 		decr_refs(o->data.cell.cdr);
 		break;
 	case FUNCTION:
-		destroy_func(o);
+		if (o->data.func.lambda) {
+			decr_refs(o->data.func.rep.lisp);
+		}
 		break;
 	case HASHTABLE:
 		free_table(o->data.table);

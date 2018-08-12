@@ -1,6 +1,8 @@
 #ifndef CORE_H
 #define CORE_H
+#include "compile.h"
 #include "hash.h"
+#include "interpret.h"
 #include "namespace.h"
 #include "stack.h"
 #include "types.h"
@@ -51,4 +53,6 @@ CORE(unset,obj_t *)
 CORE(eq,obj_t *,obj_t *)
 CORE(copy,obj_t *)
 CORE(length,obj_t *)
+CORE(lambda,obj_t *,obj_t *)
+CORE(eval,obj_t *)
 #endif
