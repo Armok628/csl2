@@ -8,11 +8,11 @@ obj_t *translate_progn(obj_t *body)
 			list=rpn(CAR(f));
 			tail=list;
 		} else {
-			CDR(tail)=rpn(CAR(f));
+			CDR(tail)=incr_refs(rpn(CAR(f)));
 		}
 		for (;CDR(tail);tail=CDR(tail));
 		if (CDR(f)) {
-			CDR(tail)=new_cell(new_symbol(strdup("DROP")),NULL);
+			CDR(tail)=incr_refs(new_cell(new_symbol(strdup("DROP")),NULL));
 			tail=CDR(tail);
 		}
 	}
@@ -53,20 +53,17 @@ obj_t *rpn(obj_t *body)
 			list=rpn(CAR(o));
 			tail=list;
 		} else {
-			CDR(tail)=rpn(CAR(o));
-			incr_refs(CDR(tail));
+			CDR(tail)=incr_refs(rpn(CAR(o)));
 		}
 		for (;CDR(tail);tail=CDR(tail));
 	}
 	if (list) {
-		CDR(tail)=rpn(CAR(body));
-		incr_refs(CDR(tail));
+		CDR(tail)=incr_refs(rpn(CAR(body)));
 		tail=CDR(tail);
 	} else {
 		list=rpn(CAR(body));
 		tail=list;
 	}
-	CDR(tail)=new_cell(new_symbol(strdup("CALL")),NULL);
-	incr_refs(CDR(tail));
+	CDR(tail)=incr_refs(new_cell(new_symbol(strdup("CALL")),NULL));
 	return list;
 }

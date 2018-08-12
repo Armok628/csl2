@@ -123,10 +123,8 @@ void test_compile_interpret(void)
 {
 	char buf[250];
 	fgets(buf,250,stdin);
-	obj_t *r=read(buf);
-	incr_refs(r);
-	obj_t *t=rpn(r);
-	incr_refs(t);
+	obj_t *r=incr_refs(read(buf));
+	obj_t *t=incr_refs(rpn(r));
 	decr_refs(r);
 	fputs("Compiled: ",stdout);
 	print_obj(t);

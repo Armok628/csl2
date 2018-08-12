@@ -109,7 +109,7 @@ int delimit(char *str)
 obj_t *readlist(char *str)
 { // Assumes valid list
 	obj_t *ret=NULL;
-	obj_t **tail=NULL;
+	obj_t *tail=NULL;
 	int n=delimit(str);
 	char *tok=str;
 	bool dotted=false;
@@ -122,18 +122,21 @@ obj_t *readlist(char *str)
 			continue;
 		}
 		obj_t *r=read(tok);
+		r=dotted?r:new_cell(r,NULL);
 		if (!ret) {
-			ret=dotted?r:new_cell(r,NULL);
-			tail=&CDR(ret);
+			ret=r;
+			tail=ret;
 		} else {
-			*tail=dotted?r:new_cell(r,NULL);
-			tail=&CDR(*tail);
+			CDR(tail)=incr_refs(r);
+			tail=CDR(tail);
 		}
 	}
 	return ret;
 }
 obj_t *quote(obj_t *obj)
 {
+	if (obj->type!=CELL&&obj->type!=SYMBOL)
+		return obj;
 	return new_cell(new_symbol(strdup("QUOTE")),new_cell(obj,NULL));
 }
 obj_t *read(char *str)
