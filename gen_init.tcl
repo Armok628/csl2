@@ -19,7 +19,7 @@ puts \
 #include \"src/types.h\"
 void init_dict(void)
 {
-	dict=new_table(STACK_SIZE,(dtor_t)&decr_refs);
+	dict=new_namespace();
 	obj_t *f=NULL;"
 foreach file $argv {puts_init_lines $file}
 puts \
