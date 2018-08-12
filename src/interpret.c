@@ -42,31 +42,4 @@ void interpret(obj_t *list)
 			push(CAR(o)); // copy_obj?
 	}
 }
-void bind_args(obj_t *argl)
-{
-	int l=list_length(argl);
-	for (int i=l-1;i>=0;i--) {
-		set_binding(CAR(argl),stack_obj(i));
-		argl=CDR(argl);
-	}
-	for (int i=0;i<l;i++)
-		drop();
-}
-void funcall(obj_t *func)
-{
-	if (!func->data.func.lambda) {
-		func->data.func.rep.c();
-		return;
-	}
-	obj_t *rep=func->data.func.rep.lisp;
-	obj_t *local_env=CAR(rep);
-	rep=CDR(rep);
-	obj_t *args=CAR(rep);
-	rep=CDR(rep);
-	obj_t *body=CAR(rep);
-	push_namespace(local_env->data.table);
-	if (args)
-		bind_args(args);
-	interpret(body);
-	pop_namespace();
-}
+

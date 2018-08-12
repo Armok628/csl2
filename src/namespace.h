@@ -1,3 +1,4 @@
+// Functions for creating and manipulating LISP namespaces
 #ifndef NAMESPACE_H
 #define NAMESPACE_H
 #include "core.h"

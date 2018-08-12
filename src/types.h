@@ -1,3 +1,5 @@
+// Type definitions, functions, and macros
+// for creating and manipulating LISP objects
 #ifndef TYPES_H
 #define TYPES_H
 #include <stdio.h>
@@ -35,19 +37,13 @@ typedef struct obj_s {
 		table_t *table;
 	} data;
 } obj_t;
+#include "new.h"
 #define CAR(x) ((x)->data.cell.car)
 #define CDR(x) ((x)->data.cell.cdr)
 
 const char *type_name(type_t);
 const char *obj_type_name(obj_t *);
 bool type_check(obj_t *,type_t,const char *);
-obj_t *new_obj(void);
-obj_t *new_cell(obj_t *,obj_t *);
-obj_t *new_symbol(char *);
-obj_t *new_integer(long);
-obj_t *new_double(double);
-obj_t *new_hashtable(table_t *);
-obj_t *new_cfunction(void (*)(void));
 void destroy(obj_t *);
 obj_t *incr_refs(obj_t *);
 void decr_refs(obj_t *);

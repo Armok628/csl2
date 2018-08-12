@@ -1,6 +1,9 @@
+// Functions for use in the LISP environment
+// and macros to produce them from C functions
 #ifndef CORE_H
 #define CORE_H
 #include "compile.h"
+#include "function.h"
 #include "hash.h"
 #include "interpret.h"
 #include "namespace.h"

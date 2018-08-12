@@ -112,15 +112,7 @@ obj_t *lambda(obj_t *args,obj_t *body)
 			return new_obj();
 	if (!type_check(body,CELL|SYMBOL,"LAMBDA BODY: "))
 		return new_obj();
-	obj_t *func=new_obj();
-	func->type=FUNCTION;
-	func->data.func.lambda=true;
-	obj_t *rep=NULL;
-	rep=new_cell(rpn(body),rep);
-	rep=new_cell(args,rep);
-	rep=new_cell(new_hashtable(new_namespace()),rep);
-	func->data.func.rep.lisp=rep;
-	return func;
+	return new_lispfunction(args,rpn(body));
 }
 STACK(eval,1_ARG)
 obj_t *eval(obj_t *expr)

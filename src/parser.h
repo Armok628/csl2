@@ -1,3 +1,4 @@
+// Functions for parsing source code into LISP objects
 #ifndef PARSE_H
 #define PARSE_H
 #include <stdio.h>

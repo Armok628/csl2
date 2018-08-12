@@ -1,3 +1,4 @@
+// Functions for manipulating the stack used for interpretation
 #ifndef STACK_H
 #define STACK_H
 #include "types.h"
