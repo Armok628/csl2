@@ -1,14 +1,4 @@
 #include "compile.h"
-obj_t *compile(obj_t *list)
-{
-	int size=list_length(list);
-	obj_t *mem=calloc(size,sizeof(obj_t));
-	for (int i=0;i<size;i++) {
-		mem[i]=*CAR(list);
-		list=CDR(list);
-	}
-	return mem;
-}
 obj_t *translate_progn(obj_t *body)
 {
 	obj_t *list=NULL;

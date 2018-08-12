@@ -2,6 +2,7 @@
 #include <string.h>
 #include "src/core.h"
 #include "src/compile.h"
+#include "src/interpret.h"
 #include "src/parser.h"
 #include "src/stack.h"
 #include "src/types.h"
@@ -105,38 +106,20 @@ void test_stack(void)
 	stack_terpri();
 	drop();
 }
-void interpret_list(obj_t *list) // Prototype
-{
-	list=rpn(list);
-	incr_refs(list);
-	for (obj_t *o=list;o;o=CDR(o)) {
-		if (symbol_match(CAR(o),"DROP")) {
-			drop();
-		} else if (symbol_match(CAR(o),"CALL")) {
-			obj_t *f=pop();
-			f->data.func.rep.c();
-			decr_refs(f);
-		} else if (symbol_match(CAR(o),"QUOTE")) {
-			o=CDR(o);
-			push(CAR(o));
-			continue;
-		} else
-			push(get(CAR(o)));
-	}
-	decr_refs(list);
-	fputs("=> ",stdout);
-	stack_print();
-	drop();
-	terpri();
-}
 void test_interpret_list(void)
 {
 	char buf[250];
 	fgets(buf,250,stdin);
 	obj_t *r=read(buf);
 	incr_refs(r);
-	interpret_list(r);
+	obj_t *t=rpn(r);
+	incr_refs(t);
 	decr_refs(r);
+	interpret(t);
+	decr_refs(t);
+	fputs("=> ",stdout);
+	stack_print();
+	terpri();
 }
 int main(int argc,char **argv)
 {
