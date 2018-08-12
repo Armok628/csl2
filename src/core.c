@@ -22,6 +22,7 @@ void init_core(void)
 	INIT(NOT,null)
 	INIT(QUIT,quit)
 	INIT(EXIT,quit)
+	INIT(SEE,see)
 }
 STACK(print,1_ARG)
 obj_t *print(obj_t *obj)
@@ -168,4 +169,13 @@ STACK(quit,0_ARGS)
 obj_t *quit(void)
 {
 	exit(0);
+}
+STACK(see,1_ARG)
+obj_t *see(obj_t *func)
+{
+	if (!type_check(func,FUNCTION,"SEE: "))
+		return new_object();
+	if (!func->data.func.lambda)
+		return NULL;
+	return CAR(CDR(CDR(func->data.func.rep.lisp)));
 }

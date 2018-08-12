@@ -64,4 +64,5 @@ CORE(eval,obj_t *)
 CORE(read,obj_t *)
 CORE(null,obj_t *)
 CORE(quit,void)
+CORE(see,obj_t *)
 #endif

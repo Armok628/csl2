@@ -33,8 +33,7 @@ int main(int argc,char **argv)
 		push(new_integer(1000));
 		stack_read();
 		stack_eval();
-		putchar('\n');
-		fputs("=> ",stdout);
+		fputs("\n=> ",stdout);
 		stack_print();
 		drop();
 		putchar('\n');
