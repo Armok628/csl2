@@ -121,7 +121,7 @@ obj_t *readlist(char *str)
 			dotted=true;
 			continue;
 		}
-		obj_t *r=read(tok);
+		obj_t *r=read_str(tok);
 		r=dotted?r:new_cell(r,NULL);
 		if (!ret) {
 			ret=r;
@@ -139,7 +139,7 @@ obj_t *quote(obj_t *obj)
 		return obj;
 	return new_cell(new_symbol(strdup("QUOTE")),new_cell(obj,NULL));
 }
-obj_t *read(char *str)
+obj_t *read_str(char *str)
 { // Error checking through infer_type
 	obj_t *obj;
 	str=trim(str); // Trims input

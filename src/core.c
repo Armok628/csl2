@@ -17,6 +17,7 @@ void init_core(void)
 	INIT(LENGTH,length)
 	INIT(LAMBDA,lambda)
 	INIT(EVAL,eval)
+	INIT(READ,read)
 }
 STACK(print,1_ARG)
 obj_t *print(obj_t *obj)
@@ -143,4 +144,14 @@ obj_t *eval(obj_t *expr)
 	if (r)
 		r->refs-=r->refs>0;
 	return r;
+}
+STACK(read,1_ARG)
+obj_t *read(obj_t *n)
+{
+	if (!type_check(n,INTEGER,"READ: "))
+		return new_object();
+	int l=n->data.i;
+	char buf[l];
+	fgets(buf,l,stdin);
+	return read_str(buf);
 }

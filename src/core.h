@@ -7,8 +7,9 @@
 #include "hash.h"
 #include "interpret.h"
 #include "namespace.h"
-#include "stack.h"
 #include "object.h"
+#include "parser.h"
+#include "stack.h"
 // Stack function declaration
 #define STACK_FUNC(func) \
 	void stack_##func(void)
@@ -60,4 +61,5 @@ CORE(copy,obj_t *)
 CORE(length,obj_t *)
 CORE(lambda,obj_t *,obj_t *)
 CORE(eval,obj_t *)
+CORE(read,obj_t *)
 #endif
