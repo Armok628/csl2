@@ -36,8 +36,10 @@ void interpret(obj_t *list)
 		} else if (symbol_match(CAR(o),"COND")) {
 			o=interpret_cond(o);
 			// COND_END skipped by o=CDR(o) in for-loop
-		} else
+		} else if (CAR(o)->type==SYMBOL) {
 			push(get_binding(CAR(o)));
+		} else
+			push(CAR(o)); // copy_obj?
 	}
 }
 void bind_args(obj_t *argl)

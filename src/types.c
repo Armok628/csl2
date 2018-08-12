@@ -1,13 +1,50 @@
 #include "types.h"
-const char *type_names[]={
-	"CELL",
-	"DOUBLE",
-	"ERROR",
-	"HASHTABLE",
-	"INTEGER",
-	"FUNCTION",
-	"SYMBOL",
-};
+const char *type_name(type_t type)
+{
+	switch (type) {
+	case CELL:
+		return "CELL";
+	case DOUBLE:
+		return "DOUBLE";
+	case ERROR:
+		return "ERROR";
+	case HASHTABLE:
+		return "HASHTABLE";
+	case INTEGER:
+		return "INTEGER";
+	case FUNCTION:
+		return "FUNCTION";
+	case SYMBOL:
+		return "SYMBOL";
+	default:
+		return "UNKNOWN";
+	}
+}
+const char *obj_type_name(obj_t *obj)
+{
+	if (!obj)
+		return "NIL";
+	return type_name(obj->type);
+}
+bool type_check(obj_t *obj,type_t types,const char *err_prefix)
+{ // Returns true if obj is of one of the types specified by type
+	if (obj&&obj->type&types)
+		return true;
+	if (err_prefix)
+		fputs(err_prefix,stdout);
+	fputs("Expected ",stdout);
+	for (int i=0;types>>i>0;i++) {
+		if (!((types>>i)&1))
+			continue;
+		fputs(type_name(1<<i),stdout);
+		if (types>>i>1)
+			putchar('|');
+	}
+	printf(", received %s: ",obj_type_name(obj));
+	print_obj(obj);
+	putchar('\n');
+	return false;
+}
 obj_t *new_obj(void)
 {
 	obj_t *obj=calloc(1,sizeof(obj_t));
@@ -134,8 +171,11 @@ void print_obj(obj_t *obj)
 	case SYMBOL:
 		fputs(obj->data.sym,stdout);
 		break;
+	case ERROR:
+		fputs("ERROR",stdout);
+		break;
 	default:
-		printf("{%s:%p}",type_names[obj->type],(void *)obj);
+		printf("{%s:%p}",obj_type_name(obj),(void *)obj);
 		break;
 	}
 	return;

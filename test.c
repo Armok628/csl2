@@ -8,13 +8,6 @@
 #include "src/stack.h"
 #include "src/types.h"
 #include "init.h"
-void puts_type(obj_t *o)
-{
-	if (!o)
-		puts("NIL");
-	else
-		puts(type_names[o->type]);
-}
 void test_read(void)
 {
 	char buf[250];
@@ -23,7 +16,7 @@ void test_read(void)
 	incr_refs(o);
 	print_obj(o);
 	putchar('\n');
-	puts_type(o);
+	puts(obj_type_name(o));
 	decr_refs(o);
 }
 void test_compile(void)
