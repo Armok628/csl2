@@ -20,6 +20,8 @@ void init_core(void)
 	INIT(READ,read)
 	INIT(NULL,null)
 	INIT(NOT,null)
+	INIT(QUIT,quit)
+	INIT(EXIT,quit)
 }
 STACK(print,1_ARG)
 obj_t *print(obj_t *obj)
@@ -161,4 +163,9 @@ STACK(null,1_ARG)
 obj_t *null(obj_t *c)
 {
 	return !c?new_symbol(strdup("T")):NULL;
+}
+STACK(quit,0_ARGS)
+obj_t *quit(void)
+{
+	exit(0);
 }
