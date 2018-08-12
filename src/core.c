@@ -23,7 +23,7 @@ obj_t *car(obj_t *c)
 	if (!c)
 		return NULL;
 	if (!type_check(c,CELL,"CAR: "))
-		return new_obj();
+		return new_object();
 	return CAR(c);
 }
 STACK(cdr,1_ARG)
@@ -33,13 +33,13 @@ obj_t *cdr(obj_t *c)
 		return NULL;
 	if (!type_check(c,CELL,"CDR: "))
 		return CDR(c);
-	return new_obj();
+	return new_object();
 }
 STACK(rplaca,2_ARGS)
 obj_t *rplaca(obj_t *c,obj_t *v)
 {
 	if (!type_check(c,CELL,"RPLACA: "))
-		return new_obj();
+		return new_object();
 	decr_refs(CAR(c));
 	CAR(c)=incr_refs(v);
 	return c;
@@ -48,7 +48,7 @@ STACK(rplacd,2_ARGS)
 obj_t *rplacd(obj_t *c,obj_t *v)
 {
 	if (!type_check(c,CELL,"RPLACD: "))
-		return new_obj();
+		return new_object();
 	decr_refs(CDR(c));
 	CDR(c)=incr_refs(v);
 	return c;
@@ -64,7 +64,7 @@ STACK(set,2_ARGS)
 obj_t *set(obj_t *sym,obj_t *val)
 {
 	if (!type_check(sym,SYMBOL,"SET: "))
-		return new_obj();
+		return new_object();
 	set_binding(sym,val);
 	return sym;
 }
@@ -99,19 +99,19 @@ STACK(length,1_ARG)
 obj_t *length(obj_t *list)
 {
 	if (!type_check(list,CELL,"LENGTH: "))
-		return new_obj();
+		return new_object();
 	return new_integer(list_length(list));
 }
 STACK(lambda,2_ARGS)
 obj_t *lambda(obj_t *args,obj_t *body)
 {
 	if (!type_check(args,CELL,"LAMBDA ARGS: "))
-		return new_obj();
+		return new_object();
 	for (obj_t *o=args;o;o=CDR(o))
 		if (!type_check(CAR(o),SYMBOL,"LAMBDA ARG: "))
-			return new_obj();
+			return new_object();
 	if (!type_check(body,CELL|SYMBOL,"LAMBDA BODY: "))
-		return new_obj();
+		return new_object();
 	return new_lispfunction(args,rpn(body));
 }
 STACK(eval,1_ARG)

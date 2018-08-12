@@ -1,7 +1,7 @@
 #include "function.h"
 obj_t *new_cfunction(void (*f)(void))
 {
-	obj_t *o=new_obj();
+	obj_t *o=new_object();
 	o->type=FUNCTION;
 	o->data.func.lambda=false;
 	o->data.func.rep.c=f;
@@ -9,7 +9,7 @@ obj_t *new_cfunction(void (*f)(void))
 }
 obj_t *new_lispfunction(obj_t *argl,obj_t *body)
 {
-	obj_t *func=new_obj();
+	obj_t *func=new_object();
 	func->type=FUNCTION;
 	func->data.func.lambda=true;
 	obj_t *rep=NULL;

@@ -1,4 +1,4 @@
-#include "types.h"
+#include "object.h"
 const char *type_name(type_t type)
 {
 	switch (type) {
@@ -161,7 +161,7 @@ obj_t *copy_obj(obj_t *o)
 {
 	if (!o)
 		return NULL;
-	obj_t *c=new_obj();
+	obj_t *c=new_object();
 	c->type=o->type;
 	switch (o->type) {
 	case INTEGER:

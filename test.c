@@ -6,7 +6,7 @@
 #include "src/namespace.h"
 #include "src/parser.h"
 #include "src/stack.h"
-#include "src/types.h"
+#include "src/object.h"
 #include "init.h"
 void test_read(void)
 {

@@ -16,7 +16,7 @@ proc puts_init_lines {file} {
 puts \
 "#ifndef INIT
 #define INIT
-#include \"src/types.h\"
+#include \"src/object.h\"
 void init_dict(void)
 {
 	dict=new_namespace();

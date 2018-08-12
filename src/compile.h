@@ -2,7 +2,7 @@
 // to a stack-based postfix notation
 #ifndef COMPILE_H
 #define COMPILE_H
-#include "types.h"
+#include "object.h"
 
 obj_t *rpn(obj_t *);
 #endif

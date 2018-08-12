@@ -1,5 +1,5 @@
 #include "new.h"
-obj_t *new_obj(void)
+obj_t *new_object(void)
 { // Returns uninitialized object with type ERROR
 	obj_t *obj=calloc(1,sizeof(obj_t));
 	obj->refs=0;
@@ -8,7 +8,7 @@ obj_t *new_obj(void)
 }
 obj_t *new_cell(obj_t *a,obj_t *b)
 {
-	obj_t *c=new_obj();
+	obj_t *c=new_object();
 	c->type=CELL;
 	CAR(c)=incr_refs(a);
 	CDR(c)=incr_refs(b);
@@ -16,28 +16,28 @@ obj_t *new_cell(obj_t *a,obj_t *b)
 }
 obj_t *new_symbol(char *s)
 {
-	obj_t *o=new_obj();
+	obj_t *o=new_object();
 	o->type=SYMBOL;
 	o->data.sym=s;
 	return o;
 }
 obj_t *new_integer(long i)
 {
-	obj_t *o=new_obj();
+	obj_t *o=new_object();
 	o->type=INTEGER;
 	o->data.i=i;
 	return o;
 }
 obj_t *new_double(double d)
 {
-	obj_t *o=new_obj();
+	obj_t *o=new_object();
 	o->type=DOUBLE;
 	o->data.d=d;
 	return o;
 }
 obj_t *new_hashtable(table_t *table)
 {
-	obj_t *o=new_obj();
+	obj_t *o=new_object();
 	o->type=HASHTABLE;
 	o->data.table=table;
 	return o;

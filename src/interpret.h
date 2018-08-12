@@ -4,7 +4,7 @@
 #include "core.h"
 #include "function.h"
 #include "stack.h"
-#include "types.h"
+#include "object.h"
 
 void interpret(obj_t *);
 #endif

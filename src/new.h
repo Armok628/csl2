@@ -3,9 +3,9 @@
 #define NEW_H
 #include <stdlib.h>
 #include "hash.h"
-#include "types.h"
+#include "object.h"
 
-obj_t *new_obj(void);
+obj_t *new_object(void);
 obj_t *new_cell(obj_t *,obj_t *);
 obj_t *new_symbol(char *);
 obj_t *new_integer(long);

@@ -1,7 +1,7 @@
 // Functions for manipulating the stack used for interpretation
 #ifndef STACK_H
 #define STACK_H
-#include "types.h"
+#include "object.h"
 #define STACK_SIZE 1000
 
 void push(obj_t *);

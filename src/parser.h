@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "types.h"
+#include "object.h"
 
 bool valid_list(char *);
 char *trim_left(char *);

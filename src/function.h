@@ -3,7 +3,7 @@
 #ifndef FUNCTION_H
 #define FUNCTION_H
 #include "interpret.h"
-#include "types.h"
+#include "object.h"
 
 obj_t *new_cfunction(void (*)(void));
 obj_t *new_lispfunction(obj_t *,obj_t *);

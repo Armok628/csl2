@@ -2,7 +2,7 @@
 #ifndef NAMESPACE_H
 #define NAMESPACE_H
 #include "core.h"
-#include "types.h"
+#include "object.h"
 
 void push_namespace(table_t *);
 table_t *pop_namespace(void);

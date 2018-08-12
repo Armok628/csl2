@@ -8,7 +8,7 @@
 #include "interpret.h"
 #include "namespace.h"
 #include "stack.h"
-#include "types.h"
+#include "object.h"
 // Stack function declaration
 #define STACK_FUNC(func) \
 	void stack_##func(void)
