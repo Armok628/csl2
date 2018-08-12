@@ -3,6 +3,7 @@
 #include "src/core.h"
 #include "src/compile.h"
 #include "src/interpret.h"
+#include "src/namespace.h"
 #include "src/parser.h"
 #include "src/stack.h"
 #include "src/types.h"
@@ -138,7 +139,8 @@ void test_compile_interpret(void)
 }
 int main(int argc,char **argv)
 {
-	init();
+	init_dict();
+	push_namespace(dict);
 	test_compile_interpret();
 	free_table(dict);
 }

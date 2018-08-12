@@ -65,7 +65,7 @@ obj_t *set(obj_t *sym,obj_t *val)
 {
 	if (!sym||sym->type!=SYMBOL)
 		return new_obj();
-	insert(dict,sym->data.sym,incr_refs(val));
+	set_binding(sym,val);
 	return sym;
 }
 STACK(get,1_ARG)
@@ -73,13 +73,13 @@ obj_t *get(obj_t *sym)
 {
 	if (!sym||sym->type!=SYMBOL)
 		return sym;
-	return lookup(dict,sym->data.sym);
+	return get_binding(sym);
 }
 STACK(unset,1_ARG)
 obj_t *unset(obj_t *sym)
 {
 	if (!sym||sym->type==SYMBOL)
-		expunge(dict,sym->data.sym);
+		unset_binding(sym);
 	return NULL;
 }
 STACK(eq,2_ARGS)

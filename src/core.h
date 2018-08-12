@@ -1,8 +1,9 @@
 #ifndef CORE_H
 #define CORE_H
+#include "hash.h"
+#include "namespace.h"
 #include "stack.h"
 #include "types.h"
-#include "hash.h"
 // Stack function declaration
 #define STACK_FUNC(func) \
 	void stack_##func(void)

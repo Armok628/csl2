@@ -30,7 +30,7 @@ void interpret(obj_t *list)
 			decr_refs(f);
 		} else if (symbol_match(CAR(o),"QUOTE")) {
 			o=CDR(o);
-			push(copy_obj(CAR(o)));
+			push(CAR(o));
 			continue;
 		} else if (symbol_match(CAR(o),"COND")) {
 			o=interpret_cond(o);
