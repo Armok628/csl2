@@ -66,9 +66,21 @@ void test_compile_interpret(void)
 	terpri();
 	drop();
 }
+void test_eval(void)
+{
+	char buf[250];
+	fgets(buf,250,stdin);
+	push(read(buf));
+	stack_eval();
+	fputs("=> ",stdout);
+	stack_print();
+	drop();
+	terpri();
+	drop();
+}
 int main(int argc,char **argv)
 {
 	init_dict();
-	test_compile_interpret();
+	test_eval();
 	free_table(dict);
 }

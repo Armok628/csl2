@@ -122,5 +122,7 @@ obj_t *eval(obj_t *expr)
 	incr_refs(r);
 	interpret(r);
 	decr_refs(r);
-	return pop();
+	r=pop();
+	r->refs-=r->refs>0;
+	return r;
 }
