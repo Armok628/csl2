@@ -10,6 +10,7 @@
 #include "object.h"
 #include "parser.h"
 #include "stack.h"
+#include "timer.h"
 // Stack function declaration
 #define STACK_FUNC(func) \
 	void stack_##func(void)
@@ -65,4 +66,6 @@ CORE(read,obj_t *)
 CORE(null,obj_t *)
 CORE(quit,void)
 CORE(see,obj_t *)
+CORE(tick,void)
+CORE(tock,void)
 #endif

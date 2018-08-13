@@ -23,6 +23,8 @@ void init_core(void)
 	INIT(QUIT,quit)
 	INIT(EXIT,quit)
 	INIT(SEE,see)
+	INIT(TICK,tick)
+	INIT(TOCK,tock)
 }
 STACK(print,1_ARG)
 obj_t *print(obj_t *obj)
@@ -178,4 +180,15 @@ obj_t *see(obj_t *func)
 	if (!func->data.func.lambda)
 		return NULL;
 	return CAR(CDR(CDR(func->data.func.rep.lisp)));
+}
+STACK(tick,0_ARGS)
+obj_t *tick(void)
+{
+	start_timer();
+	return NULL;
+}
+STACK(tock,0_ARGS)
+obj_t *tock(void)
+{
+	return new_double(read_timer());
 }

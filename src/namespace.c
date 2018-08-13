@@ -25,7 +25,7 @@ void drop_namespace(void)
 }
 table_t *new_namespace(void)
 {
-	return new_table(STACK_SIZE,(dtor_t)&decr_refs);
+	return new_table(NAMESPACE_SIZE,(dtor_t)&decr_refs);
 }
 obj_t *get_binding(obj_t *sym)
 {

@@ -3,6 +3,7 @@
 #define NAMESPACE_H
 #include "core.h"
 #include "object.h"
+#define NAMESPACE_SIZE 100
 extern table_t *dict;
 
 void init_dict(void);
