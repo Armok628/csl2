@@ -16,7 +16,7 @@ obj_t *new_lispfunction(obj_t *argl,obj_t *body)
 	rep=new_cell(body,rep);
 	rep=new_cell(argl,rep);
 	table_t *t=new_namespace();
-	//insert(t,"RECURSE",incr_refs(func));
+	insert(t,"RECURSE",func); // No incr_refs -- ref is self
 	rep=new_cell(new_hashtable(t),rep);
 	func->data.func.rep.lisp=incr_refs(rep);
 	return func;

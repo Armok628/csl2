@@ -57,9 +57,8 @@ void destroy(obj_t *o)
 		decr_refs(o->data.cell.cdr);
 		break;
 	case FUNCTION:
-		if (o->data.func.lambda) {
+		if (o->data.func.lambda)
 			decr_refs(o->data.func.rep.lisp);
-		}
 		break;
 	case HASHTABLE:
 		free_table(o->data.table);
@@ -75,14 +74,14 @@ obj_t *incr_refs(obj_t *o)
 {
 	if (!o)
 		return NULL;
-	o->refs+=o->refs>=0;
+	o->refs++;
 	return o;
 }
 void decr_refs(obj_t *o)
 {
 	if (!o)
 		return;
-	o->refs-=o->refs>0;
+	o->refs--;
 	if (!o->refs)
 		destroy(o);
 }
