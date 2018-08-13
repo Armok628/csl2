@@ -136,7 +136,7 @@ bool eq_objs(obj_t *a,obj_t *b)
 		return false;
 	switch (a->type) {
 	case SYMBOL:
-		return !strcmp(a->data.sym,b->data.sym);
+		return !strcasecmp(a->data.sym,b->data.sym);
 	case DOUBLE:
 		return a->data.d==b->data.d;
 	case INTEGER:
