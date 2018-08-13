@@ -132,7 +132,7 @@ obj_t *length(obj_t *list)
 STACK(lambda,2_ARGS)
 obj_t *lambda(obj_t *args,obj_t *body)
 {
-	if (!type_check(args,CELL,"LAMBDA ARGS: "))
+	if (args&&!type_check(args,CELL,"LAMBDA ARGS: "))
 		return new_object();
 	for (obj_t *o=args;o;o=CDR(o))
 		if (!type_check(CAR(o),SYMBOL,"LAMBDA ARG: "))
@@ -200,6 +200,10 @@ obj_t *uplevel(obj_t *n,obj_t *expr)
 		return new_object();
 	if (!type_check(expr,CELL|SYMBOL,"UPLEVEL, arg 2: "))
 		return new_object();
+	if (level<1) {
+		puts("UPLEVEL: No higher level");
+		return new_object();
+	}
 	level-=n->data.i;
 	obj_t *t=incr_refs(rpn(expr));
 	interpret(t);

@@ -23,6 +23,18 @@ void interpret(obj_t *list)
 	for (obj_t *o=list;o;o=CDR(o)) {
 		if (!CAR(o)) {
 			push(NULL);
+		} else if (symbol_match(CAR(o),"LIST")) {
+			push(CAR(o));
+		} else if (symbol_match(CAR(o),"LIST_END")) {
+			obj_t *body=NULL;
+			while (!symbol_match(stack_obj(0),"LIST")) {
+				obj_t *o=pop();
+				if (o)
+					o->refs--;
+				body=new_cell(o,body);
+			}
+			drop();
+			push(body);
 		} else if (symbol_match(CAR(o),"DROP")) {
 			drop();
 		} else if (symbol_match(CAR(o),"CALL")) {
@@ -39,7 +51,7 @@ void interpret(obj_t *list)
 		} else if (CAR(o)->type==SYMBOL) {
 			push(get_binding(CAR(o)));
 		} else
-			push(CAR(o)); // copy_obj?
+			push(CAR(o));
 	}
 }
 

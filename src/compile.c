@@ -33,6 +33,17 @@ obj_t *translate_cond(obj_t *body)
 	CDR(tail)=incr_refs(new_cell(new_symbol(strdup("COND_END")),NULL));
 	return list;
 }
+obj_t *translate_list(obj_t *body)
+{
+	obj_t *head=new_cell(new_symbol(strdup("LIST")),NULL);
+	obj_t *tail=head;
+	for (obj_t *o=CDR(body);o;o=CDR(o)) {
+		CDR(tail)=incr_refs(rpn(CAR(o)));
+		for (;CDR(tail);tail=CDR(tail));
+	}
+	CDR(tail)=incr_refs(new_cell(new_symbol(strdup("LIST_END")),NULL));
+	return head;
+}
 obj_t *rpn(obj_t *body)
 {
 	if (!body||body->type!=CELL)
@@ -43,6 +54,8 @@ obj_t *rpn(obj_t *body)
 		return translate_cond(body);
 	if (symbol_match(CAR(body),"PROGN"))
 		return translate_progn(body);
+	if (symbol_match(CAR(body),"LIST"))
+		return translate_list(body);
 	obj_t *list=NULL;
 	obj_t *tail=NULL;
 	for (obj_t *o=CDR(body);o;o=CDR(o)) {

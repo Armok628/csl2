@@ -135,7 +135,7 @@ obj_t *readlist(char *str)
 }
 obj_t *quote(obj_t *obj)
 {
-	if (obj->type!=CELL&&obj->type!=SYMBOL)
+	if (obj&&obj->type!=CELL&&obj->type!=SYMBOL)
 		return obj;
 	return new_cell(new_symbol(strdup("QUOTE")),new_cell(obj,NULL));
 }
