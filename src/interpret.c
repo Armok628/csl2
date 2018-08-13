@@ -39,12 +39,17 @@ void interpret(obj_t *list)
 			drop();
 		} else if (symbol_match(CAR(o),"CALL")) {
 			obj_t *f=pop();
-			funcall(f);
+			if (!funcall(f))
+				goto FATAL_INTERP_ERROR;
 			decr_refs(f);
+#ifdef ALL_ERRORS_FATAL
+			obj_t *r=stack_obj(0);
+			if (r&&r->type==ERROR)
+				goto FATAL_INTERP_ERROR;
+#endif
 		} else if (symbol_match(CAR(o),"QUOTE")) {
 			o=CDR(o);
 			push(CAR(o));
-			continue;
 		} else if (symbol_match(CAR(o),"COND")) {
 			o=interpret_cond(o);
 			// COND_END skipped by o=CDR(o) in for-loop
@@ -53,5 +58,13 @@ void interpret(obj_t *list)
 		} else
 			push(CAR(o));
 	}
+	return;
+
+FATAL_INTERP_ERROR:
+	fputs("Fatal error while interpreting ",stdout);
+	print_obj(list);
+	putchar('\n');
+	print_stack();
+	exit(1);
 }
 

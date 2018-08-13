@@ -18,3 +18,12 @@ obj_t *stack_obj(int n)
 {
 	return stack[stack_index-n-1];
 }
+void print_stack(void)
+{
+	puts("Stack:");
+	for (int i=stack_index-1;i>=0;i--) {
+		printf("%d: ",i);
+		print_obj(stack[i]);
+		putchar('\n');
+	}
+}

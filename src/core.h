@@ -41,7 +41,8 @@
 		decr_refs(arg1); \
 		decr_refs(arg2); \
 	}
-#define INIT(name,func) insert(dict,#name,incr_refs(new_cfunction(&stack_##func)));
+#define INIT(name,func) \
+	insert(dict,#name,incr_refs(new_cfunction(&stack_##func)));
 // Files depending on above macros are part of the core:
 #include "arith.h"
 

@@ -93,7 +93,7 @@ obj_t *set(obj_t *sym,obj_t *val)
 	if (!type_check(sym,SYMBOL,"SET: "))
 		return new_object();
 	set_binding(sym,val);
-	return sym;
+	return val;
 }
 STACK(get,1_ARG)
 obj_t *get(obj_t *sym)

@@ -6,5 +6,6 @@
 #include "stack.h"
 #include "object.h"
 
+#define ALL_ERRORS_FATAL
 void interpret(obj_t *);
 #endif

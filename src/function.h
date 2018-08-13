@@ -7,5 +7,5 @@
 
 obj_t *new_cfunction(void (*)(void));
 obj_t *new_lispfunction(obj_t *,obj_t *);
-void funcall(obj_t *);
+bool funcall(obj_t *);
 #endif

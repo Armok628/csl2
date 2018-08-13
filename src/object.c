@@ -40,9 +40,13 @@ bool type_check(obj_t *obj,type_t types,const char *err_prefix)
 		if (types>>i>1)
 			fputs(" or ",stdout);
 	}
-	printf(", but got %s: ",obj_type_name(obj));
-	print_obj(obj);
-	putchar('\n');
+	if (obj) {
+		printf(", but got %s: ",obj_type_name(obj));
+		print_obj(obj);
+		putchar('\n');
+	} else
+		puts(", but got NIL");
+
 	return false;
 }
 void destroy(obj_t *o)

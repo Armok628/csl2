@@ -31,13 +31,13 @@ void bind_args(obj_t *argl)
 	for (int i=0;i<l;i++)
 		drop();
 }
-void funcall(obj_t *func)
-{
-	if (!type_check(func,FUNCTION,"Fatal: funcall(): "))
-		exit(1);
+bool funcall(obj_t *func)
+{ // Returns true if no fatal error occurred
+	if (!type_check(func,FUNCTION,"funcall(): "))
+		return false;
 	if (!func->data.func.lambda) {
 		func->data.func.rep.c();
-		return;
+		return true;
 	}
 	obj_t *rep=func->data.func.rep.lisp;
 	obj_t *local_env=CAR(rep);
@@ -50,4 +50,5 @@ void funcall(obj_t *func)
 		bind_args(args);
 	interpret(body);
 	pop_namespace();
+	return true;
 }
