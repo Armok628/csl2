@@ -68,4 +68,5 @@ CORE(quit,void)
 CORE(see,obj_t *)
 CORE(tick,void)
 CORE(tock,void)
+CORE(uplevel,obj_t *,obj_t *)
 #endif

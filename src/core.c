@@ -25,6 +25,7 @@ void init_core(void)
 	INIT(SEE,see)
 	INIT(TICK,tick)
 	INIT(TOCK,tock)
+	INIT(UPLEVEL,uplevel)
 }
 STACK(print,1_ARG)
 obj_t *print(obj_t *obj)
@@ -149,7 +150,7 @@ obj_t *eval(obj_t *expr)
 	decr_refs(r);
 	r=pop();
 	if (r)
-		r->refs-=r->refs>0;
+		r->refs--;
 	return r;
 }
 STACK(read,1_ARG)
@@ -191,4 +192,21 @@ STACK(tock,0_ARGS)
 obj_t *tock(void)
 {
 	return new_double(read_timer());
+}
+STACK(uplevel,2_ARGS)
+obj_t *uplevel(obj_t *n,obj_t *expr)
+{
+	if (!type_check(n,INTEGER,"UPLEVEL, arg 1: "))
+		return new_object();
+	if (!type_check(expr,CELL|SYMBOL,"UPLEVEL, arg 2: "))
+		return new_object();
+	level-=n->data.i;
+	obj_t *t=incr_refs(rpn(expr));
+	interpret(t);
+	decr_refs(t);
+	level+=n->data.i;
+	obj_t *r=pop();
+	if (r)
+		r->refs--;
+	return r;
 }

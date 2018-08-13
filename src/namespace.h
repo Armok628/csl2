@@ -5,6 +5,7 @@
 #include "object.h"
 #define NAMESPACE_SIZE 100
 extern table_t *dict;
+extern int level;
 
 void init_dict(void);
 void push_namespace(table_t *);
