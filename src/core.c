@@ -26,6 +26,7 @@ void init_core(void)
 	INIT(TICK,tick)
 	INIT(TOCK,tock)
 	INIT(UPLEVEL,uplevel)
+	INIT(NCONC,nconc)
 }
 STACK(print,1_ARG)
 obj_t *print(obj_t *obj)
@@ -213,4 +214,10 @@ obj_t *uplevel(obj_t *n,obj_t *expr)
 	if (r)
 		r->refs--;
 	return r;
+}
+STACK(nconc,2_ARGS)
+obj_t *nconc(obj_t *a,obj_t *b)
+{
+	concatenate(a,b);
+	return a;
 }

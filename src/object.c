@@ -185,3 +185,8 @@ obj_t *copy_obj(obj_t *o)
 	}
 	return c;
 }
+void concatenate(obj_t *list,obj_t *item)
+{
+	for (;CDR(list);list=CDR(list));
+	CDR(list)=incr_refs(item);
+}

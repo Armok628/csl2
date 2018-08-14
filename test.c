@@ -29,14 +29,15 @@ int main(int argc,char **argv)
 		stack_eval();
 		drop();
 		free(script);
-	} else {
-		push(new_integer(1000));
-		stack_read();
-		stack_eval();
-		fputs("\n=> ",stdout);
-		stack_print();
-		drop();
-		putchar('\n');
-	}
+	} else
+		for (;;) {
+			push(new_integer(1000));
+			stack_read();
+			stack_eval();
+			fputs("\n=> ",stdout);
+			stack_print();
+			drop();
+			putchar('\n');
+		}
 	free_table(dict);
 }
