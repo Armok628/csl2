@@ -12,7 +12,9 @@ char *trim_left(char *str)
 { // Returns pointer to where printing characters begin
 	for (;*str;str++) {
 		switch (*str) {
-		case ' ':
+		case '#':
+			for (;*str&&*str!='\n';str++);
+	 	case ' ':
 		case '\n':
 		case '\t':
 			continue;
