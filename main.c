@@ -23,11 +23,23 @@ char *slurp(char *filename)
 	fclose(fh);
 	return buf;
 }
+void bind_argv(int argc,char **argv)
+{
+	obj_t *l=NULL;
+	for (int i=argc-1;i>=0;i--)
+		l=new_cell(read_str(argv[i]),l);
+	set_binding(new_symbol(strdup("ARGV")),l);
+}
 int main(int argc,char **argv)
 {
 	init_dict();
 	if (argc>1) {
+		bind_argv(argc,argv);
 		char *script=slurp(argv[1]);
+		if (!script) {
+			printf("Could not read %s\n",argv[1]);
+			return 1;
+		}
 		push(read_str(script));
 		stack_eval();
 		drop();
@@ -47,4 +59,5 @@ int main(int argc,char **argv)
 		}
 	}
 	free_table(dict);
+	return 0;
 }
