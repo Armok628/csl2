@@ -142,27 +142,37 @@ obj_t *quote(obj_t *obj)
 	return new_cell(new_symbol(strdup("QUOTE")),new_cell(obj,NULL));
 }
 obj_t *read_splice_str(char *str)
-{
+{ // Accepts argument identical to read_list_str (no starting `)
+	// `(A ,B @C . D) => (CONS (QUOTE A) (CONS B (NCONC C (QUOTE D))))
 	obj_t *ret=NULL;
 	obj_t *tail=NULL;
 	int n=delimit(str);
 	char *tok=str;
+	bool dotted=false;
 	for (int i=0;i<n;i++) {
 		for (;*tok;tok++); // Find next separator
 		for (;!*tok;tok++) // Find next token
 			*tok=' '; // Replace nulls with space to avoid double reading
+		if (!strcmp(tok,".")) {
+			dotted=true;
+			continue;
+		}
 		bool unquote=*tok==',';
 		bool splice=*tok=='@';
 		obj_t *r=read_str(tok+unquote+splice);
 		if (!unquote&&!splice)
 			r=quote(r);
-		obj_t *s=new_symbol(strdup(splice?"NCONC":"CONS"));
-		r=new_cell(s,new_cell(r,new_cell(NULL,NULL)));
+		if (!dotted) {
+			obj_t *s=new_symbol(strdup(splice?"NCONC":"CONS"));
+			r=new_cell(s,new_cell(r,new_cell(NULL,NULL)));
+		}
 		if (!ret) {
 			ret=r;
 			tail=CDR(CDR(ret));
 		} else {
 			CAR(tail)=incr_refs(r);
+			if (dotted)
+				break;
 			tail=CDR(CDR(CAR(tail)));
 		}
 	}
