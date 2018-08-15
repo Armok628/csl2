@@ -293,17 +293,6 @@ obj_t *load(obj_t *file)
 {
 	if (!type_check(file,SYMBOL,"LOAD: "))
 		return new_object();
-	char *filename=file->data.sym;
-	FILE *fh=fopen(filename,"r");
-	if (!fh)
-		return new_object();
-	fseek(fh,0,SEEK_END);
-	long len=ftell(fh);
-	fseek(fh,0,SEEK_SET);
-	char *buf=calloc(len+1,1);
-	fread(buf,1,len,fh);
-	fclose(fh);
-	obj_t *r=read_str(buf);
-	free(buf);
-	return r;
+	obj_t *r=load_file(file->data.sym);
+	return r?r:new_object();
 }

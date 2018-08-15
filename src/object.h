@@ -17,19 +17,19 @@ typedef enum {
 	NIL=1<<6, // Pseudo-type for use in type_check
 	SYMBOL=1<<7,
 } type_t; // Formatted as flags for type_check
-typedef struct obj_s {
+typedef struct object {
 	int refs;
 	type_t type;
 	union {
 		struct {
-			struct obj_s *car;
-			struct obj_s *cdr;
+			struct object *car;
+			struct object *cdr;
 		} cell;
 		struct {
 			bool lambda;
 			union {
 				void (*c)(void);
-				struct obj_s *lisp; // (namespace_obj args_list body)
+				struct object *lisp; // (namespace_obj args_list body)
 			} rep;
 		} func;
 		char *sym;

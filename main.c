@@ -2,13 +2,12 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include "src/core.h"
 #include "src/compile.h"
 #include "src/interpret.h"
 #include "src/namespace.h"
+#include "src/object.h"
 #include "src/parser.h"
 #include "src/stack.h"
-#include "src/object.h"
 #define REPL
 void bind_argv(int argc,char **argv)
 {
@@ -22,9 +21,11 @@ int main(int argc,char **argv)
 	init_dict();
 	if (argc>1) {
 		bind_argv(argc,argv);
-		push(strsym(argv[1]));
-		stack_load();
-		stack_eval();
+		obj_t *r=incr_refs(load_file(argv[1]));
+		obj_t *t=incr_refs(rpn(r));
+		decr_refs(r);
+		interpret(t);
+		decr_refs(t);
 		drop();
 		goto QUIT_MAIN;
 	}
@@ -35,11 +36,15 @@ int main(int argc,char **argv)
 		char buf[1000];
 		if (!fgets(buf,1000,stdin))
 			goto QUIT_MAIN;
-		push(read_str(buf));
-		stack_eval();
+		obj_t *r=incr_refs(read_str(buf));
+		obj_t *t=incr_refs(rpn(r));
+		decr_refs(r);
+		interpret(t);
+		decr_refs(t);
+		r=pop();
 		fputs("\n=> ",stdout);
-		stack_print();
-		drop();
+		print_obj(r);
+		decr_refs(r);
 		putchar('\n');
 	}
 QUIT_MAIN:

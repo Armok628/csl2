@@ -6,6 +6,6 @@
 #include <string.h>
 #include "object.h"
 
-/**/obj_t *read_splice_str(char *);
 obj_t *read_str(char *);
+obj_t *load_file(char *);
 #endif
