@@ -189,6 +189,8 @@ obj_t *uplevel(obj_t *n,obj_t *expr)
 STACK(uplevel,2)
 obj_t *nconc(obj_t *a,obj_t *b)
 {
+	if (!type_check(a,CELL,"NCONC: "))
+		return new_object();
 	concatenate(a,b);
 	return a;
 }
