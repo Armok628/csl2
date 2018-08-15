@@ -4,7 +4,6 @@
 #include "core.h"
 #include "namespace.h"
 #define FUNC_FROM_OP(op,name) \
-STACK(name,2) \
 obj_t *name(obj_t *x,obj_t *y) \
 { \
 	bool type_err=false; \
@@ -16,9 +15,9 @@ obj_t *name(obj_t *x,obj_t *y) \
 		return new_integer(x->data.i op y->data.i); \
 	double a=dub(x),b=dub(y); \
 	return new_double(a op b); \
-}
+} \
+STACK(name,2)
 #define FUNC_FROM_COMP(op,name) \
-STACK(name,2) \
 obj_t *name(obj_t *x,obj_t *y) \
 { \
 	bool type_err=false; \
@@ -31,17 +30,8 @@ obj_t *name(obj_t *x,obj_t *y) \
 		return strsym("T"); \
 	else \
 		return NULL; \
-}
+} \
+STACK(name,2)
 
 void init_arith(void);
-CORE(add,obj_t *,obj_t *)
-CORE(subtract,obj_t *,obj_t *)
-CORE(multiply,obj_t *,obj_t *)
-CORE(divide,obj_t *,obj_t *)
-CORE(gt,obj_t *,obj_t *)
-CORE(gte,obj_t *,obj_t *)
-CORE(lt,obj_t *,obj_t *)
-CORE(lte,obj_t *,obj_t *)
-CORE(eqn,obj_t *,obj_t *)
-CORE(lrandom,obj_t *)
 #endif

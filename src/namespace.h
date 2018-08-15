@@ -1,8 +1,11 @@
 // Functions for creating and manipulating LISP namespaces
 #ifndef NAMESPACE_H
 #define NAMESPACE_H
-#include "core.h"
 #include "object.h"
+#include "stack.h"
+// The following headers contain init functions for built-ins
+#include "arith.h"
+#include "core.h"
 #define NAMESPACE_SIZE 100
 extern table_t *dict;
 extern int level;

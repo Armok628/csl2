@@ -1,54 +1,21 @@
 #include "core.h"
-void init_core(void)
-{
-	INIT(PRINT,print)
-	INIT(TERPRI,terpri)
-	INIT(CONS,cons)
-	INIT(CAR,car)
-	INIT(CDR,cdr)
-	INIT(RPLACA,rplaca)
-	INIT(RPLACD,rplacd)
-	INIT(ATOM,atom)
-	INIT(SET,set)
-	INIT(GET,get)
-	INIT(UNSET,unset)
-	INIT(EQ,eq)
-	INIT(COPY,copy)
-	INIT(LENGTH,length)
-	INIT(LAMBDA,lambda)
-	INIT(EVAL,eval)
-	INIT(READ,lread)
-	INIT(NULL,null)
-	INIT(NOT,null)
-	INIT(QUIT,quit)
-	INIT(EXIT,quit)
-	INIT(SEE,see)
-	INIT(TICK,tick)
-	INIT(TOCK,tock)
-	INIT(UPLEVEL,uplevel)
-	INIT(NCONC,nconc)
-	INIT(FOR,lfor)
-	INIT(FOREACH,foreach)
-	INIT(LOAD,load)
-}
-STACK(print,1)
 obj_t *print(obj_t *obj)
 {
 	print_obj(obj);
 	return obj;
 }
-STACK(terpri,0)
+STACK(print,1)
 obj_t *terpri(void)
 {
 	putchar('\n');
 	return NULL;
 }
-STACK(cons,2)
+STACK(terpri,0)
 obj_t *cons(obj_t *a,obj_t *b)
 {
 	return new_cell(a,b);
 }
-STACK(car,1)
+STACK(cons,2)
 obj_t *car(obj_t *c)
 {
 	if (!c)
@@ -57,7 +24,7 @@ obj_t *car(obj_t *c)
 		return new_object();
 	return CAR(c);
 }
-STACK(cdr,1)
+STACK(car,1)
 obj_t *cdr(obj_t *c)
 {
 	if (!c)
@@ -66,7 +33,7 @@ obj_t *cdr(obj_t *c)
 		return new_object();
 	return CDR(c);
 }
-STACK(rplaca,2)
+STACK(cdr,1)
 obj_t *rplaca(obj_t *c,obj_t *v)
 {
 	if (!type_check(c,CELL,"RPLACA: "))
@@ -75,7 +42,7 @@ obj_t *rplaca(obj_t *c,obj_t *v)
 	CAR(c)=incr_refs(v);
 	return c;
 }
-STACK(rplacd,2)
+STACK(rplaca,2)
 obj_t *rplacd(obj_t *c,obj_t *v)
 {
 	if (!type_check(c,CELL,"RPLACD: "))
@@ -84,14 +51,14 @@ obj_t *rplacd(obj_t *c,obj_t *v)
 	CDR(c)=incr_refs(v);
 	return c;
 }
-STACK(atom,1)
+STACK(rplacd,2)
 obj_t *atom(obj_t *obj)
 {
 	if (!obj)
 		return strsym("T");
 	return obj->type==CELL?NULL:obj;
 }
-STACK(set,2)
+STACK(atom,1)
 obj_t *set(obj_t *sym,obj_t *val)
 {
 	if (!type_check(sym,SYMBOL,"SET: "))
@@ -99,21 +66,21 @@ obj_t *set(obj_t *sym,obj_t *val)
 	set_binding(sym,val);
 	return val;
 }
-STACK(get,1)
+STACK(set,2)
 obj_t *get(obj_t *sym)
 {
 	if (!sym||sym->type!=SYMBOL)
 		return sym;
 	return get_binding(sym);
 }
-STACK(unset,1)
+STACK(get,1)
 obj_t *unset(obj_t *sym)
 {
 	if (!sym||sym->type==SYMBOL)
 		unset_binding(sym);
 	return NULL;
 }
-STACK(eq,2)
+STACK(unset,1)
 obj_t *eq(obj_t *a,obj_t *b)
 {
 	if (eq_objs(a,b))
@@ -121,19 +88,19 @@ obj_t *eq(obj_t *a,obj_t *b)
 	else
 		return NULL;
 }
-STACK(copy,1)
+STACK(eq,2)
 obj_t *copy(obj_t *obj)
 {
 	return copy_obj(obj);
 }
-STACK(length,1)
+STACK(copy,1)
 obj_t *length(obj_t *list)
 {
 	if (!type_check(list,NIL|CELL,"LENGTH: "))
 		return new_object();
 	return new_integer(list_length(list));
 }
-STACK(lambda,2)
+STACK(length,1)
 obj_t *lambda(obj_t *args,obj_t *body)
 {
 	bool type_err=false;
@@ -145,7 +112,7 @@ obj_t *lambda(obj_t *args,obj_t *body)
 		return new_object();
 	return new_lispfunction(args,rpn(body));
 }
-STACK(eval,1)
+STACK(lambda,2)
 obj_t *eval(obj_t *expr)
 {
 	obj_t *r=rpn(expr);
@@ -157,7 +124,7 @@ obj_t *eval(obj_t *expr)
 		r->refs--;
 	return r;
 }
-STACK(lread,1)
+STACK(eval,1)
 obj_t *lread(obj_t *n)
 {
 	if (!type_check(n,INTEGER,"READ: "))
@@ -167,17 +134,17 @@ obj_t *lread(obj_t *n)
 	fgets(buf,l,stdin);
 	return read_str(buf);
 }
-STACK(null,1)
+STACK(lread,1)
 obj_t *null(obj_t *c)
 {
 	return !c?strsym("T"):NULL;
 }
-STACK(quit,0)
+STACK(null,1)
 obj_t *quit(void)
 {
 	exit(0);
 }
-STACK(see,1)
+STACK(quit,0)
 obj_t *see(obj_t *func)
 {
 	if (!type_check(func,FUNCTION,"SEE: "))
@@ -186,18 +153,18 @@ obj_t *see(obj_t *func)
 		return NULL;
 	return CAR(CDR(CDR(func->data.func.rep.lisp)));
 }
-STACK(tick,0)
+STACK(see,1)
 obj_t *tick(void)
 {
 	start_timer();
 	return NULL;
 }
-STACK(tock,0)
+STACK(tick,0)
 obj_t *tock(void)
 {
 	return new_double(read_timer());
 }
-STACK(uplevel,2)
+STACK(tock,0)
 obj_t *uplevel(obj_t *n,obj_t *expr)
 {
 	bool type_err=false;
@@ -219,13 +186,13 @@ obj_t *uplevel(obj_t *n,obj_t *expr)
 		r->refs--;
 	return r;
 }
-STACK(nconc,2)
+STACK(uplevel,2)
 obj_t *nconc(obj_t *a,obj_t *b)
 {
 	concatenate(a,b);
 	return a;
 }
-STACK(lfor,4)
+STACK(nconc,2)
 obj_t *lfor(obj_t *init,obj_t *cond,obj_t *iter,obj_t *body)
 {
 	bool type_err=false;
@@ -266,7 +233,7 @@ obj_t *lfor(obj_t *init,obj_t *cond,obj_t *iter,obj_t *body)
 		ret->refs--;
 	return ret;
 }
-STACK(foreach,3)
+STACK(lfor,4)
 obj_t *foreach(obj_t *name,obj_t *list,obj_t *body)
 {
 	bool type_err=false;
@@ -288,11 +255,44 @@ obj_t *foreach(obj_t *name,obj_t *list,obj_t *body)
 		ret->refs--;
 	return ret;
 }
-STACK(load,1)
+STACK(foreach,3)
 obj_t *load(obj_t *file)
 {
 	if (!type_check(file,SYMBOL,"LOAD: "))
 		return new_object();
 	obj_t *r=load_file(file->data.sym);
 	return r?r:new_object();
+}
+STACK(load,1)
+void init_core(void)
+{
+	INIT(PRINT,print)
+	INIT(TERPRI,terpri)
+	INIT(CONS,cons)
+	INIT(CAR,car)
+	INIT(CDR,cdr)
+	INIT(RPLACA,rplaca)
+	INIT(RPLACD,rplacd)
+	INIT(ATOM,atom)
+	INIT(SET,set)
+	INIT(GET,get)
+	INIT(UNSET,unset)
+	INIT(EQ,eq)
+	INIT(COPY,copy)
+	INIT(LENGTH,length)
+	INIT(LAMBDA,lambda)
+	INIT(EVAL,eval)
+	INIT(READ,lread)
+	INIT(NULL,null)
+	INIT(NOT,null)
+	INIT(QUIT,quit)
+	INIT(EXIT,quit)
+	INIT(SEE,see)
+	INIT(TICK,tick)
+	INIT(TOCK,tock)
+	INIT(UPLEVEL,uplevel)
+	INIT(NCONC,nconc)
+	INIT(FOR,lfor)
+	INIT(FOREACH,foreach)
+	INIT(LOAD,load)
 }
