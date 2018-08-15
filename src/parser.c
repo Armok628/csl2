@@ -139,7 +139,7 @@ obj_t *quote(obj_t *obj)
 {
 	if (obj&&obj->type!=CELL&&obj->type!=SYMBOL)
 		return obj;
-	return new_cell(new_symbol(strdup("QUOTE")),new_cell(obj,NULL));
+	return new_cell(strsym("QUOTE"),new_cell(obj,NULL));
 }
 obj_t *read_splice_str(char *str)
 { // Accepts argument identical to read_list_str (no starting `)
@@ -163,7 +163,7 @@ obj_t *read_splice_str(char *str)
 		if (!unquote&&!splice)
 			r=quote(r);
 		if (!dotted) {
-			obj_t *s=new_symbol(strdup(splice?"NCONC":"CONS"));
+			obj_t *s=strsym(splice?"NCONC":"CONS");
 			r=new_cell(s,new_cell(r,new_cell(NULL,NULL)));
 		}
 		if (!ret) {
@@ -193,7 +193,7 @@ obj_t *read_str(char *str)
 		obj=read_list_str(str);
 		break;
 	case SYMBOL:
-		obj=new_symbol(strdup(str));
+		obj=strsym(str);
 		break;
 	case INTEGER:
 		obj=new_integer(atol(str));
@@ -202,7 +202,7 @@ obj_t *read_str(char *str)
 		obj=new_double(strtod(str,NULL));
 		break;
 	default:
-		return new_symbol(strdup("ERROR"));
+		return strsym("ERROR");
 	} // String must be freed by caller if necessary
 	return q?quote(obj):obj;
 }

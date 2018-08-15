@@ -12,4 +12,9 @@ obj_t *new_integer(long);
 obj_t *new_double(double);
 obj_t *new_hashtable(table_t *);
 obj_t *new_cfunction(void (*)(void));
+
+static inline obj_t *strsym(const char *str)
+{
+	return new_symbol(strdup(str));
+}
 #endif

@@ -28,7 +28,7 @@ obj_t *name(obj_t *x,obj_t *y) \
 		return new_object(); \
 	double a=dub(x),b=dub(y); \
 	if (a op b) \
-		return new_symbol(strdup("T")); \
+		return strsym("T"); \
 	else \
 		return NULL; \
 }

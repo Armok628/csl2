@@ -22,7 +22,7 @@ int main(int argc,char **argv)
 	init_dict();
 	if (argc>1) {
 		bind_argv(argc,argv);
-		push(new_symbol(strdup(argv[1])));
+		push(strsym(argv[1]));
 		stack_load();
 		stack_eval();
 		drop();

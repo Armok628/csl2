@@ -88,7 +88,7 @@ STACK(atom,1)
 obj_t *atom(obj_t *obj)
 {
 	if (!obj)
-		return new_symbol(strdup("T"));
+		return strsym("T");
 	return obj->type==CELL?NULL:obj;
 }
 STACK(set,2)
@@ -117,7 +117,7 @@ STACK(eq,2)
 obj_t *eq(obj_t *a,obj_t *b)
 {
 	if (eq_objs(a,b))
-		return new_symbol(strdup("T"));
+		return strsym("T");
 	else
 		return NULL;
 }
@@ -170,7 +170,7 @@ obj_t *lread(obj_t *n)
 STACK(null,1)
 obj_t *null(obj_t *c)
 {
-	return !c?new_symbol(strdup("T")):NULL;
+	return !c?strsym("T"):NULL;
 }
 STACK(quit,0)
 obj_t *quit(void)
