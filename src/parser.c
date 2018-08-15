@@ -108,7 +108,7 @@ int delimit(char *str)
 	}
 	return count;
 }
-obj_t *readlist(char *str)
+obj_t *read_list_str(char *str)
 { // Assumes valid list
 	obj_t *ret=NULL;
 	obj_t *tail=NULL;
@@ -141,17 +141,46 @@ obj_t *quote(obj_t *obj)
 		return obj;
 	return new_cell(new_symbol(strdup("QUOTE")),new_cell(obj,NULL));
 }
+obj_t *read_splice_str(char *str)
+{
+	obj_t *ret=NULL;
+	obj_t *tail=NULL;
+	int n=delimit(str);
+	char *tok=str;
+	for (int i=0;i<n;i++) {
+		for (;*tok;tok++); // Find next separator
+		for (;!*tok;tok++) // Find next token
+			*tok=' '; // Replace nulls with space to avoid double reading
+		bool unquote=*tok==',';
+		bool splice=*tok=='@';
+		obj_t *r=read_str(tok+unquote+splice);
+		if (!unquote&&!splice)
+			r=quote(r);
+		obj_t *s=new_symbol(strdup(splice?"NCONC":"CONS"));
+		r=new_cell(s,new_cell(r,new_cell(NULL,NULL)));
+		if (!ret) {
+			ret=r;
+			tail=CDR(CDR(ret));
+		} else {
+			CAR(tail)=incr_refs(r);
+			tail=CDR(CDR(CAR(tail)));
+		}
+	}
+	return ret;
+}
 obj_t *read_str(char *str)
 { // Error checking through infer_type
 	obj_t *obj;
 	str=trim(str); // Trims input
 	if (!*str||!strcasecmp(str,"NIL"))
 		return NULL;
+	if (*str=='`')
+		return read_splice_str(str+1);
 	bool q=*str=='\'';
 	str+=q;
 	switch (infer_type(str)) {
 	case CELL:
-		obj=readlist(str);
+		obj=read_list_str(str);
 		break;
 	case SYMBOL:
 		obj=new_symbol(strdup(str));

@@ -17,7 +17,7 @@ void init_core(void)
 	INIT(LENGTH,length)
 	INIT(LAMBDA,lambda)
 	INIT(EVAL,eval)
-	INIT(READ,read)
+	INIT(READ,lread)
 	INIT(NULL,null)
 	INIT(NOT,null)
 	INIT(QUIT,quit)
@@ -154,8 +154,8 @@ obj_t *eval(obj_t *expr)
 		r->refs--;
 	return r;
 }
-STACK(read,1_ARG)
-obj_t *read(obj_t *n)
+STACK(lread,1_ARG)
+obj_t *lread(obj_t *n)
 {
 	if (!type_check(n,INTEGER,"READ: "))
 		return new_object();
