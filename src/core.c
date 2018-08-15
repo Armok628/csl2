@@ -128,7 +128,7 @@ obj_t *copy(obj_t *obj)
 STACK(length,1)
 obj_t *length(obj_t *list)
 {
-	if (!type_check(list,CELL,"LENGTH: "))
+	if (!type_check(list,NIL|CELL,"LENGTH: "))
 		return new_object();
 	return new_integer(list_length(list));
 }
@@ -136,10 +136,10 @@ STACK(lambda,2)
 obj_t *lambda(obj_t *args,obj_t *body)
 {
 	bool type_err=false;
-	type_err|=!type_check(args,NIL|CELL,"LAMBDA ARGS: ");
+	type_err|=!type_check(args,NIL|CELL,"LAMBDA, args: ");
 	for (obj_t *o=args;o;o=CDR(o))
-		type_err|=!type_check(CAR(o),SYMBOL,"LAMBDA ARG: ");
-	type_err|=!type_check(body,CELL|SYMBOL,"LAMBDA BODY: ");
+		type_err|=!type_check(CAR(o),SYMBOL,"LAMBDA, arg: ");
+	type_err|=!type_check(body,CELL|SYMBOL,"LAMBDA, body: ");
 	if (type_err)
 		return new_object();
 	return new_lispfunction(args,rpn(body));
