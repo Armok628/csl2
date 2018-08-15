@@ -162,6 +162,8 @@ obj_t *read_splice_str(char *str)
 		obj_t *r=read_str(tok+unquote+splice);
 		if (!unquote&&!splice)
 			r=quote(r);
+		if (splice&&i+1>=n)
+			dotted=true;
 		if (!dotted) {
 			obj_t *s=strsym(splice?"NCONC":"CONS");
 			r=new_cell(s,new_cell(r,new_cell(NULL,NULL)));
