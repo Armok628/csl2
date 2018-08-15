@@ -1,5 +1,6 @@
 #ifndef ARITH_H
 #define ARITH_H
+#include <stdlib.h>
 #include "core.h"
 #include "namespace.h"
 #define FUNC_FROM_OP(op,name) \
@@ -40,4 +41,5 @@ CORE(gte,obj_t *,obj_t *)
 CORE(lt,obj_t *,obj_t *)
 CORE(lte,obj_t *,obj_t *)
 CORE(eqn,obj_t *,obj_t *)
+CORE(lrandom,obj_t *)
 #endif
