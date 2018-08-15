@@ -8,12 +8,14 @@ const char *type_name(type_t type)
 		return "DOUBLE";
 	case ERROR:
 		return "ERROR";
+	case FUNCTION:
+		return "FUNCTION";
 	case HASHTABLE:
 		return "HASHTABLE";
 	case INTEGER:
 		return "INTEGER";
-	case FUNCTION:
-		return "FUNCTION";
+	case NIL:
+		return "NIL"; // For use by type_check error messages
 	case SYMBOL:
 		return "SYMBOL";
 	default:
@@ -28,7 +30,7 @@ const char *obj_type_name(obj_t *obj)
 }
 bool type_check(obj_t *obj,type_t types,const char *err_prefix)
 { // Returns true if obj is of one of the types specified by type
-	if (obj&&obj->type&types)
+	if ((obj&&obj->type&types)||(!obj&&types&NIL))
 		return true;
 	if (err_prefix)
 		fputs(err_prefix,stdout);

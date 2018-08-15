@@ -28,6 +28,7 @@ void init_core(void)
 	INIT(UPLEVEL,uplevel)
 	INIT(NCONC,nconc)
 	INIT(FOR,lfor)
+	INIT(FOREACH,foreach)
 }
 STACK(print,1)
 obj_t *print(obj_t *obj)
@@ -134,7 +135,7 @@ obj_t *length(obj_t *list)
 STACK(lambda,2)
 obj_t *lambda(obj_t *args,obj_t *body)
 {
-	if (args&&!type_check(args,CELL,"LAMBDA ARGS: "))
+	if (!type_check(args,NIL|CELL,"LAMBDA ARGS: "))
 		return new_object();
 	for (obj_t *o=args;o;o=CDR(o))
 		if (!type_check(CAR(o),SYMBOL,"LAMBDA ARG: "))
@@ -225,6 +226,14 @@ obj_t *nconc(obj_t *a,obj_t *b)
 STACK(lfor,4)
 obj_t *lfor(obj_t *init,obj_t *cond,obj_t *iter,obj_t *body)
 {
+	if (!type_check(init,NIL|CELL,"FOR, initialization: "))
+		return new_object();
+	if (!type_check(init,NIL|CELL,"FOR, condition: "))
+		return new_object();
+	if (!type_check(iter,NIL|CELL,"FOR, iteration: "))
+		return new_object();
+	if (!type_check(body,CELL,"FOR, body: "))
+		return new_object();
 	init=incr_refs(rpn(init));
 	cond=incr_refs(rpn(cond));
 	iter=incr_refs(rpn(iter));
@@ -235,12 +244,14 @@ obj_t *lfor(obj_t *init,obj_t *cond,obj_t *iter,obj_t *body)
 	obj_t *ret=NULL;
 	obj_t *c;
 	for (;;) {
-		interpret(cond);
-		c=pop();
-		if (c)
-			decr_refs(c);
-		else
-			break;
+		if (cond) {
+			interpret(cond);
+			c=pop();
+			if (c)
+				decr_refs(c);
+			else
+				break;
+		}
 		interpret(body);
 		decr_refs(ret);
 		ret=pop();
@@ -250,6 +261,28 @@ obj_t *lfor(obj_t *init,obj_t *cond,obj_t *iter,obj_t *body)
 	decr_refs(cond);
 	decr_refs(body);
 	decr_refs(iter);
+	if (ret)
+		ret->refs--;
+	return ret;
+}
+STACK(foreach,3)
+obj_t *foreach(obj_t *name,obj_t *list,obj_t *body)
+{
+	if (!type_check(name,SYMBOL,"FOREACH, name: "))
+		return new_object();
+	if (!type_check(list,CELL,"FOREACH, list: "))
+		return new_object();
+	if (!type_check(body,CELL,"FOREACH, body: "))
+		return new_object();
+	body=incr_refs(rpn(body));
+	obj_t *ret=NULL;
+	for (obj_t *o=list;o;o=CDR(o)) {
+		set_binding(name,CAR(o));
+		interpret(body);
+		decr_refs(ret);
+		ret=pop();
+	}
+	decr_refs(body);
 	if (ret)
 		ret->refs--;
 	return ret;
