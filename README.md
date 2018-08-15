@@ -15,12 +15,15 @@ which convert C functions into a stack-based equivalent.
 Really, they only pop arguments, push results, and do basic memory management.
 However, it greatly reduces the amount of work required to add new built-in functions.
 
+This project also makes use of my own hash table implementation, called [semstable](../../../semstable),
+with a slight modification to allow hash tables to be case-insensitive.
+
 ##### To create a header for new built-in functions:
 1. Make the header (with include guards) and `#include "core.h"` to gain access to its macros.
 2. Include your header in core.h so it can be loaded by the rest of the language automatically.
-3. Make an init function and add a call to it to init_dict in namespace.c.
+3. Make an init function and add a call to it to `init_dict` in namespace.c.
 
-##### To define a new built-in function:
+##### To create a new built-in function:
 1. Write the C function. It must take only object pointers (or void) and return an object pointer.
 2. Use the `STACK(name,argc)` macro to generate a stack-based function.
 4. Use the `CORE(name,args)` macro in the header to make the function visible.
