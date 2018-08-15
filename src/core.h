@@ -74,4 +74,5 @@ CORE(tick,void)
 CORE(tock,void)
 CORE(uplevel,obj_t *,obj_t *)
 CORE(nconc,obj_t *,obj_t *)
+CORE(lfor,obj_t *,obj_t *,obj_t *,obj_t *)
 #endif

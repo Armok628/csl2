@@ -27,6 +27,7 @@ void init_core(void)
 	INIT(TOCK,tock)
 	INIT(UPLEVEL,uplevel)
 	INIT(NCONC,nconc)
+	INIT(FOR,lfor)
 }
 STACK(print,1)
 obj_t *print(obj_t *obj)
@@ -220,4 +221,36 @@ obj_t *nconc(obj_t *a,obj_t *b)
 {
 	concatenate(a,b);
 	return a;
+}
+STACK(lfor,4)
+obj_t *lfor(obj_t *init,obj_t *cond,obj_t *iter,obj_t *body)
+{
+	init=incr_refs(rpn(init));
+	cond=incr_refs(rpn(cond));
+	iter=incr_refs(rpn(iter));
+	body=incr_refs(rpn(body));
+	interpret(init);
+	decr_refs(init);
+	drop();
+	obj_t *ret=NULL;
+	obj_t *c;
+	for (;;) {
+		interpret(cond);
+		c=pop();
+		if (c)
+			decr_refs(c);
+		else
+			break;
+		interpret(body);
+		decr_refs(ret);
+		ret=pop();
+		interpret(iter);
+		drop();
+	}
+	decr_refs(cond);
+	decr_refs(body);
+	decr_refs(iter);
+	if (ret)
+		ret->refs--;
+	return ret;
 }
