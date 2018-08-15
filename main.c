@@ -9,6 +9,7 @@
 #include "src/parser.h"
 #include "src/stack.h"
 #include "src/object.h"
+#define REPL
 char *slurp(char *filename)
 {
 	FILE *fh=fopen(filename,"r");
@@ -32,7 +33,10 @@ int main(int argc,char **argv)
 		drop();
 		free(script);
 	} else {
-		//for (;;) {
+#ifdef REPL
+		for (;;)
+#endif
+			{
 			push(new_integer(1000));
 			stack_lread();
 			stack_eval();
@@ -40,7 +44,7 @@ int main(int argc,char **argv)
 			stack_print();
 			drop();
 			putchar('\n');
-		//}
+		}
 	}
 	free_table(dict);
 }
