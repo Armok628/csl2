@@ -4,7 +4,7 @@
 #include "core.h"
 #include "namespace.h"
 #define FUNC_FROM_OP(op,name) \
-STACK(name,2_ARGS) \
+STACK(name,2) \
 obj_t *name(obj_t *x,obj_t *y) \
 { \
 	if (!type_check(x,INTEGER|DOUBLE,#op", arg 1: ")) \
@@ -17,7 +17,7 @@ obj_t *name(obj_t *x,obj_t *y) \
 	return new_double(a op b); \
 }
 #define FUNC_FROM_COMP(op,name) \
-STACK(name,2_ARGS) \
+STACK(name,2) \
 obj_t *name(obj_t *x,obj_t *y) \
 { \
 	if (!type_check(x,INTEGER|DOUBLE,#op", arg 1: ")) \

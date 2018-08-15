@@ -28,24 +28,24 @@ void init_core(void)
 	INIT(UPLEVEL,uplevel)
 	INIT(NCONC,nconc)
 }
-STACK(print,1_ARG)
+STACK(print,1)
 obj_t *print(obj_t *obj)
 {
 	print_obj(obj);
 	return obj;
 }
-STACK(terpri,0_ARGS)
+STACK(terpri,0)
 obj_t *terpri(void)
 {
 	putchar('\n');
 	return NULL;
 }
-STACK(cons,2_ARGS)
+STACK(cons,2)
 obj_t *cons(obj_t *a,obj_t *b)
 {
 	return new_cell(a,b);
 }
-STACK(car,1_ARG)
+STACK(car,1)
 obj_t *car(obj_t *c)
 {
 	if (!c)
@@ -54,7 +54,7 @@ obj_t *car(obj_t *c)
 		return new_object();
 	return CAR(c);
 }
-STACK(cdr,1_ARG)
+STACK(cdr,1)
 obj_t *cdr(obj_t *c)
 {
 	if (!c)
@@ -63,7 +63,7 @@ obj_t *cdr(obj_t *c)
 		return new_object();
 	return CDR(c);
 }
-STACK(rplaca,2_ARGS)
+STACK(rplaca,2)
 obj_t *rplaca(obj_t *c,obj_t *v)
 {
 	if (!type_check(c,CELL,"RPLACA: "))
@@ -72,7 +72,7 @@ obj_t *rplaca(obj_t *c,obj_t *v)
 	CAR(c)=incr_refs(v);
 	return c;
 }
-STACK(rplacd,2_ARGS)
+STACK(rplacd,2)
 obj_t *rplacd(obj_t *c,obj_t *v)
 {
 	if (!type_check(c,CELL,"RPLACD: "))
@@ -81,14 +81,14 @@ obj_t *rplacd(obj_t *c,obj_t *v)
 	CDR(c)=incr_refs(v);
 	return c;
 }
-STACK(atom,1_ARG)
+STACK(atom,1)
 obj_t *atom(obj_t *obj)
 {
 	if (!obj)
 		return new_symbol(strdup("T"));
 	return obj->type==CELL?NULL:obj;
 }
-STACK(set,2_ARGS)
+STACK(set,2)
 obj_t *set(obj_t *sym,obj_t *val)
 {
 	if (!type_check(sym,SYMBOL,"SET: "))
@@ -96,21 +96,21 @@ obj_t *set(obj_t *sym,obj_t *val)
 	set_binding(sym,val);
 	return val;
 }
-STACK(get,1_ARG)
+STACK(get,1)
 obj_t *get(obj_t *sym)
 {
 	if (!sym||sym->type!=SYMBOL)
 		return sym;
 	return get_binding(sym);
 }
-STACK(unset,1_ARG)
+STACK(unset,1)
 obj_t *unset(obj_t *sym)
 {
 	if (!sym||sym->type==SYMBOL)
 		unset_binding(sym);
 	return NULL;
 }
-STACK(eq,2_ARGS)
+STACK(eq,2)
 obj_t *eq(obj_t *a,obj_t *b)
 {
 	if (eq_objs(a,b))
@@ -118,19 +118,19 @@ obj_t *eq(obj_t *a,obj_t *b)
 	else
 		return NULL;
 }
-STACK(copy,1_ARG)
+STACK(copy,1)
 obj_t *copy(obj_t *obj)
 {
 	return copy_obj(obj);
 }
-STACK(length,1_ARG)
+STACK(length,1)
 obj_t *length(obj_t *list)
 {
 	if (!type_check(list,CELL,"LENGTH: "))
 		return new_object();
 	return new_integer(list_length(list));
 }
-STACK(lambda,2_ARGS)
+STACK(lambda,2)
 obj_t *lambda(obj_t *args,obj_t *body)
 {
 	if (args&&!type_check(args,CELL,"LAMBDA ARGS: "))
@@ -142,7 +142,7 @@ obj_t *lambda(obj_t *args,obj_t *body)
 		return new_object();
 	return new_lispfunction(args,rpn(body));
 }
-STACK(eval,1_ARG)
+STACK(eval,1)
 obj_t *eval(obj_t *expr)
 {
 	obj_t *r=rpn(expr);
@@ -154,7 +154,7 @@ obj_t *eval(obj_t *expr)
 		r->refs--;
 	return r;
 }
-STACK(lread,1_ARG)
+STACK(lread,1)
 obj_t *lread(obj_t *n)
 {
 	if (!type_check(n,INTEGER,"READ: "))
@@ -164,17 +164,17 @@ obj_t *lread(obj_t *n)
 	fgets(buf,l,stdin);
 	return read_str(buf);
 }
-STACK(null,1_ARG)
+STACK(null,1)
 obj_t *null(obj_t *c)
 {
 	return !c?new_symbol(strdup("T")):NULL;
 }
-STACK(quit,0_ARGS)
+STACK(quit,0)
 obj_t *quit(void)
 {
 	exit(0);
 }
-STACK(see,1_ARG)
+STACK(see,1)
 obj_t *see(obj_t *func)
 {
 	if (!type_check(func,FUNCTION,"SEE: "))
@@ -183,18 +183,18 @@ obj_t *see(obj_t *func)
 		return NULL;
 	return CAR(CDR(CDR(func->data.func.rep.lisp)));
 }
-STACK(tick,0_ARGS)
+STACK(tick,0)
 obj_t *tick(void)
 {
 	start_timer();
 	return NULL;
 }
-STACK(tock,0_ARGS)
+STACK(tock,0)
 obj_t *tock(void)
 {
 	return new_double(read_timer());
 }
-STACK(uplevel,2_ARGS)
+STACK(uplevel,2)
 obj_t *uplevel(obj_t *n,obj_t *expr)
 {
 	if (!type_check(n,INTEGER,"UPLEVEL, arg 1: "))
@@ -215,7 +215,7 @@ obj_t *uplevel(obj_t *n,obj_t *expr)
 		r->refs--;
 	return r;
 }
-STACK(nconc,2_ARGS)
+STACK(nconc,2)
 obj_t *nconc(obj_t *a,obj_t *b)
 {
 	concatenate(a,b);

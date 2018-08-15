@@ -26,7 +26,7 @@ FUNC_FROM_COMP(>=,gte)
 FUNC_FROM_COMP(<,lt)
 FUNC_FROM_COMP(>=,lte)
 FUNC_FROM_COMP(==,eqn)
-STACK(lrandom,1_ARG)
+STACK(lrandom,1)
 obj_t *lrandom(obj_t *n)
 {
 	if (!type_check(n,DOUBLE|INTEGER,"RANDOM: "))
