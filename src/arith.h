@@ -7,9 +7,10 @@
 STACK(name,2) \
 obj_t *name(obj_t *x,obj_t *y) \
 { \
-	if (!type_check(x,INTEGER|DOUBLE,#op", arg 1: ")) \
-		return new_object(); \
-	if (!type_check(y,INTEGER|DOUBLE,#op", arg 2: ")) \
+	bool type_err=false; \
+	type_err|=!type_check(x,INTEGER|DOUBLE,#op", arg 1: "); \
+	type_err|=!type_check(y,INTEGER|DOUBLE,#op", arg 2: "); \
+	if (type_err) \
 		return new_object(); \
 	if (x->type==INTEGER&&y->type==INTEGER) \
 		return new_integer(x->data.i op y->data.i); \
@@ -20,9 +21,10 @@ obj_t *name(obj_t *x,obj_t *y) \
 STACK(name,2) \
 obj_t *name(obj_t *x,obj_t *y) \
 { \
-	if (!type_check(x,INTEGER|DOUBLE,#op", arg 1: ")) \
-		return new_object(); \
-	if (!type_check(y,INTEGER|DOUBLE,#op", arg 2: ")) \
+	bool type_err=false; \
+	type_err|=!type_check(x,INTEGER|DOUBLE,#op", arg 1: "); \
+	type_err|=!type_check(y,INTEGER|DOUBLE,#op", arg 2: "); \
+	if (type_err) \
 		return new_object(); \
 	double a=dub(x),b=dub(y); \
 	if (a op b) \

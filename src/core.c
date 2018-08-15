@@ -135,12 +135,12 @@ obj_t *length(obj_t *list)
 STACK(lambda,2)
 obj_t *lambda(obj_t *args,obj_t *body)
 {
-	if (!type_check(args,NIL|CELL,"LAMBDA ARGS: "))
-		return new_object();
+	bool type_err=false;
+	type_err|=!type_check(args,NIL|CELL,"LAMBDA ARGS: ");
 	for (obj_t *o=args;o;o=CDR(o))
-		if (!type_check(CAR(o),SYMBOL,"LAMBDA ARG: "))
-			return new_object();
-	if (!type_check(body,CELL|SYMBOL,"LAMBDA BODY: "))
+		type_err|=!type_check(CAR(o),SYMBOL,"LAMBDA ARG: ");
+	type_err|=!type_check(body,CELL|SYMBOL,"LAMBDA BODY: ");
+	if (type_err)
 		return new_object();
 	return new_lispfunction(args,rpn(body));
 }
@@ -199,9 +199,10 @@ obj_t *tock(void)
 STACK(uplevel,2)
 obj_t *uplevel(obj_t *n,obj_t *expr)
 {
-	if (!type_check(n,INTEGER,"UPLEVEL, arg 1: "))
-		return new_object();
-	if (!type_check(expr,CELL|SYMBOL,"UPLEVEL, arg 2: "))
+	bool type_err=false;
+	type_err|=!type_check(n,INTEGER,"UPLEVEL, arg 1: ");
+	type_err|=!type_check(expr,CELL|SYMBOL,"UPLEVEL, arg 2: ");
+	if (type_err)
 		return new_object();
 	if (level<1) {
 		puts("UPLEVEL: No higher level");
@@ -226,13 +227,12 @@ obj_t *nconc(obj_t *a,obj_t *b)
 STACK(lfor,4)
 obj_t *lfor(obj_t *init,obj_t *cond,obj_t *iter,obj_t *body)
 {
-	if (!type_check(init,NIL|CELL,"FOR, initialization: "))
-		return new_object();
-	if (!type_check(init,NIL|CELL,"FOR, condition: "))
-		return new_object();
-	if (!type_check(iter,NIL|CELL,"FOR, iteration: "))
-		return new_object();
-	if (!type_check(body,CELL,"FOR, body: "))
+	bool type_err=false;
+	type_err|=!type_check(init,NIL|CELL,"FOR, initialization: ");
+	type_err|=!type_check(init,NIL|CELL,"FOR, condition: ");
+	type_err|=!type_check(iter,NIL|CELL,"FOR, iteration: ");
+	type_err|=!type_check(body,CELL,"FOR, body: ");
+	if (type_err)
 		return new_object();
 	init=incr_refs(rpn(init));
 	cond=incr_refs(rpn(cond));
@@ -268,11 +268,11 @@ obj_t *lfor(obj_t *init,obj_t *cond,obj_t *iter,obj_t *body)
 STACK(foreach,3)
 obj_t *foreach(obj_t *name,obj_t *list,obj_t *body)
 {
-	if (!type_check(name,SYMBOL,"FOREACH, name: "))
-		return new_object();
-	if (!type_check(list,CELL,"FOREACH, list: "))
-		return new_object();
-	if (!type_check(body,CELL,"FOREACH, body: "))
+	bool type_err=false;
+	type_err|=!type_check(name,SYMBOL,"FOREACH, name: ");
+	type_err|=!type_check(list,CELL,"FOREACH, list: ");
+	type_err|=!type_check(body,CELL,"FOREACH, body: ");
+	if (type_err)
 		return new_object();
 	body=incr_refs(rpn(body));
 	obj_t *ret=NULL;

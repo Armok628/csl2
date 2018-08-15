@@ -30,7 +30,7 @@ STACK(lrandom,1)
 obj_t *lrandom(obj_t *n)
 {
 	if (!type_check(n,DOUBLE|INTEGER,"RANDOM: "))
-		return NULL;
+		return new_object();
 	switch (n->type) {
 	case INTEGER:
 		return new_integer(rand()%n->data.i);
