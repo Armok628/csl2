@@ -26,19 +26,23 @@ int main(int argc,char **argv)
 		stack_load();
 		stack_eval();
 		drop();
-	} else
+		goto QUIT_MAIN;
+	}
 #ifdef REPL
-		for (;;)
+	for (;;)
 #endif
 		{
-		push(new_integer(1000));
-		stack_lread();
+		char buf[1000];
+		if (!fgets(buf,1000,stdin))
+			goto QUIT_MAIN;
+		push(read_str(buf));
 		stack_eval();
 		fputs("\n=> ",stdout);
 		stack_print();
 		drop();
 		putchar('\n');
 	}
+QUIT_MAIN:
 	free_table(dict);
 	return 0;
 }
