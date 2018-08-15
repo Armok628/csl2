@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "core.h"
 #include "namespace.h"
-#define FUNC_FROM_OP(op,name) \
+#define FUNC_FROM_MATHOP(op,name) \
 obj_t *name(obj_t *x,obj_t *y) \
 { \
 	bool type_err=false; \
@@ -27,6 +27,15 @@ obj_t *name(obj_t *x,obj_t *y) \
 		return new_object(); \
 	double a=dub(x),b=dub(y); \
 	if (a op b) \
+		return strsym("T"); \
+	else \
+		return NULL; \
+} \
+STACK(name,2)
+#define FUNC_FROM_BOOLOP(op,name) \
+obj_t *name(obj_t *x,obj_t *y) \
+{ \
+	if (x op y) \
 		return strsym("T"); \
 	else \
 		return NULL; \

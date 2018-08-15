@@ -3,15 +3,17 @@ static inline double dub(obj_t *n)
 {
 	return n->type==INTEGER?(double)n->data.i:n->data.d;
 }
-FUNC_FROM_OP(+,add)
-FUNC_FROM_OP(-,subtract)
-FUNC_FROM_OP(*,multiply)
-FUNC_FROM_OP(/,divide)
+FUNC_FROM_MATHOP(+,add)
+FUNC_FROM_MATHOP(-,subtract)
+FUNC_FROM_MATHOP(*,multiply)
+FUNC_FROM_MATHOP(/,divide)
 FUNC_FROM_COMP(>,gt)
 FUNC_FROM_COMP(>=,gte)
 FUNC_FROM_COMP(<,lt)
 FUNC_FROM_COMP(>=,lte)
 FUNC_FROM_COMP(==,eqn)
+FUNC_FROM_BOOLOP(||,or)
+FUNC_FROM_BOOLOP(&&,and)
 obj_t *lrandom(obj_t *n)
 {
 	if (!type_check(n,DOUBLE|INTEGER,"RANDOM: "))
@@ -38,5 +40,7 @@ void init_arith(void)
 	INIT(<,lt);
 	INIT(<=,lte);
 	INIT(==,eqn);
+	INIT(or,or);
+	INIT(and,and);
 	INIT(RANDOM,lrandom);
 }
