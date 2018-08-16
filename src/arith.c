@@ -31,16 +31,16 @@ STACK(lrandom,1)
 void init_arith(void)
 {
 	srand(time(NULL));
+	INIT(*,multiply);
 	INIT(+,add);
 	INIT(-,subtract);
-	INIT(*,multiply);
 	INIT(/,divide);
-	INIT(>,gt);
-	INIT(>=,gte);
 	INIT(<,lt);
 	INIT(<=,lte);
 	INIT(==,eqn);
-	INIT(OR,or);
+	INIT(>,gt);
+	INIT(>=,gte);
 	INIT(AND,and);
+	INIT(OR,or);
 	INIT(RANDOM,lrandom);
 }
