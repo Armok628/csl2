@@ -6,6 +6,7 @@ int level=-1; // Unlike stack_index, level is last *filled* slot
 void init_dict(void)
 {
 	dict=new_namespace();
+	insert(dict,"T",incr_refs(strsym("T")));
 	push_namespace(dict);
 	hash_function=&nocase_hash_key;
 	init_core();

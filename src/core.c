@@ -54,9 +54,9 @@ obj_t *rplacd(obj_t *c,obj_t *v)
 STACK(rplacd,2)
 obj_t *atom(obj_t *obj)
 {
-	if (!obj)
+	if (!obj||obj->type!=CELL)
 		return strsym("T");
-	return obj->type==CELL?NULL:obj;
+	return NULL;
 }
 STACK(atom,1)
 obj_t *set(obj_t *sym,obj_t *val)
