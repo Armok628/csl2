@@ -28,7 +28,7 @@ void bind_args(obj_t *argl)
 }
 bool funcall(obj_t *func)
 { // Returns true if no fatal error occurred
-	if (!type_check(func,FUNCTION|NAMESPACE,"funcall(): "))
+	if (!type_check(func,FUNCTION,"funcall(): "))
 		return false;
 	if (!func->data.func.lambda) {
 		func->data.func.rep.c();
