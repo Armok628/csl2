@@ -12,7 +12,7 @@ typedef enum {
 	DOUBLE=1<<1,
 	ERROR=1<<2,
 	FUNCTION=1<<3,
-	HASHTABLE=1<<4,
+	NAMESPACE=1<<4,
 	INTEGER=1<<5,
 	NIL=1<<6, // Pseudo-type for use in type_check
 	SYMBOL=1<<7,

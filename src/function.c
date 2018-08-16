@@ -12,12 +12,7 @@ obj_t *new_lispfunction(obj_t *argl,obj_t *body)
 	obj_t *func=new_object();
 	func->type=FUNCTION;
 	func->data.func.lambda=true;
-	obj_t *rep=NULL;
-	rep=new_cell(body,rep);
-	rep=new_cell(argl,rep);
-	table_t *t=new_namespace();
-	insert(t,"RECURSE",func); // No incr_refs -- ref is self
-	rep=new_cell(new_hashtable(t),rep);
+	obj_t *rep=new_cell(argl,new_cell(body,NULL));
 	func->data.func.rep.lisp=incr_refs(rep);
 	return func;
 }
@@ -33,22 +28,20 @@ void bind_args(obj_t *argl)
 }
 bool funcall(obj_t *func)
 { // Returns true if no fatal error occurred
-	if (!type_check(func,FUNCTION,"funcall(): "))
+	if (!type_check(func,FUNCTION|NAMESPACE,"funcall(): "))
 		return false;
 	if (!func->data.func.lambda) {
 		func->data.func.rep.c();
 		return true;
 	}
 	obj_t *rep=func->data.func.rep.lisp;
-	obj_t *local_env=CAR(rep);
-	rep=CDR(rep);
 	obj_t *args=CAR(rep);
-	rep=CDR(rep);
-	obj_t *body=CAR(rep);
-	push_namespace(local_env->data.table);
-	if (args)
-		bind_args(args);
+	obj_t *body=CAR(CDR(rep));
+	table_t *loc=new_namespace_table(1);
+	insert(loc,"RECURSE",incr_refs(func));
+	push_namespace(loc);
+	bind_args(args);
 	interpret(body);
-	pop_namespace();
+	drop_namespace();
 	return true;
 }

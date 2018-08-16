@@ -151,7 +151,7 @@ obj_t *see(obj_t *func)
 		return new_object();
 	if (!func->data.func.lambda)
 		return NULL;
-	return CAR(CDR(CDR(func->data.func.rep.lisp)));
+	return func->data.func.rep.lisp;
 }
 STACK(see,1)
 obj_t *tick(void)
@@ -176,11 +176,11 @@ obj_t *uplevel(obj_t *n,obj_t *expr)
 		puts("UPLEVEL: No higher level");
 		return new_object();
 	}
-	level-=n->data.i;
+	table_t *loc=pop_namespace();
 	obj_t *t=incr_refs(rpn(expr));
 	interpret(t);
 	decr_refs(t);
-	level+=n->data.i;
+	push_namespace(loc);
 	obj_t *r=pop();
 	if (r)
 		r->refs--;
@@ -266,6 +266,11 @@ obj_t *load(obj_t *file)
 	return r?r:new_object();
 }
 STACK(load,1)
+obj_t *namespace(void)
+{
+	return new_namespace_obj(new_namespace_table(NAMESPACE_SIZE));
+}
+STACK(namespace,0)
 void init_core(void)
 {
 	INIT(PRINT,print)
@@ -297,4 +302,5 @@ void init_core(void)
 	INIT(FOR,lfor)
 	INIT(FOREACH,foreach)
 	INIT(LOAD,load)
+	INIT(NAMESPACE,namespace)
 }

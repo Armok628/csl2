@@ -10,8 +10,8 @@ const char *type_name(type_t type)
 		return "ERROR";
 	case FUNCTION:
 		return "FUNCTION";
-	case HASHTABLE:
-		return "HASHTABLE";
+	case NAMESPACE:
+		return "NAMESPACE";
 	case INTEGER:
 		return "INTEGER";
 	case NIL:
@@ -66,7 +66,7 @@ void destroy(obj_t *o)
 		if (o->data.func.lambda)
 			decr_refs(o->data.func.rep.lisp);
 		break;
-	case HASHTABLE:
+	case NAMESPACE:
 		free_table(o->data.table);
 		break;
 	case INTEGER:

@@ -44,6 +44,15 @@ obj_t *translate_list(obj_t *body)
 	CDR(tail)=incr_refs(new_cell(strsym("LIST_END"),NULL));
 	return head;
 }
+obj_t *translate_inside(obj_t *body)
+{
+	obj_t *l=new_cell(CAR(body),NULL);
+	body=CDR(body);
+	l=new_cell(CAR(body),l);
+	body=CDR(body);
+	l=new_cell(rpn(CAR(body)),l);
+	return l;
+}
 obj_t *rpn(obj_t *body)
 {
 	if (!body||body->type!=CELL)
@@ -56,6 +65,8 @@ obj_t *rpn(obj_t *body)
 		return translate_progn(body);
 	if (symbol_match(CAR(body),"LIST"))
 		return translate_list(body);
+	if (symbol_match(CAR(body),"INSIDE"))
+		return translate_inside(body);
 	obj_t *list=NULL;
 	obj_t *tail=NULL;
 	for (obj_t *o=CDR(body);o;o=CDR(o)) {

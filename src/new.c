@@ -35,10 +35,10 @@ obj_t *new_double(double d)
 	o->data.d=d;
 	return o;
 }
-obj_t *new_hashtable(table_t *table)
+obj_t *new_namespace_obj(table_t *table)
 {
 	obj_t *o=new_object();
-	o->type=HASHTABLE;
+	o->type=NAMESPACE;
 	o->data.table=table;
 	return o;
 }

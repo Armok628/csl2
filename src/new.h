@@ -10,7 +10,7 @@ obj_t *new_cell(obj_t *,obj_t *);
 obj_t *new_symbol(char *);
 obj_t *new_integer(long);
 obj_t *new_double(double);
-obj_t *new_hashtable(table_t *);
+obj_t *new_namespace_obj(table_t *);
 obj_t *new_cfunction(void (*)(void));
 
 static inline obj_t *strsym(const char *str)
