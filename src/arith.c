@@ -40,7 +40,7 @@ void init_arith(void)
 	INIT(<,lt);
 	INIT(<=,lte);
 	INIT(==,eqn);
-	INIT(or,or);
-	INIT(and,and);
+	INIT(OR,or);
+	INIT(AND,and);
 	INIT(RANDOM,lrandom);
 }
