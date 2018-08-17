@@ -15,4 +15,4 @@
   (set 'flatten (lambda '(l) '(cond ((null l) nil)
 				    ((atom l) (cons l nil))
 				    (t (nconc (recurse (car l)) (recurse (cdr l)))))))
-  )
+  t)

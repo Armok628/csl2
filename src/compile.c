@@ -35,7 +35,7 @@ obj_t *translate_cond(obj_t *body)
 }
 obj_t *translate_list(obj_t *body)
 {
-	obj_t *head=new_cell(strsym("LIST"),NULL);
+	obj_t *head=new_cell(CAR(body),NULL);
 	obj_t *tail=head;
 	for (obj_t *o=CDR(body);o;o=CDR(o)) {
 		CDR(tail)=incr_refs(rpn(CAR(o)));
@@ -58,7 +58,7 @@ obj_t *rpn(obj_t *body)
 	if (!body||body->type!=CELL)
 		return new_cell(body,NULL);
 	if (symbol_match(CAR(body),"QUOTE"))
-		return body;
+		return copy_obj(body);
 	if (symbol_match(CAR(body),"COND"))
 		return translate_cond(body);
 	if (symbol_match(CAR(body),"PROGN"))

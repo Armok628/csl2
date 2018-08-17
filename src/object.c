@@ -59,8 +59,8 @@ void destroy(obj_t *o)
 		free(o->data.sym);
 		break;
 	case CELL:
-		decr_refs(o->data.cell.car);
-		decr_refs(o->data.cell.cdr);
+		decr_refs(CAR(o));
+		decr_refs(CDR(o));
 		break;
 	case FUNCTION:
 		if (o->data.func.lambda)
@@ -176,14 +176,15 @@ obj_t *copy_obj(obj_t *o)
 		c->data.d=o->data.d;
 		break;
 	case CELL:
-		c->data.cell.car=incr_refs(o->data.cell.car);
-		c->data.cell.cdr=incr_refs(o->data.cell.cdr);
+		CAR(c)=incr_refs(copy_obj(CAR(o)));
+		CDR(c)=incr_refs(copy_obj(CDR(o)));
 		break;
 	case SYMBOL:
 		c->data.sym=strdup(o->data.sym);
 		break;
-	default:
-		return NULL;
+	default: // ???
+		free(c);
+		return incr_refs(o);
 	}
 	return c;
 }
