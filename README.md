@@ -3,6 +3,60 @@ A small garbage-collected LISP dialect based on compilation to postfix notation
 
 This is effectively a far superior rewrite of my previous LISP project, csl.
 
+## ISPL Front-End
+
+Compile with `make`.
+The executable produced runs a typical REPL when given no arguments.
+Results of REPL evaluations are prepended by a newline and "=> " when printed.
+When given an argument, the executable interprets the argument as a script to be run.
+
+Built-in functions can be listed with `cat src/*.c | grep INIT`.
+Quotations and `PROGN`s are never implicit with these functions.
+
+All functions are created with `LAMBDA`.
+Common Lisp's `(defun name (args) ...)` would be translated as `(set 'name (lambda '(args) '(progn ...)))`.
+Although longer, this allows for interesting code generation possibilities without the need for macros.
+
+Speaking of code generation, a Common Lisp style backquote-unquote syntax is available,
+with one minor difference: write `,@` as `@`.
+For example, ``` (progn (set 'a 1) (set 'b 2) (set 'c '(3 4)) `(a ,b @c . 5)) ``` yields `(a 2 3 4 . 5)`.
+This feature is implemented as a special set of parser rules.
+In fact, ``` (quote `(,a @b c @d)) ``` yields `(CONS a (NCONC b (CONS (QUOTE c) d)))`.
+
+Special forms include `LIST`, `QUOTE`, `COND`, `PROGN`, and `INSIDE`,
+where by "special form" I mean a quasi-function implemented as a special translation rule,
+and interpreted differently where encountered.
+
+All of the special forms work the same as their equivalent in other dialects.
+However, no equivalent to `INSIDE` is present in other dialects, as far as I know.
+It takes two arguments: a namespace (created with the `NAMESPACE` function)
+and an expression (unquoted as in `PROGN` for compilation),
+and evaluates the expression in the context of the namespace.
+
+#### Inspiration from Tcl
+Some features of this language are heavily inspired by Tcl.
+
+For example, the aforementioned `INSIDE` special form is equivalent to Tcl's `namespace eval`.
+
+Other similarities to Tcl include the functions `FOR`, `FOREACH`, `SET`, `UNSET`, and `UPLEVEL`,
+which operate identically to Tcl's.
+
+In fact, like Tcl, `FOR` and `FOREACH` compile their script arguments only once, but interpret them many times.
+
+Even the backquote-unquote syntax can be translated to/from Tcl in the context of substitution:
+
+| ISPL | Tcl |
+| :-: | :-: |
+| `,...` | `$...` |
+| `,(...)` | `[...]` |
+| `@...` | `{*}...` |
+
+Just as well, though the `SEE` function is actually inspired by Forth, Tcl has the comparable `info body`.
+(Although, the `SEE` function will actually show a function's arguments and *compiled* body.
+Perhaps a better comparison would be to `tcl::unsupported::disassemble proc`.)
+
+## C Back-End
+
 The header files contain short summaries of the purpose of their contents.
 Implementation details and type definitions can be found in object.h.
 Its source file, object.c, contains C functions only for direct use by the programmer.
@@ -15,7 +69,7 @@ which convert C functions into a stack-based equivalent.
 Really, they only pop arguments, push results, and do basic memory management.
 However, it greatly reduces the amount of work required to add new built-in functions.
 
-This project also makes use of my own hash table implementation, called [semstable](../../../semstable),
+This project makes use of my own hash table implementation, called [semstable](../../../semstable),
 with a slight modification to allow hash tables to be case-insensitive.
 
 ##### To create source files for new built-in functions:
@@ -28,7 +82,7 @@ with a slight modification to allow hash tables to be case-insensitive.
 2. Use the `STACK(name,argc)` macro after the function definition to generate a stack-based function.
 3. Use the `INIT(lispname,cname)` macro in the init function to make the function available.
 
-##### Memory management guidelines for new functions:
+##### Memory management guidelines for new built-in functions:
 Reference counters must always be incremented by `incr_refs` and decremented by `decr_refs`,
 with one exception.<sup>&dagger;</sup>
 Of course, this must be done whenever a pointer is permanently stored or removed, respectively.
