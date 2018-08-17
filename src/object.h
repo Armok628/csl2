@@ -42,13 +42,10 @@ typedef struct object {
 #define CAR(x) ((x)->data.cell.car)
 #define CDR(x) ((x)->data.cell.cdr)
 
-const char *type_name(type_t);
 const char *obj_type_name(obj_t *);
 bool type_check(obj_t *,type_t,const char *);
-void destroy(obj_t *);
 obj_t *incr_refs(obj_t *);
 void decr_refs(obj_t *);
-void print_cell(obj_t *);
 void print_obj(obj_t *);
 bool eq_objs(obj_t *,obj_t *);
 bool symbol_match(obj_t *,const char *);

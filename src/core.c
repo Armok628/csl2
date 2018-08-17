@@ -271,6 +271,11 @@ obj_t *namespace(void)
 	return new_namespace_obj(new_namespace_table(NAMESPACE_SIZE));
 }
 STACK(namespace,0)
+obj_t *l_typeof(obj_t *obj)
+{
+	return strsym(obj_type_name(obj));
+}
+STACK(l_typeof,1)
 void init_core(void)
 {
 	INIT(ATOM,atom)
@@ -301,6 +306,7 @@ void init_core(void)
 	INIT(TERPRI,terpri)
 	INIT(TICK,tick)
 	INIT(TOCK,tock)
+	INIT(TYPEOF,l_typeof)
 	INIT(UNSET,unset)
 	INIT(UPLEVEL,uplevel)
 }
