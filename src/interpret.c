@@ -71,9 +71,9 @@ void interpret(obj_t *list)
 	return;
 
 FATAL_INTERP_ERROR:
-	fputs("Fatal error while interpreting ",stdout);
-	print_obj(list);
-	putchar('\n');
+	fputs("Fatal error while interpreting ",stderr);
+	print_obj(list,stderr);
+	fputc('\n',stderr);
 	print_stack();
 	exit(1);
 }

@@ -43,7 +43,7 @@ int main(int argc,char **argv)
 		decr_refs(t);
 		r=pop();
 		fputs("\n=> ",stdout);
-		print_obj(r);
+		print_obj(r,stdout);
 		decr_refs(r);
 		putchar('\n');
 	}

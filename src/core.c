@@ -1,7 +1,7 @@
 #include "core.h"
 obj_t *print(obj_t *obj)
 {
-	print_obj(obj);
+	print_obj(obj,stdout);
 	return obj;
 }
 STACK(print,1)

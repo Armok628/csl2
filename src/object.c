@@ -33,21 +33,21 @@ bool type_check(obj_t *obj,type_t types,const char *err_prefix)
 	if ((obj&&obj->type&types)||(!obj&&types&NIL))
 		return true;
 	if (err_prefix)
-		fputs(err_prefix,stdout);
-	fputs("Expected ",stdout);
+		fputs(err_prefix,stderr);
+	fputs("Expected ",stderr);
 	for (int i=0;types>>i>0;i++) {
 		if (!((types>>i)&1))
 			continue;
-		fputs(type_name(1<<i),stdout);
+		fputs(type_name(1<<i),stderr);
 		if (types>>i>1)
-			fputs(" or ",stdout);
+			fputs(" or ",stderr);
 	}
 	if (obj) {
-		printf(", but got %s: ",obj_type_name(obj));
-		print_obj(obj);
-		putchar('\n');
+		fprintf(stderr,", but got %s: ",obj_type_name(obj));
+		print_obj(obj,stderr);
+		fputc('\n',stderr);
 	} else
-		puts(", but got NIL");
+		fputs(", but got NIL",stderr);
 
 	return false;
 }
@@ -91,45 +91,45 @@ void decr_refs(obj_t *o)
 	if (!o->refs)
 		destroy(o);
 }
-void print_cell(obj_t *o)
+void print_cell(obj_t *o,FILE *fs)
 {
-	putchar('(');
+	fputc('(',fs);
 	for (;o&&o->type==CELL;o=CDR(o)) {
-		print_obj(CAR(o));
+		print_obj(CAR(o),fs);
 		if (CDR(o))
-			putchar(' ');
+			fputc(' ',fs);
 	}
 	if (o) {
-		putchar('.');
-		putchar(' ');
-		print_obj(o);
+		fputc('.',fs);
+		fputc(' ',fs);
+		print_obj(o,fs);
 	}
-	putchar(')');
+	fputc(')',fs);
 }
-void print_obj(obj_t *obj)
+void print_obj(obj_t *obj,FILE *fs)
 {
 	if (!obj) {
-		printf("NIL");
+		fprintf(fs,"NIL");
 		return;
 	}
 	switch (obj->type) {
 	case CELL:
-		print_cell(obj);
+		print_cell(obj,fs);
 		break;
 	case INTEGER:
-		printf("%ld",obj->data.i);
+		fprintf(fs,"%ld",obj->data.i);
 		break;
 	case DOUBLE:
-		printf("%f",obj->data.d);
+		fprintf(fs,"%f",obj->data.d);
 		break;
 	case SYMBOL:
-		fputs(obj->data.sym,stdout);
+		fputs(obj->data.sym,fs);
 		break;
 	case ERROR:
-		fputs("ERROR",stdout);
+		fputs("ERROR",fs);
 		break;
 	default:
-		printf("{%s:%p}",obj_type_name(obj),(void *)obj);
+		fprintf(fs,"{%s:%p}",obj_type_name(obj),(void *)obj);
 		break;
 	}
 	return;

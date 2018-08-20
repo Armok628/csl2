@@ -20,10 +20,10 @@ obj_t *stack_obj(int n)
 }
 void print_stack(void)
 {
-	puts("Stack:");
+	fputs("Stack:",stderr);
 	for (int i=stack_index-1;i>=0;i--) {
-		printf("%d: ",i);
-		print_obj(stack[i]);
-		putchar('\n');
+		fprintf(stderr,"%d: ",i);
+		print_obj(stack[i],stderr);
+		fputc('\n',stderr);
 	}
 }
