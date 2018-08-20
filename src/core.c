@@ -63,7 +63,7 @@ obj_t *set(obj_t *sym,obj_t *val)
 {
 	if (!type_check(sym,SYMBOL,"SET: "))
 		return new_object();
-	set_binding(sym,val);
+	set_binding(sym->data.sym,val);
 	return val;
 }
 STACK(set,2)
@@ -71,13 +71,13 @@ obj_t *get(obj_t *sym)
 {
 	if (!sym||sym->type!=SYMBOL)
 		return sym;
-	return get_binding(sym);
+	return get_binding(sym->data.sym);
 }
 STACK(get,1)
 obj_t *unset(obj_t *sym)
 {
 	if (!sym||sym->type==SYMBOL)
-		unset_binding(sym);
+		unset_binding(sym->data.sym);
 	return NULL;
 }
 STACK(unset,1)
@@ -247,7 +247,7 @@ obj_t *foreach(obj_t *name,obj_t *list,obj_t *body)
 	body=incr_refs(rpn(body));
 	obj_t *ret=NULL;
 	for (obj_t *o=list;o;o=CDR(o)) {
-		set_binding(name,CAR(o));
+		set_binding(name->data.sym,CAR(o));
 		interpret(body);
 		decr_refs(ret);
 		ret=pop();
@@ -271,6 +271,18 @@ obj_t *namespace(void)
 	return new_namespace_obj(new_namespace_table(NAMESPACE_SIZE));
 }
 STACK(namespace,0)
+obj_t *inside(obj_t *namespace,obj_t *expr)
+{
+	obj_t *t=incr_refs(rpn(expr));
+	push_namespace(namespace->data.table);
+	interpret(t);
+	decr_refs(t);
+	pop_namespace();
+	t=pop();
+	t->refs--;
+	return t;
+}
+STACK(inside,2)
 obj_t *l_typeof(obj_t *obj)
 {
 	return strsym(obj_type_name(obj));
@@ -289,6 +301,7 @@ void init_core(void)
 	INIT(FOR,lfor)
 	INIT(FOREACH,foreach)
 	INIT(GET,get)
+	INIT(INSIDE,inside)
 	INIT(LAMBDA,lambda)
 	INIT(LENGTH,length)
 	INIT(LOAD,load)

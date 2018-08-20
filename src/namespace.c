@@ -6,6 +6,7 @@ int level=-1; // Unlike stack_index, level is last *filled* slot
 void init_dict(void)
 {
 	dict=new_namespace_table(NAMESPACE_SIZE);
+	insert(dict,"DICTIONARY",incr_refs(new_namespace_obj(dict)));
 	insert(dict,"T",incr_refs(strsym("T")));
 	push_namespace(dict);
 	hash_function=&nocase_hash_key;
@@ -28,19 +29,18 @@ table_t *new_namespace_table(int size)
 {
 	return new_table(size,(dtor_t)&decr_refs);
 }
-obj_t *get_binding(obj_t *sym)
+obj_t *get_binding(char *str)
 {
-	obj_t *l=lookup(namespaces[level],sym->data.sym);
+	obj_t *l=lookup(namespaces[level],str);
 	if (!l)
-		l=lookup(dict,sym->data.sym);
+		l=lookup(dict,str);
 	return l;
 }
-void set_binding(obj_t *sym,obj_t *val)
+void set_binding(char *str,obj_t *val)
 {
-	incr_refs(val);
-	insert(namespaces[level],sym->data.sym,val);
+	insert(namespaces[level],str,incr_refs(val));
 }
-void unset_binding(obj_t *sym)
+void unset_binding(char *str)
 {
-	expunge(namespaces[level],sym->data.sym);
+	expunge(namespaces[level],str);
 }

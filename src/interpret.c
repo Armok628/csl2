@@ -53,18 +53,8 @@ void interpret(obj_t *list)
 		} else if (symbol_match(CAR(o),"COND")) {
 			o=interpret_cond(o);
 			// COND_END skipped by o=CDR(o) in for-loop
-		} else if (symbol_match(CAR(o),"INSIDE")) {
-			obj_t *env=pop();
-			if (!type_check(env,NAMESPACE,"INSIDE: "))
-				goto FATAL_INTERP_ERROR;
-			push_namespace(env->data.table);
-			obj_t *expr=pop();
-			interpret(expr);
-			decr_refs(expr);
-			pop_namespace();
-			decr_refs(env);
 		} else if (CAR(o)->type==SYMBOL) {
-			push(get_binding(CAR(o)));
+			push(get_binding(CAR(o)->data.sym));
 		} else
 			push(CAR(o));
 	}

@@ -15,7 +15,7 @@ void push_namespace(table_t *);
 table_t *pop_namespace(void);
 void drop_namespace(void);
 table_t *new_namespace_table(int);
-obj_t *get_binding(obj_t *);
-void set_binding(obj_t *,obj_t *);
-void unset_binding(obj_t *);
+obj_t *get_binding(char *);
+void set_binding(char *,obj_t *);
+void unset_binding(char *);
 #endif

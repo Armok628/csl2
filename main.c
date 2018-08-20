@@ -48,6 +48,6 @@ int main(int argc,char **argv)
 		putchar('\n');
 	}
 QUIT_MAIN:
-	free_table(dict);
+	unset_binding("DICTIONARY");
 	return 0;
 }

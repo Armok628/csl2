@@ -16,33 +16,29 @@ Quotations and `PROGN`s are never implicit with these functions.
 Functions do not contain their own namespaces, but namespaces can be created as objects.
 Namespaces are described in more detail below.
 
-All functions are created with `LAMBDA`.
-Common Lisp's `(defun name (args) ...)` would be translated as `(set 'name (lambda '(args) '(progn ...)))`.
+All functions are created with `LAMBDA`, in which `PROGN` is still never implicit.
+So, instead of `(defun name (args) ...)`, use `(set 'name (lambda '(args) '(progn ...)))`
 Although longer, this allows for interesting code generation possibilities without the need for macros.
 
 Speaking of code generation, a Common Lisp style backquote-unquote syntax is available,
 with one minor difference: write `,@` as `@`.
-For example, ``` (progn (set 'a 1) (set 'b 2) (set 'c '(3 4)) `(a ,b @c . 5)) ``` yields `(a 2 3 4 . 5)`.
 This feature is implemented as a special set of parser rules.
 In fact, ``` (quote `(,a @b c @d)) ``` yields `(CONS a (NCONC b (CONS (QUOTE c) d)))`.
 
-Special forms include `LIST`, `QUOTE`, `COND`, `PROGN`, and `INSIDE`,
+Special forms include `LIST`, `QUOTE`, `COND`, and `PROGN`,
 where by "special form" I mean a quasi-function implemented as a special translation rule,
 and interpreted differently where encountered.
 
+This is done to circumvent the limitation that stack-based notations do not group their arguments.
+Therefore, this is done as a compromise to introduce otherwise-impossible variadic "functions."
+
 All of the special forms work the same as their equivalent in other dialects.
-However, no equivalent to `INSIDE` is present in other dialects, as far as I know.
-It takes two arguments: a namespace (created with the `NAMESPACE` function)
-and an expression (unquoted as in `PROGN` for compilation),
-and evaluates the expression in the context of the namespace.
 
 #### Inspiration from Tcl
 Some features of this language are heavily inspired by Tcl.
 
-For example, the aforementioned `INSIDE` special form is equivalent to Tcl's `namespace eval`.
-
-Other similarities to Tcl include the functions `FOR`, `FOREACH`, `SET`, `UNSET`, and `UPLEVEL`,
-which operate identically to Tcl's.
+Functions which act as equivalents to Tcl operations include
+`FOR`, `FOREACH`, `INSIDE` (compare with `namespace eval`), `SET`, `UNSET`, and `UPLEVEL`.
 
 In fact, like Tcl, `FOR` and `FOREACH` compile their script arguments only once, but interpret them many times.
 
@@ -73,7 +69,10 @@ and the local scope, created only when a lambda function is called.
 Built-in functions, which are linked to C functions, execute in the namespace of their caller.
 
 Just as in Tcl, namespaces can be manually created with the `NAMESPACE` function, which takes no arguments.
-They can be manipulated using the `INSIDE` macro, comparable to Tcl's `namespace eval`.
+They can be manipulated using the `INSIDE` function, comparable to Tcl's `namespace eval`.
+
+In fact, the global scope itself is bound to the symbol `DICTIONARY` inside itself,
+so it can be manipulated with `INSIDE` as any other namespace.
 
 Namespaces higher in the call stack can be manipulated using the `UPLEVEL` function.
 
