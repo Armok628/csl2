@@ -20,7 +20,7 @@ obj_t *stack_obj(int n)
 }
 void print_stack(void)
 {
-	fputs("Stack:",stderr);
+	fputs("Stack:\n",stderr);
 	for (int i=stack_index-1;i>=0;i--) {
 		fprintf(stderr,"%d: ",i);
 		print_obj(stack[i],stderr);

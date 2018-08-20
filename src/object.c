@@ -47,8 +47,7 @@ bool type_check(obj_t *obj,type_t types,const char *err_prefix)
 		print_obj(obj,stderr);
 		fputc('\n',stderr);
 	} else
-		fputs(", but got NIL",stderr);
-
+		fputs(", but got NIL\n",stderr);
 	return false;
 }
 void destroy(obj_t *o)
