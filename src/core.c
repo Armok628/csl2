@@ -273,13 +273,19 @@ obj_t *namespace(void)
 STACK(namespace,0)
 obj_t *inside(obj_t *namespace,obj_t *expr)
 {
+	bool type_err=false;
+	type_err|=!type_check(namespace,NAMESPACE,"INSIDE, namespace: ");
+	type_err|=!type_check(expr,CELL|SYMBOL,"INSIDE, expression: ");
+	if (type_err)
+		return new_object();
 	obj_t *t=incr_refs(rpn(expr));
 	push_namespace(namespace->data.table);
 	interpret(t);
 	decr_refs(t);
 	pop_namespace();
 	t=pop();
-	t->refs--;
+	if (t)
+		t->refs--;
 	return t;
 }
 STACK(inside,2)

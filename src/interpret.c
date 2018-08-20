@@ -44,8 +44,10 @@ void interpret(obj_t *list)
 			decr_refs(f);
 #ifdef ALL_ERRORS_FATAL
 			obj_t *r=stack_obj(0);
-			if (r&&r->type==ERROR)
+			if (r&&r->type==ERROR) {
+				drop();
 				goto FATAL_INTERP_ERROR;
+			}
 #endif
 		} else if (symbol_match(CAR(o),"QUOTE")) {
 			o=CDR(o);

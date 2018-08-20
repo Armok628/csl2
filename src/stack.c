@@ -20,6 +20,10 @@ obj_t *stack_obj(int n)
 }
 void print_stack(void)
 {
+	if (!stack_index) {
+		fputs("Empty stack\n",stderr);
+		return;
+	}
 	fputs("Stack:\n",stderr);
 	for (int i=stack_index-1;i>=0;i--) {
 		fprintf(stderr,"%d: ",i);
