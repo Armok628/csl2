@@ -167,7 +167,6 @@ obj_t *read_splice_str(char *str)
 			if (!(unquote||splice))
 				r=quote(r);
 		}
-		/**/ printf("Next section: "); print_obj(r,stdout); putchar('\n');
 		if (splice&&i+1>=n)
 			dotted=true;
 		if (!dotted) {
@@ -183,9 +182,7 @@ obj_t *read_splice_str(char *str)
 				break;
 			tail=CDR(CDR(CAR(tail)));
 		}
-		/**/ printf("Splicing progress: "); print_obj(ret,stdout); putchar('\n');
 	}
-	/**/ printf("Done splicing.\n");
 	return ret;
 }
 obj_t *read_str(char *str)
