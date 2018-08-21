@@ -159,9 +159,15 @@ obj_t *read_splice_str(char *str)
 		}
 		bool unquote=*tok==',';
 		bool splice=*tok=='@';
-		obj_t *r=read_str(tok+unquote+splice);
-		if (!unquote&&!splice)
-			r=quote(r);
+		obj_t *r;
+		if (*tok=='('&&!(unquote||splice))
+			r=read_splice_str(tok);
+		else {
+			r=read_str(tok+unquote+splice);
+			if (!(unquote||splice))
+				r=quote(r);
+		}
+		/**/ printf("Next section: "); print_obj(r,stdout); putchar('\n');
 		if (splice&&i+1>=n)
 			dotted=true;
 		if (!dotted) {
@@ -177,7 +183,9 @@ obj_t *read_splice_str(char *str)
 				break;
 			tail=CDR(CDR(CAR(tail)));
 		}
+		/**/ printf("Splicing progress: "); print_obj(ret,stdout); putchar('\n');
 	}
+	/**/ printf("Done splicing.\n");
 	return ret;
 }
 obj_t *read_str(char *str)
