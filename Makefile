@@ -1,5 +1,5 @@
 CC=clang
-CFLAGS=-g -pedantic
+CFLAGS=-Oz -pedantic
 
 test: *.c src/*
 	$(CC) $(CFLAGS) -lm *.c src/*.c

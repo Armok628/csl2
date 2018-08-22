@@ -2,6 +2,7 @@
 // and macros to produce them from C functions
 #ifndef CORE_H
 #define CORE_H
+#include <time.h>
 #include "compile.h"
 #include "function.h"
 #include "hash.h"
@@ -10,7 +11,6 @@
 #include "object.h"
 #include "parser.h"
 #include "stack.h"
-#include "timer.h"
 // Stack function declaration
 // C functions to stack functions
 #define GETARGS(n) GETARG##n
