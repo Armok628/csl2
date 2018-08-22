@@ -16,7 +16,7 @@ typedef enum {
 	INTEGER=1<<5,
 	NIL=1<<6, // Pseudo-type for use in type_check
 	SYMBOL=1<<7,
-} type_t; // Formatted as flags for type_check
+} type_t; // Formatted as bit flags for type_check
 typedef struct object {
 	int refs;
 	type_t type;
@@ -29,7 +29,7 @@ typedef struct object {
 			bool lambda;
 			union {
 				void (*c)(void);
-				struct object *lisp; // (namespace_obj args_list body)
+				struct object *lisp;
 			} rep;
 		} func;
 		char *sym;

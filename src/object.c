@@ -29,7 +29,7 @@ const char *obj_type_name(obj_t *obj)
 	return type_name(obj->type);
 }
 bool type_check(obj_t *obj,type_t types,const char *err_prefix)
-{ // Returns true if obj is of one of the types specified by type
+{ // Returns true if obj is of one of the types specified by bitmask type
 	if ((obj&&obj->type&types)||(!obj&&types&NIL))
 		return true;
 	if (err_prefix)
