@@ -294,8 +294,18 @@ obj_t *l_typeof(obj_t *obj)
 	return strsym(obj_type_name(obj));
 }
 STACK(l_typeof,1)
+obj_t *append(obj_t *a,obj_t *b)
+{
+	if (!type_check(a,CELL,"APPEND: "))
+		return new_object();
+	a=copy_obj(a);
+	concatenate(a,b);
+	return a;
+}
+STACK(append,2)
 void init_core(void)
 {
+	INIT(APPEND,append)
 	INIT(ATOM,atom)
 	INIT(CAR,car)
 	INIT(CDR,cdr)
