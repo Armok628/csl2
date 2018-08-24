@@ -37,7 +37,7 @@ void interpret(obj_t *list)
 			push(body);
 		} else if (symbol_match(CAR(o),"DROP")) {
 			drop();
-		} else if (symbol_match(CAR(o),"CALL")) {
+		} else if (symbol_match(CAR(o),"!")) {
 			obj_t *f=pop();
 			if (!funcall(f))
 				goto FATAL_INTERP_ERROR;

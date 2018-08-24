@@ -74,6 +74,6 @@ obj_t *rpn(obj_t *body)
 		tail=list;
 	}
 	for (;CDR(tail);tail=CDR(tail));
-	CDR(tail)=incr_refs(new_cell(strsym("CALL"),NULL));
+	CDR(tail)=incr_refs(new_cell(strsym("!"),NULL));
 	return list;
 }

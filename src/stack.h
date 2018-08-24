@@ -8,5 +8,5 @@ void push(obj_t *);
 obj_t *pop(void);
 void drop(void);
 obj_t *stack_obj(int);
-void print_stack(void);
+int print_stack(void);
 #endif

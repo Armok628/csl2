@@ -308,6 +308,17 @@ obj_t *append(obj_t *a,obj_t *b)
 	return a;
 }
 STACK(append,2)
+obj_t *l_interpret(obj_t *sbe)
+{ // Takes a stack-based expression
+	interpret(sbe);
+	return NULL;
+}
+STACK(l_interpret,1)
+obj_t *stack(void)
+{ // Returns number of stack items
+	return new_integer(print_stack());
+}
+STACK(stack,0)
 void init_core(void)
 {
 	INIT(APPEND,append)
@@ -323,6 +334,7 @@ void init_core(void)
 	INIT(FOREACH,foreach)
 	INIT(GET,get)
 	INIT(INSIDE,inside)
+	INIT(INTERPRET,l_interpret)
 	INIT(LAMBDA,lambda)
 	INIT(LENGTH,length)
 	INIT(LOAD,load)
@@ -337,6 +349,7 @@ void init_core(void)
 	INIT(RPLACD,rplacd)
 	INIT(SEE,see)
 	INIT(SET,set)
+	INIT(STACK,stack)
 	INIT(TERPRI,terpri)
 	INIT(TICK,tick)
 	INIT(TOCK,tock)

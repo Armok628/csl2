@@ -18,16 +18,17 @@ obj_t *stack_obj(int n)
 {
 	return stack[stack_index-n-1];
 }
-void print_stack(void)
-{
+int print_stack(void)
+{ // Returns number of stack items
 	if (!stack_index) {
 		fputs("Empty stack\n",stderr);
-		return;
+		return 0;
 	}
-	fputs("Stack:\n",stderr);
+	fprintf(stderr,"Stack (%d):\n",stack_index);
 	for (int i=stack_index-1;i>=0;i--) {
 		fprintf(stderr,"%d: ",i);
 		print_obj(stack[i],stderr);
 		fputc('\n',stderr);
 	}
+	return stack_index;
 }
