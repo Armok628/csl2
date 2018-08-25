@@ -55,7 +55,7 @@ STACK(rplacd,2)
 obj_t *atom(obj_t *obj)
 {
 	if (!obj||obj->type!=CELL)
-		return strsym("T");
+		return incr_refs(&t_sym);
 	return NULL;
 }
 STACK(atom,1)
@@ -84,7 +84,7 @@ STACK(unset,1)
 obj_t *eq(obj_t *a,obj_t *b)
 {
 	if (eq_objs(a,b))
-		return strsym("T");
+		return incr_refs(&t_sym);
 	else
 		return NULL;
 }
@@ -119,10 +119,7 @@ obj_t *eval(obj_t *expr)
 	incr_refs(r);
 	interpret(r);
 	decr_refs(r);
-	r=pop();
-	if (r)
-		r->refs--;
-	return r;
+	return dpop();
 }
 STACK(eval,1)
 obj_t *lread(obj_t *n)
@@ -137,7 +134,7 @@ obj_t *lread(obj_t *n)
 STACK(lread,1)
 obj_t *null(obj_t *c)
 {
-	return !c?strsym("T"):NULL;
+	return !c?incr_refs(&t_sym):NULL;
 }
 STACK(null,1)
 obj_t *quit(void)
@@ -186,10 +183,7 @@ obj_t *uplevel(obj_t *n,obj_t *expr)
 	interpret(t);
 	decr_refs(t);
 	push_namespace(loc);
-	obj_t *r=pop();
-	if (r)
-		r->refs--;
-	return r;
+	return dpop();
 }
 STACK(uplevel,2)
 obj_t *nconc(obj_t *a,obj_t *b)
@@ -288,15 +282,31 @@ obj_t *inside(obj_t *namespace,obj_t *expr)
 	interpret(t);
 	decr_refs(t);
 	pop_namespace();
-	t=pop();
-	if (t)
-		t->refs--;
-	return t;
+	return dpop();
 }
 STACK(inside,2)
 obj_t *l_typeof(obj_t *obj)
 {
-	return strsym(obj_type_name(obj));
+	if (!obj)
+		return NULL;
+	switch (obj->type) {
+	case CELL:
+		return &cell_sym;
+	case DOUBLE:
+		return &double_sym;
+	case ERROR:
+		return &error_sym;
+	case FUNCTION:
+		return &function_sym;
+	case NAMESPACE:
+		return &namespace_sym;
+	case INTEGER:
+		return &integer_sym;
+	case SYMBOL:
+		return &symbol_sym;
+	default:
+		return new_object();
+	}
 }
 STACK(l_typeof,1)
 obj_t *append(obj_t *a,obj_t *b)
@@ -321,6 +331,7 @@ obj_t *stack(void)
 STACK(stack,0)
 void init_core(void)
 {
+	insert(dict,"T",incr_refs(&t_sym));
 	INIT(APPEND,append)
 	INIT(ATOM,atom)
 	INIT(CAR,car)

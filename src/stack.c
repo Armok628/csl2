@@ -10,6 +10,13 @@ obj_t *pop(void)
 { // Popped stack items must have a call to decr_refs after use
 	return stack[--stack_index];
 }
+obj_t *dpop(void)
+{ // Decreases reference counter without destroying
+	obj_t *r=stack[--stack_index];
+	if (r)
+		r->refs--;
+	return r;
+}
 void drop(void)
 {
 	decr_refs(stack[--stack_index]);

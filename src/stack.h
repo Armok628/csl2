@@ -6,6 +6,7 @@
 
 void push(obj_t *);
 obj_t *pop(void);
+obj_t *dpop(void);
 void drop(void);
 obj_t *stack_obj(int);
 int print_stack(void);

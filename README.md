@@ -137,7 +137,9 @@ However, should C variables count as references? It depends on what will happen 
 Naturally, one should use functions declared in new.h, object.h, or namespace.h whenever possible,
 as these functions are designed to make reference counting easier.
   
-<sup>&dagger;</sup>When popping an object off of the stack to be returned, decrement its references manually.
-As with any returned value, memory management is to be done by the caller.
+<sup>&dagger;</sup>When popping an object off of the stack to be returned,
+you'll want to decrement its references manually;
+as with any returned value, memory management is to be done by the caller.
 However, if you use `decr_refs`, you risk destroying the object prematurely.
-This can be avoided by simply using `obj->refs--;` instead.
+This can be avoided by using `dpop()` instead of `pop()`.
+Using `dpop()` will decrement the popped object's references without possible destruction.

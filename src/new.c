@@ -42,4 +42,3 @@ obj_t *new_namespace_obj(table_t *table)
 	o->data.table=table;
 	return o;
 }
-

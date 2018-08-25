@@ -4,6 +4,7 @@
 #define CORE_H
 #include <time.h>
 #include "compile.h"
+#include "consts.h"
 #include "function.h"
 #include "hash.h"
 #include "interpret.h"

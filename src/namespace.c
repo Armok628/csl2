@@ -9,7 +9,6 @@ void init_dict(void)
 	// Miscellaneous dictionary setup tasks here:
 	hash_function=&nocase_hash_key;
 	insert(dict,"DICTIONARY",incr_refs(new_namespace_obj(dict)));
-	insert(dict,"T",incr_refs(strsym("T")));
 	// Calls to init functions go here:
 	init_core();
 	init_arith();

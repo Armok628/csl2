@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "consts.h"
 #include "object.h"
 
 obj_t *read_str(char *);

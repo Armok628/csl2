@@ -21,23 +21,22 @@ obj_t *interpret_cond(obj_t *l)
 void interpret(obj_t *list)
 { // Requires RPN list as argument
 	for (obj_t *o=list;o;o=CDR(o)) {
-		if (!CAR(o)) {
+		obj_t *instr=CAR(o);
+		if (!instr) {
 			push(NULL);
-		} else if (symbol_match(CAR(o),"LIST")) {
-			push(CAR(o));
-		} else if (symbol_match(CAR(o),"LIST_END")) {
+		} else if (instr->type!=SYMBOL) {
+			push(instr);
+		} else if (instr==&list_sym||symbol_match(instr,"LIST")) {
+			push(instr);
+		} else if (instr==&list_end_sym||symbol_match(instr,"LIST_END")) {
 			obj_t *body=NULL;
-			while (!symbol_match(stack_obj(0),"LIST")) {
-				obj_t *o=pop();
-				if (o)
-					o->refs--;
-				body=CONS(o,body);
-			}
+			while (!symbol_match(stack_obj(0),"LIST"))
+				body=CONS(dpop(),body);
 			drop();
 			push(body);
-		} else if (symbol_match(CAR(o),"DROP")) {
+		} else if (instr==&drop_sym||symbol_match(instr,"DROP")) {
 			drop();
-		} else if (symbol_match(CAR(o),"!")) {
+		} else if (instr==&exec_sym||symbol_match(instr,"!")) {
 			obj_t *f=pop();
 			if (!funcall(f))
 				goto FATAL_INTERP_ERROR;
@@ -49,16 +48,15 @@ void interpret(obj_t *list)
 				goto FATAL_INTERP_ERROR;
 			}
 #endif
-		} else if (symbol_match(CAR(o),"QUOTE")) {
+		} else if (instr==&quote_sym||symbol_match(instr,"QUOTE")) {
 			o=CDR(o);
 			push(CAR(o));
-		} else if (symbol_match(CAR(o),"COND")) {
+		} else if (instr==&cond_sym||symbol_match(instr,"COND")) {
 			o=interpret_cond(o);
 			// COND_END skipped by o=CDR(o) in for-loop
-		} else if (CAR(o)->type==SYMBOL) {
-			push(get_binding(CAR(o)->data.sym));
-		} else
-			push(CAR(o));
+		} else {
+			push(get_binding(instr->data.sym));
+		}
 	}
 	return;
 

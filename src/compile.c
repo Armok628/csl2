@@ -12,7 +12,7 @@ obj_t *translate_progn(obj_t *body)
 		}
 		for (;CDR(tail);tail=CDR(tail));
 		if (CDR(f)) {
-			CDR(tail)=incr_refs(CONS(strsym("DROP"),NULL));
+			CDR(tail)=incr_refs(CONS(&drop_sym,NULL));
 			tail=CDR(tail);
 		}
 	}
@@ -30,7 +30,7 @@ obj_t *translate_cond(obj_t *body)
 		CDR(tail)=incr_refs(CONS(rpn(result),NULL));
 		tail=CDR(tail);
 	}
-	CDR(tail)=incr_refs(CONS(strsym("COND_END"),NULL));
+	CDR(tail)=incr_refs(CONS(&cond_end_sym,NULL));
 	return list;
 }
 obj_t *translate_list(obj_t *body)
@@ -41,7 +41,7 @@ obj_t *translate_list(obj_t *body)
 		CDR(tail)=incr_refs(rpn(CAR(o)));
 		for (;CDR(tail);tail=CDR(tail));
 	}
-	CDR(tail)=incr_refs(CONS(strsym("LIST_END"),NULL));
+	CDR(tail)=incr_refs(CONS(&list_end_sym,NULL));
 	return head;
 }
 obj_t *rpn(obj_t *body)
@@ -74,6 +74,6 @@ obj_t *rpn(obj_t *body)
 		tail=list;
 	}
 	for (;CDR(tail);tail=CDR(tail));
-	CDR(tail)=incr_refs(CONS(strsym("!"),NULL));
+	CDR(tail)=incr_refs(CONS(&exec_sym,NULL));
 	return list;
 }
