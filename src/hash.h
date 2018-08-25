@@ -14,10 +14,11 @@ typedef struct {
 	bucket_t **pool;
 	dtor_t destructor;
 } table_t;
+
 extern unsigned long (*hash_function)(char *);
 
-unsigned long hash_key(char *);
-unsigned long nocase_hash_key(char *);
+unsigned long fnv_1a(char *);
+unsigned long nocase_fnv_1a(char *);
 table_t *new_table(int,dtor_t);
 void free_table(table_t *);
 void insert(table_t *,char *,void *);

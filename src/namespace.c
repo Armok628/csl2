@@ -7,7 +7,7 @@ void init_dict(void)
 	dict=new_namespace_table(NAMESPACE_SIZE);
 	push_namespace(dict);
 	// Miscellaneous dictionary setup tasks here:
-	hash_function=&nocase_hash_key;
+	hash_function=&nocase_fnv_1a;
 	insert(dict,"DICTIONARY",incr_refs(new_namespace_obj(dict)));
 	// Calls to init functions go here:
 	init_core();

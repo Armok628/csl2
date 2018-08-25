@@ -1,25 +1,24 @@
 #include "hash.h"
-unsigned long (*hash_function)(char *)=&hash_key;
-unsigned long hash_key(char *str)
+unsigned long (*hash_function)(char *)=&fnv_1a;
+const unsigned long fnv_prime=0x100000001b3;
+const unsigned long fnv_offset=0xcbf29ce484222325;
+unsigned long fnv_1a(char *str)
 {
-	unsigned long key=0;
-	for (char *c=str;*c;c++) {
-		key+=*c;
-		key*=*c;
-		key<<=1;
-		key-=*c;
+	unsigned long key=fnv_offset;
+	for (char c=*str++;c;c=*str++) {
+		key^=c;
+		key*=fnv_prime;
 	}
 	return key;
 }
-unsigned long nocase_hash_key(char *str)
+unsigned long nocase_fnv_1a(char *str)
 {
-	unsigned long key=0;
-	for (char *s=str;*s;s++) {
-		char c='a'<=*s&&*s<='z'?*s-('a'-'A'):*s;
-		key+=c;
-		key*=c;
-		key<<=1;
-		key-=c;
+	unsigned long key=fnv_offset;
+	for (char c=*str++;c;c=*str++) {
+		if ('a'<=c&&c<='z')
+			c+='A'-'a';
+		key^=c;
+		key*=fnv_prime;
 	}
 	return key;
 }
