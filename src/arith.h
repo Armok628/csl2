@@ -1,9 +1,8 @@
+// Mathematical built-in functions
 #ifndef ARITH_H
 #define ARITH_H
 #include <math.h>
-#include <stdlib.h>
-#include "core.h"
-#include "namespace.h"
+#include "core.h" // Includes all other prereqs
 
 void init_arith(void);
 #endif

@@ -1,15 +1,16 @@
 #include "namespace.h"
-// TODO: Do I want an equivalent to Tcl's upvar/uplevel?
 table_t *dict=NULL;
 table_t *namespaces[STACK_SIZE];
 int level=-1; // Unlike stack_index, level is last *filled* slot
 void init_dict(void)
 {
 	dict=new_namespace_table(NAMESPACE_SIZE);
+	push_namespace(dict);
+	// Miscellaneous dictionary setup tasks here:
+	hash_function=&nocase_hash_key;
 	insert(dict,"DICTIONARY",incr_refs(new_namespace_obj(dict)));
 	insert(dict,"T",incr_refs(strsym("T")));
-	push_namespace(dict);
-	hash_function=&nocase_hash_key;
+	// Calls to init functions go here:
 	init_core();
 	init_arith();
 }

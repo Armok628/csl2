@@ -11,8 +11,7 @@
 #include "object.h"
 #include "parser.h"
 #include "stack.h"
-// Stack function declaration
-// C functions to stack functions
+// Warning: Preprocessor abuse ahead
 #define GETARGS(n) GETARG##n
 #define GETARG4 obj_t *arg4=pop(); GETARG3
 #define GETARG3 obj_t *arg3=pop(); GETARG2
@@ -31,16 +30,19 @@
 #define DECRREF2 decr_refs(arg2); DECRREF1
 #define DECRREF1 decr_refs(arg1);
 #define DECRREF0
-
+// C functions to stack functions
+// Use these macros to generate functions available to the language
 #define STACK(func,n) \
-	void stack_##func(void) \
-	{ \
-		GETARGS(n) \
-		push(func(ARGS(n))); \
-		DECRREFS(n) \
-	}
+void stack_##func(void) \
+{ \
+	GETARGS(n) \
+	push(func(ARGS(n))); \
+	DECRREFS(n) \
+}
+// ^ This one goes after your function definition.
 #define INIT(name,func) \
-	insert(dict,#name,incr_refs(new_cfunction(&stack_##func)));
+insert(dict,#name,incr_refs(new_cfunction(&stack_##func)));
+// ^ This one goes inside your init function.
 
 void init_core(void);
 #endif

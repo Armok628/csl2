@@ -2,7 +2,6 @@
 #ifndef NAMESPACE_H
 #define NAMESPACE_H
 #include "object.h"
-#include "stack.h"
 // The following headers contain init functions for built-ins
 #include "arith.h"
 #include "core.h"
