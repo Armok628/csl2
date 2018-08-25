@@ -12,7 +12,7 @@ obj_t *translate_progn(obj_t *body)
 		}
 		for (;CDR(tail);tail=CDR(tail));
 		if (CDR(f)) {
-			CDR(tail)=incr_refs(new_cell(strsym("DROP"),NULL));
+			CDR(tail)=incr_refs(CONS(strsym("DROP"),NULL));
 			tail=CDR(tail);
 		}
 	}
@@ -20,34 +20,34 @@ obj_t *translate_progn(obj_t *body)
 }
 obj_t *translate_cond(obj_t *body)
 {
-	obj_t *list=new_cell(CAR(body),NULL);
+	obj_t *list=CONS(CAR(body),NULL);
 	obj_t *tail=list;
 	for (obj_t *c=CDR(body);c;c=CDR(c)) {
 		obj_t *condition=CAR(CAR(c));
 		obj_t *result=CAR(CDR(CAR(c)));
-		CDR(tail)=incr_refs(new_cell(rpn(condition),NULL));
+		CDR(tail)=incr_refs(CONS(rpn(condition),NULL));
 		tail=CDR(tail);
-		CDR(tail)=incr_refs(new_cell(rpn(result),NULL));
+		CDR(tail)=incr_refs(CONS(rpn(result),NULL));
 		tail=CDR(tail);
 	}
-	CDR(tail)=incr_refs(new_cell(strsym("COND_END"),NULL));
+	CDR(tail)=incr_refs(CONS(strsym("COND_END"),NULL));
 	return list;
 }
 obj_t *translate_list(obj_t *body)
 {
-	obj_t *head=new_cell(CAR(body),NULL);
+	obj_t *head=CONS(CAR(body),NULL);
 	obj_t *tail=head;
 	for (obj_t *o=CDR(body);o;o=CDR(o)) {
 		CDR(tail)=incr_refs(rpn(CAR(o)));
 		for (;CDR(tail);tail=CDR(tail));
 	}
-	CDR(tail)=incr_refs(new_cell(strsym("LIST_END"),NULL));
+	CDR(tail)=incr_refs(CONS(strsym("LIST_END"),NULL));
 	return head;
 }
 obj_t *rpn(obj_t *body)
 {
 	if (!body||body->type!=CELL)
-		return new_cell(body,NULL);
+		return CONS(body,NULL);
 	if (symbol_match(CAR(body),"QUOTE"))
 		return copy_obj(body);
 	if (symbol_match(CAR(body),"COND"))
@@ -74,6 +74,6 @@ obj_t *rpn(obj_t *body)
 		tail=list;
 	}
 	for (;CDR(tail);tail=CDR(tail));
-	CDR(tail)=incr_refs(new_cell(strsym("!"),NULL));
+	CDR(tail)=incr_refs(CONS(strsym("!"),NULL));
 	return list;
 }

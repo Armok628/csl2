@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "hash.h"
 #include "object.h"
-
+#define CONS new_cell
 obj_t *new_object(void);
 obj_t *new_cell(obj_t *,obj_t *);
 obj_t *new_symbol(char *);

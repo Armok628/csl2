@@ -31,7 +31,7 @@ void interpret(obj_t *list)
 				obj_t *o=pop();
 				if (o)
 					o->refs--;
-				body=new_cell(o,body);
+				body=CONS(o,body);
 			}
 			drop();
 			push(body);

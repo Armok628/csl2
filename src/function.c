@@ -12,7 +12,7 @@ obj_t *new_lispfunction(obj_t *argl,obj_t *body)
 	obj_t *func=new_object();
 	func->type=FUNCTION;
 	func->data.func.lambda=true;
-	obj_t *rep=new_cell(argl,new_cell(body,NULL));
+	obj_t *rep=CONS(argl,CONS(body,NULL));
 	func->data.func.rep.lisp=incr_refs(rep);
 	return func;
 }

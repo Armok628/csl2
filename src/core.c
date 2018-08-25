@@ -13,7 +13,7 @@ obj_t *terpri(void)
 STACK(terpri,0)
 obj_t *cons(obj_t *a,obj_t *b)
 {
-	return new_cell(a,b);
+	return CONS(a,b);
 }
 STACK(cons,2)
 obj_t *car(obj_t *c)
