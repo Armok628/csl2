@@ -91,8 +91,7 @@ As such, I have made a point of not declaring core functions in any headers.
 They are made available to the language environment by their function pointers.
 
 Side note: This project makes use of my own hash table implementation,
-called [semstable](../../../semstable),
-with a slight modification to allow hash tables to be case-insensitive.
+called [semstable](../../../semstable).
 
 #### Notes on Built-in Functions
 
