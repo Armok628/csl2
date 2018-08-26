@@ -25,7 +25,6 @@ obj_t *new_symbol(char *str)
 	o->type=SYMBOL;
 	o->data.sym=strdup(str);
 	insert(obtable,str,o);
-	/**/fprintf(stderr,"DEBUG: Creating new symbol object: \"%s\"\n",str);
 	// ^ No incr_refs -- obtable has no destructor
 	return o;
 }
