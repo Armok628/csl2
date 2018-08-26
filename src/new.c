@@ -15,6 +15,27 @@ obj_t *new_cell(obj_t *a,obj_t *b)
 	CDR(c)=incr_refs(b);
 	return c;
 }
+obj_t *new_double(double d)
+{
+	obj_t *o=new_object();
+	o->type=DOUBLE;
+	o->data.d=d;
+	return o;
+}
+obj_t *new_integer(long i)
+{
+	obj_t *o=new_object();
+	o->type=INTEGER;
+	o->data.i=i;
+	return o;
+}
+obj_t *new_namespace(table_t *t)
+{
+	obj_t *o=new_object();
+	o->type=NAMESPACE;
+	o->data.table=t;
+	return o;
+}
 obj_t *new_symbol(char *str)
 { // Returns identical symbol object if one already exists
 	obj_t *o=lookup(obtable,str);
@@ -26,26 +47,5 @@ obj_t *new_symbol(char *str)
 	o->data.sym=strdup(str);
 	insert(obtable,str,o);
 	// ^ No incr_refs -- obtable has no destructor
-	return o;
-}
-obj_t *new_integer(long i)
-{
-	obj_t *o=new_object();
-	o->type=INTEGER;
-	o->data.i=i;
-	return o;
-}
-obj_t *new_double(double d)
-{
-	obj_t *o=new_object();
-	o->type=DOUBLE;
-	o->data.d=d;
-	return o;
-}
-obj_t *new_namespace_obj(table_t *table)
-{
-	obj_t *o=new_object();
-	o->type=NAMESPACE;
-	o->data.table=table;
 	return o;
 }

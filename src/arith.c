@@ -45,7 +45,7 @@ obj_t *name(obj_t *x,obj_t *y) \
 		return new_object(); \
 	double a=dub(x),b=dub(y); \
 	if (a op b) \
-		return incr_refs(&t_sym); \
+		return &t_sym; \
 	else \
 		return NULL; \
 } \
@@ -59,7 +59,7 @@ FUNC_FROM_COMP(==,eqn)
 obj_t *name(obj_t *x,obj_t *y) \
 { \
 	if (x op y) \
-		return incr_refs(&t_sym); \
+		return &t_sym; \
 	else \
 		return NULL; \
 } \
@@ -103,10 +103,15 @@ FUNC_FROM_MATHFUNC_1(a##func##h)
 FUNCS_FROM_TRIG(sin)
 FUNCS_FROM_TRIG(cos)
 FUNCS_FROM_TRIG(tan)
+obj_t pi_obj={
+	.type=DOUBLE,
+	.data={.d=M_PI},
+	.refs=1,
+};
 void init_arith(void)
 {
 	srand(time(NULL));
-	insert(dict,"PI",incr_refs(new_double(M_PI)));
+	insert(dict,"PI",incr_refs(&pi_obj));
 	INIT(*,multiply)
 	INIT(+,add)
 	INIT(-,subtract)

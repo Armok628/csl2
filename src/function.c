@@ -1,13 +1,7 @@
 #include "function.h"
-obj_t *new_cfunction(void (*f)(void))
-{
-	obj_t *o=new_object();
-	o->type=FUNCTION;
-	o->data.func.lambda=false;
-	o->data.func.rep.c=f;
-	return o;
-}
-obj_t *new_lispfunction(obj_t *argl,obj_t *body)
+// New C functions are made available to the language
+// via static variables. See STACK in core.h
+obj_t *new_function(obj_t *argl,obj_t *body)
 {
 	obj_t *func=new_object();
 	func->type=FUNCTION;
@@ -37,7 +31,7 @@ bool funcall(obj_t *func)
 	obj_t *rep=func->data.func.rep.lisp;
 	obj_t *args=CAR(rep);
 	obj_t *body=CAR(CDR(rep));
-	table_t *loc=new_namespace_table(1);
+	table_t *loc=new_table(1,(dtor_t)&decr_refs);
 	insert(loc,"RECURSE",incr_refs(func));
 	push_namespace(loc);
 	bind_args(args);

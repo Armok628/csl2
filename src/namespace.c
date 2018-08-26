@@ -4,11 +4,11 @@ table_t *namespaces[STACK_SIZE];
 int level=-1; // Unlike stack_index, level is last *filled* slot
 void init_dict(void)
 {
-	dict=new_namespace_table(NAMESPACE_SIZE);
+	dict=new_table(NAMESPACE_SIZE,(dtor_t)&decr_refs);
 	push_namespace(dict);
 	// Miscellaneous dictionary setup tasks here:
 	hash_function=&nocase_fnv_1a;
-	insert(dict,"DICTIONARY",incr_refs(new_namespace_obj(dict)));
+	insert(dict,"DICTIONARY",incr_refs(new_namespace(dict)));
 	// Calls to init functions go here:
 	init_core();
 	init_arith();
@@ -24,10 +24,6 @@ table_t *pop_namespace(void)
 void drop_namespace(void)
 {
 	free_table(namespaces[level--]);
-}
-table_t *new_namespace_table(int size)
-{
-	return new_table(size,(dtor_t)&decr_refs);
 }
 obj_t *get_binding(char *str)
 {

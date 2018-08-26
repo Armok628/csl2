@@ -1,5 +1,5 @@
 #include "object.h"
-const char *type_name(type_t type)
+char *type_name(type_t type)
 {
 	switch (type) {
 	case CELL:
@@ -22,7 +22,7 @@ const char *type_name(type_t type)
 		return "UNKNOWN";
 	}
 }
-const char *obj_type_name(obj_t *obj)
+char *obj_type_name(obj_t *obj)
 {
 	if (!obj)
 		return "NIL";
@@ -52,7 +52,7 @@ bool type_check(obj_t *obj,type_t types,const char *err_prefix)
 }
 void destroy(obj_t *o)
 { // Argument is assumed to be destroyable
-	//printf("Destroying "); print_obj(o); printf(" {%p}\n",(void *)o);
+	//printf("Destroying "); print_obj(o,stdout); printf(" {%p}\n",(void *)o);
 	switch (o->type) {
 	case SYMBOL:
 		expunge(obtable,o->data.sym);
@@ -151,10 +151,6 @@ bool eq_objs(obj_t *a,obj_t *b)
 	default:
 		return false;
 	}
-}
-bool symbol_match(obj_t *sym,const char *string)
-{
-	return sym&&sym->type==SYMBOL&&!strcasecmp(sym->data.sym,string);
 }
 int list_length(obj_t *list)
 {

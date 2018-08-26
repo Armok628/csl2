@@ -20,6 +20,7 @@ int main(int argc,char **argv)
 {
 	init_dict();
 	obtable=new_table(NAMESPACE_SIZE,NULL);
+	intern_consts();
 	if (argc>1) {
 		bind_argv(argc,argv);
 		obj_t *r=incr_refs(load_file(argv[1]));

@@ -33,16 +33,21 @@
 #define DECRREF0
 // C functions to stack functions
 // Use these macros to generate functions available to the language
-#define STACK(func,n) \
-void stack_##func(void) \
+#define STACK(function,n) \
+void stack_##function(void) \
 { \
 	GETARGS(n) \
-	push(func(ARGS(n))); \
+	push(function(ARGS(n))); \
 	DECRREFS(n) \
-}
+} \
+obj_t stack_##function##_func={ \
+	.type=FUNCTION, \
+	.data={.func={.lambda=false,.rep={.c=&stack_##function}}}, \
+	.refs=1, \
+};
 // ^ This one goes after your function definition.
-#define INIT(name,func) \
-insert(dict,#name,incr_refs(new_cfunction(&stack_##func)));
+#define INIT(name,function) \
+insert(dict,#name,incr_refs(&stack_##function##_func));
 // ^ This one goes inside your init function.
 
 void init_core(void);

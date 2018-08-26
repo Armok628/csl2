@@ -110,7 +110,7 @@ obj_t *lambda(obj_t *args,obj_t *body)
 	type_err|=!type_check(body,CELL|SYMBOL,"LAMBDA, body: ");
 	if (type_err)
 		return new_object();
-	return new_lispfunction(args,rpn(body));
+	return new_function(args,rpn(body));
 }
 STACK(lambda,2)
 obj_t *eval(obj_t *expr)
@@ -267,7 +267,7 @@ obj_t *load(obj_t *file)
 STACK(load,1)
 obj_t *namespace(void)
 {
-	return new_namespace_obj(new_namespace_table(NAMESPACE_SIZE));
+	return new_namespace(new_table(NAMESPACE_SIZE,(dtor_t)&decr_refs));
 }
 STACK(namespace,0)
 obj_t *inside(obj_t *namespace,obj_t *expr)
@@ -287,26 +287,7 @@ obj_t *inside(obj_t *namespace,obj_t *expr)
 STACK(inside,2)
 obj_t *l_typeof(obj_t *obj)
 {
-	if (!obj)
-		return NULL;
-	switch (obj->type) {
-	case CELL:
-		return &cell_sym;
-	case DOUBLE:
-		return &double_sym;
-	case ERROR:
-		return &error_sym;
-	case FUNCTION:
-		return &function_sym;
-	case NAMESPACE:
-		return &namespace_sym;
-	case INTEGER:
-		return &integer_sym;
-	case SYMBOL:
-		return &symbol_sym;
-	default:
-		return new_object();
-	}
+	return new_symbol(obj_type_name(obj));
 }
 STACK(l_typeof,1)
 obj_t *append(obj_t *a,obj_t *b)

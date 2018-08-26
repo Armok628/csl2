@@ -3,7 +3,7 @@ obj_t *interpret_cond(obj_t *l)
 { // Returns list at COND_END
 	l=CDR(l);
 	bool ret=false;
-	for (;!ret&&l&&!symbol_match(CAR(l),"COND_END");l=CDR(CDR(l))) {
+	for (;!ret&&l&&CAR(l)!=&cond_end_sym;l=CDR(CDR(l))) {
 		interpret(CAR(l));
 		obj_t *r=pop();
 		if (r) {
@@ -14,7 +14,7 @@ obj_t *interpret_cond(obj_t *l)
 	}
 	if (!ret)
 		push(NULL);
-	while (l&&!symbol_match(CAR(l),"COND_END"))
+	while (l&&CAR(l)!=&cond_end_sym)
 		l=CDR(l);
 	return l;
 }
@@ -26,17 +26,17 @@ void interpret(obj_t *list)
 			push(NULL);
 		} else if (instr->type!=SYMBOL) {
 			push(instr);
-		} else if (instr==&list_sym||symbol_match(instr,"LIST")) {
+		} else if (instr==&list_sym) {
 			push(instr);
-		} else if (instr==&list_end_sym||symbol_match(instr,"LIST_END")) {
+		} else if (instr==&list_end_sym) {
 			obj_t *body=NULL;
-			while (!symbol_match(stack_obj(0),"LIST"))
+			while (stack_obj(0)!=&list_sym)
 				body=CONS(dpop(),body);
 			drop();
 			push(body);
-		} else if (instr==&drop_sym||symbol_match(instr,"DROP")) {
+		} else if (instr==&drop_sym) {
 			drop();
-		} else if (instr==&exec_sym||symbol_match(instr,"!")) {
+		} else if (instr==&exec_sym) {
 			obj_t *f=pop();
 			if (!funcall(f))
 				goto FATAL_INTERP_ERROR;
@@ -48,10 +48,10 @@ void interpret(obj_t *list)
 				goto FATAL_INTERP_ERROR;
 			}
 #endif
-		} else if (instr==&quote_sym||symbol_match(instr,"QUOTE")) {
+		} else if (instr==&quote_sym) {
 			o=CDR(o);
 			push(CAR(o));
-		} else if (instr==&cond_sym||symbol_match(instr,"COND")) {
+		} else if (instr==&cond_sym) {
 			o=interpret_cond(o);
 			// COND_END skipped by o=CDR(o) in for-loop
 		} else {

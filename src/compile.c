@@ -48,13 +48,13 @@ obj_t *rpn(obj_t *body)
 {
 	if (!body||body->type!=CELL)
 		return CONS(body,NULL);
-	if (symbol_match(CAR(body),"QUOTE"))
+	if (CAR(body)==&quote_sym)
 		return copy_obj(body);
-	if (symbol_match(CAR(body),"COND"))
+	if (CAR(body)==&cond_sym)
 		return translate_cond(body);
-	if (symbol_match(CAR(body),"PROGN"))
+	if (CAR(body)==&progn_sym)
 		return translate_progn(body);
-	if (symbol_match(CAR(body),"LIST"))
+	if (CAR(body)==&list_sym)
 		return translate_list(body);
 	obj_t *list=NULL;
 	obj_t *tail=NULL;

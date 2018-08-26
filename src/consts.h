@@ -12,6 +12,7 @@ extern obj_t drop_sym;
 extern obj_t exec_sym;
 extern obj_t list_sym;
 extern obj_t list_end_sym;
+extern obj_t progn_sym;
 extern obj_t quote_sym;
 extern obj_t t_sym;
 // Type Symbols
@@ -22,4 +23,6 @@ extern obj_t function_sym;
 extern obj_t namespace_sym;
 extern obj_t integer_sym;
 extern obj_t symbol_sym;
+
+void intern_consts(void);
 #endif
