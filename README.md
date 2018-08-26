@@ -128,30 +128,15 @@ See arith.h as an example. See core.h for info about the included macros.
 See core.c for examples. See arith.c for more examples (and a ton of lazy macros).
 
 ##### Memory management guidelines for new built-in functions:
-Reference counters must *always* be incremented by `incr_refs` and decremented by `decr_refs`,
-with one exception.
 
-Of course, this must be done whenever a pointer is permanently stored or removed, respectively.
-Calling `push` to store an item on the stack will increase its references automatically.
-Calling `pop` to retrieve a value will leave its references alone to avoid prematurely destroying objects.
-The object retrieved must have its references decremented *as soon as* it is no longer useful.
-Waiting to decrement a reference counter can hide bugs in memory management. This is a bad thing.
+* Use `incr_refs` and `decr_refs` when storing or removing a reference, respectively.
+* Destroy objects as soon as they become unneeded to avoid hiding memory management bugs.
 
-However, should C variables count as references? It depends on what will happen to the object.
+Whether a C variable should count as a reference depends on the intended use of the object:
 
 * If the object is generated for temporary use by the same function, increment its references.
   * This must be done so that its references can be decremented later.
-  * If the object comes from the stack, its references are already incremented by `push`.
+  * If the object comes from `pop`, its references were already incremented by `push`.
 * If the object will be generated as a return value, leave its references alone.
-  * Memory management of generated objects is to be done by the caller.
+  * Memory management of returned objects is to be done by the caller.
   * If the object comes from the stack, use `dpop()` instead of `pop()`.
-  
-Naturally, one should use functions declared in new.h, object.h, or namespace.h whenever possible,
-as these functions are designed to make reference counting easier.
-
-Speaking of new.h: As of the string interning update,
-`new_symbol` will duplicate strings when they are needed, and `destroy` will free them when they are not.
-Just handle the input string's memory; the rest will be done internally.
-
-Lastly, do not worry about accidentally destroying static objects.
-They are given an extra reference to prevent destruction by (correctly-written) garbage collection.
