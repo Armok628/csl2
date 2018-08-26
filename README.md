@@ -54,6 +54,8 @@ Though the `SEE` function is actually inspired by Forth, Tcl has the comparable 
 (However, the `SEE` function will actually show a function's arguments and *compiled* body.
 Perhaps a better comparison would be to `tcl::unsupported::disassemble proc`.)
 
+Also like Tcl, ISPL links identical symbols together by the same memory object to avoid redundant strings.
+
 #### Namespace Management
 
 Namespaces in ISPL work similarly to those in Tcl in that functions, like Tcl procedures,

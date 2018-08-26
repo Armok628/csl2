@@ -19,6 +19,7 @@ void bind_argv(int argc,char **argv)
 int main(int argc,char **argv)
 {
 	init_dict();
+	obtable=new_table(NAMESPACE_SIZE,NULL);
 	if (argc>1) {
 		bind_argv(argc,argv);
 		obj_t *r=incr_refs(load_file(argv[1]));
@@ -49,5 +50,6 @@ int main(int argc,char **argv)
 	}
 QUIT_MAIN:
 	unset_binding("DICTIONARY");
+	free_table(obtable);
 	return 0;
 }

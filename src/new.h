@@ -5,6 +5,8 @@
 #include "hash.h"
 #include "object.h"
 #define CONS new_cell
+extern table_t *obtable;
+
 obj_t *new_object(void);
 obj_t *new_cell(obj_t *,obj_t *);
 obj_t *new_symbol(char *);

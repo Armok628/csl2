@@ -55,6 +55,8 @@ void destroy(obj_t *o)
 	//printf("Destroying "); print_obj(o); printf(" {%p}\n",(void *)o);
 	switch (o->type) {
 	case SYMBOL:
+		expunge(obtable,o->data.sym);
+		// ^ No double-destroy; obtable has no destructor
 		free(o->data.sym);
 		break;
 	case CELL:
@@ -172,10 +174,8 @@ obj_t *copy_obj(obj_t *o)
 		return new_double(o->data.d);
 	case CELL:
 		return new_cell(copy_obj(CAR(o)),copy_obj(CDR(o)));
-	case SYMBOL:
-		return new_symbol(o->data.sym);
 	default:
-		return new_object();
+		return o;
 	}
 }
 void concatenate(obj_t *list,obj_t *item)

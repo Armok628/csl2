@@ -1,4 +1,5 @@
 #include "new.h"
+table_t *obtable=NULL;
 obj_t *new_object(void)
 { // Returns uninitialized object with type ERROR
 	obj_t *obj=calloc(1,sizeof(obj_t));
@@ -15,10 +16,17 @@ obj_t *new_cell(obj_t *a,obj_t *b)
 	return c;
 }
 obj_t *new_symbol(char *str)
-{ // Duplicates str
-	obj_t *o=new_object();
+{ // Returns identical symbol object if one already exists
+	obj_t *o=lookup(obtable,str);
+	// ^ Symbol table initialized by main
+	if (o)
+		return o;
+	o=new_object();
 	o->type=SYMBOL;
 	o->data.sym=strdup(str);
+	insert(obtable,str,o);
+	/**/fprintf(stderr,"DEBUG: Creating new symbol object: \"%s\"\n",str);
+	// ^ No incr_refs -- obtable has no destructor
 	return o;
 }
 obj_t *new_integer(long i)
