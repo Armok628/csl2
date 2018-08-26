@@ -165,27 +165,18 @@ obj_t *copy_obj(obj_t *o)
 {
 	if (!o)
 		return NULL;
-	obj_t *c=new_object();
-	c->type=o->type;
 	switch (o->type) {
 	case INTEGER:
-		c->data.i=o->data.i;
-		break;
+		return new_integer(o->data.i);
 	case DOUBLE:
-		c->data.d=o->data.d;
-		break;
+		return new_double(o->data.d);
 	case CELL:
-		CAR(c)=incr_refs(copy_obj(CAR(o)));
-		CDR(c)=incr_refs(copy_obj(CDR(o)));
-		break;
+		return new_cell(copy_obj(CAR(o)),copy_obj(CDR(o)));
 	case SYMBOL:
-		c->data.sym=strdup(o->data.sym);
-		break;
-	default: // ???
-		free(c);
-		return incr_refs(o);
+		return new_symbol(o->data.sym);
+	default:
+		return new_object();
 	}
-	return c;
 }
 void concatenate(obj_t *list,obj_t *item)
 {

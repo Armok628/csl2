@@ -199,7 +199,7 @@ obj_t *read_str(char *str)
 		obj=read_list_str(str);
 		break;
 	case SYMBOL:
-		obj=new_symbol(strdup(str));
+		obj=new_symbol(str);
 		break;
 	case INTEGER:
 		obj=new_integer(atol(str));

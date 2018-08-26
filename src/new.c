@@ -14,11 +14,11 @@ obj_t *new_cell(obj_t *a,obj_t *b)
 	CDR(c)=incr_refs(b);
 	return c;
 }
-obj_t *new_symbol(char *s)
-{
+obj_t *new_symbol(char *str)
+{ // Duplicates str
 	obj_t *o=new_object();
 	o->type=SYMBOL;
-	o->data.sym=s;
+	o->data.sym=strdup(str);
 	return o;
 }
 obj_t *new_integer(long i)
