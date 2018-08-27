@@ -21,4 +21,6 @@
   (set 'assoc (lambda '(s l) '(cond ((null l) nil)
 				    ((eq (car (car l)) s) (car l))
 				    (t (assoc s (cdr l))))))
+  (set 'reverse (lambda '(l) '(cond ((null (cdr l)) l)
+				    (t `(@(recurse (cdr l)) ,(car l))))))
   t)
