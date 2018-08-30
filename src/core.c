@@ -76,7 +76,7 @@ obj_t *get(obj_t *sym)
 STACK(get,1)
 obj_t *unset(obj_t *sym)
 {
-	if (!sym||sym->type==SYMBOL)
+	if (type_check(sym,SYMBOL,"UNSET: "))
 		unset_binding(sym->data.sym);
 	return NULL;
 }
