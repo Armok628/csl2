@@ -6,6 +6,7 @@
 #include "arith.h"
 #include "core.h"
 #define NAMESPACE_SIZE 100
+#define LOCAL_NAMESPACE_SIZE 1
 extern table_t *dict;
 extern int level;
 

@@ -31,7 +31,7 @@ bool funcall(obj_t *func)
 	obj_t *rep=func->data.func.rep.lisp;
 	obj_t *args=CAR(rep);
 	obj_t *body=CAR(CDR(rep));
-	table_t *loc=new_table(1,(dtor_t)&decr_refs);
+	table_t *loc=new_table(LOCAL_NAMESPACE_SIZE,(dtor_t)&decr_refs);
 	insert(loc,"RECURSE",incr_refs(func));
 	push_namespace(loc);
 	bind_args(args);
