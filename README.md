@@ -25,7 +25,7 @@ with one minor difference: write `,@` as `@`.
 This feature is implemented as a special set of parser rules.
 In fact, ``` (quote `(,a @b c @d)) ``` yields `(CONS a (NCONC b (CONS (QUOTE c) d)))`.
 
-Special forms include `LIST`, `QUOTE`, `COND`, and `PROGN`,
+Special forms include `LIST`, `QUOTE`, `COND`, `IF`, and `PROGN`,
 where by "special form" I mean a quasi-function implemented as a special translation rule,
 and interpreted differently where encountered.
 
