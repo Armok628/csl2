@@ -1,17 +1,17 @@
 (progn
   (set 'mapcar (lambda '(f l) '(cond (l (cons (f (car l)) (recurse f (cdr l)))))))
-  (set 'reduce (lambda '(f l) `(,(lambda '(f l a) '(cond ((null l) a) (t (recurse f (cdr l) (f a (car l))))))
+  (set 'reduce (lambda '(f l) `(,(lambda '(f l a) '(if (null l) a (recurse f (cdr l) (f a (car l)))))
 				 f (cdr (cdr l)) (f (car l) (car (cdr l))))))
-  (set 'range (lambda '(stt stp end) '(cond ((or (and (> stt end) (> stp 0)) (and (< stt end) (< stp 0))) nil)
-					    (t (cons stt (recurse (+ stt stp) stp end))))))
+  (set 'range (lambda '(stt stp end) '(if (or (and (> stt end) (> stp 0)) (and (< stt end) (< stp 0))) nil
+					(cons stt (recurse (+ stt stp) stp end)))))
   (set 'desc (lambda '(o l) '(cond ((null o) l)
 				   ((eq (car o) 'a) (recurse (cdr o) (car l)))
 				   ((eq (car o) 'd) (recurse (cdr o) (cdr l)))
 				   (t (recurse (cdr o) l)))))
-  (set 'nth (lambda '(n l) '(cond ((> n 0) (recurse (- n 1) (cdr l))) (t (car l)))))
+  (set 'nth (lambda '(n l) '(if (> n 0) (recurse (- n 1) (cdr l)) (car l))))
   (set 'apply (lambda '(f l) '(uplevel 1 `(,f @l))))
-  (set 'zip (lambda '(a b) '(cond ((or (null a) (null b)) nil)
-				  (t (cons (cons (car a) (car b)) (recurse (cdr a) (cdr b)))))))
+  (set 'zip (lambda '(a b) '(if (or (null a) (null b)) nil
+			      (cons (cons (car a) (car b)) (recurse (cdr a) (cdr b))))))
   (set 'flatten (lambda '(l) '(cond ((null l) nil)
 				    ((atom l) (cons l nil))
 				    (t (nconc (recurse (car l)) (recurse (cdr l)))))))
@@ -21,6 +21,6 @@
   (set 'assoc (lambda '(s l) '(cond ((null l) nil)
 				    ((eq (car (car l)) s) (car l))
 				    (t (assoc s (cdr l))))))
-  (set 'reverse (lambda '(l) '(cond ((null (cdr l)) l)
-				    (t `(@(recurse (cdr l)) ,(car l))))))
+  (set 'reverse (lambda '(l) '(if (null (cdr l)) l
+				`(@(recurse (cdr l)) ,(car l)))))
   t)
