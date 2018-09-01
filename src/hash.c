@@ -1,4 +1,6 @@
 #include "hash.h"
+int rehash_trigger=1;
+int rehash_factor=2;
 unsigned long (*hash_function)(char *)=&fnv_1a;
 const unsigned long fnv_prime=0x100000001b3;
 const unsigned long fnv_offset=0xcbf29ce484222325;
@@ -27,7 +29,6 @@ bucket_t *new_bucket(unsigned long key,void *val)
 	bucket_t *b=malloc(sizeof(bucket_t));
 	b->key=key;
 	b->val=val;
-	b->cdr=NULL;
 	return b;
 }
 void free_location(bucket_t *b,dtor_t d)
@@ -42,10 +43,16 @@ void free_location(bucket_t *b,dtor_t d)
 	}
 }
 table_t *new_table(int size,dtor_t d)
-{
-	table_t *table=malloc(sizeof(table_t));
-	table->pool=calloc(size,sizeof(bucket_t *));
+{ // Negative size enables automatic resizing
+	if (!size)
+		return NULL;
+	table_t *table=calloc(1,sizeof(table_t));
+	if (size<=0) {
+		size=-size;
+		table->rehash=1;
+	}
 	table->size=size;
+	table->pool=calloc(size,sizeof(bucket_t *));
 	table->destructor=d;
 	return table;
 }
@@ -57,10 +64,9 @@ void free_table(table_t *table)
 	free(table->pool);
 	free(table);
 }
-void insert(table_t *table,char *str,void *val)
-{
-	unsigned long key=hash_function(str);
-	bucket_t *entry=new_bucket(key,val);
+void insert_bucket(table_t *table,bucket_t *entry)
+{ // Never triggers rehashing
+	unsigned long key=entry->key;
 	bucket_t **loc=&table->pool[key%table->size]; // : Bucket location in pool
 	if (*loc) { // Bucket(s) already in location
 		bucket_t *b=*loc;
@@ -75,6 +81,14 @@ void insert(table_t *table,char *str,void *val)
 			b->cdr=entry;
 	} else // No buckets at location
 		*loc=entry;
+	entry->cdr=NULL;
+	table->members++;
+}
+void insert(table_t *table,char *str,void *val)
+{ // May trigger rehashing
+	insert_bucket(table,new_bucket(hash_function(str),val));
+	if (table->rehash&&table->members/table->size>rehash_trigger)
+		rehash(table,table->size*rehash_factor);
 }
 void *lookup(table_t *table,char *str)
 {
@@ -104,4 +118,22 @@ void expunge(table_t *table,char *str)
 	if (table->destructor)
 		table->destructor(b->val);
 	free(b);
+}
+void rehash(table_t *table,int newsize)
+{
+	//fprintf(stderr,"Resizing table to %d\n",newsize);
+	bucket_t **oldpool=table->pool;
+	int oldsize=table->size;
+	table->pool=calloc(newsize,sizeof(bucket_t *));
+	table->size=newsize;
+	table->members=0;
+	for (int i=0;i<oldsize;i++) {
+		bucket_t *l=oldpool[i];
+		while (l) {
+			bucket_t *t=l;
+			l=l->cdr;
+			insert_bucket(table,t);
+		}
+	}
+	free(oldpool);
 }

@@ -11,11 +11,15 @@ typedef struct bucket_s { // Linked list
 } bucket_t;
 typedef struct {
 	int size; // Number of bucket locations
+	int members;
+	int rehash;
 	bucket_t **pool;
 	dtor_t destructor;
 } table_t;
 
 extern unsigned long (*hash_function)(char *);
+extern int rehash_trigger;
+extern int rehash_factor;
 
 unsigned long fnv_1a(char *);
 unsigned long nocase_fnv_1a(char *);
@@ -24,4 +28,5 @@ void free_table(table_t *);
 void insert(table_t *,char *,void *);
 void *lookup(table_t *,char *);
 void expunge(table_t *,char *);
+void rehash(table_t *,int);
 #endif
