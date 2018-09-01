@@ -1,6 +1,4 @@
 #include "hash.h"
-int rehash_trigger=1;
-int rehash_factor=2;
 unsigned long (*hash_function)(char *)=&fnv_1a;
 const unsigned long fnv_prime=0x100000001b3;
 const unsigned long fnv_offset=0xcbf29ce484222325;
@@ -88,8 +86,8 @@ void insert_bucket(table_t *table,bucket_t *entry)
 void insert(table_t *table,char *str,void *val)
 { // May trigger rehashing
 	insert_bucket(table,new_bucket(hash_function(str),val));
-	if (table->rehash&&table->members/table->size>rehash_trigger)
-		rehash(table,table->size*rehash_factor);
+	if (table->rehash&&table->members>table->size)
+		rehash(table,table->size*2);
 }
 void *lookup(table_t *table,char *str)
 {
@@ -97,9 +95,7 @@ void *lookup(table_t *table,char *str)
 	bucket_t *b=table->pool[key%table->size]; // : Bucket in pool
 	while (b&&b->key!=key) // Look for identical bucket or end
 		b=b->cdr;
-	if (!b) // Found end
-		return NULL;
-	return b->val;
+	return b?b->val:NULL;
 }
 void expunge(table_t *table,char *str)
 {

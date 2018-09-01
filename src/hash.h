@@ -18,8 +18,6 @@ typedef struct {
 } table_t;
 
 extern unsigned long (*hash_function)(char *);
-extern int rehash_trigger;
-extern int rehash_factor;
 
 unsigned long fnv_1a(char *);
 unsigned long nocase_fnv_1a(char *);
