@@ -36,7 +36,7 @@ void interpret(obj_t *list)
 			push(body);
 		} else if (instr==&drop_sym) {
 			drop();
-		} else if (instr==&exec_sym) {
+		} else if (instr==&execute_sym) {
 			obj_t *f=pop();
 			if (!funcall(f))
 				goto FATAL_INTERP_ERROR;

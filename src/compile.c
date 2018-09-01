@@ -44,6 +44,29 @@ obj_t *translate_list(obj_t *body)
 	CDR(tail)=incr_refs(CONS(&list_end_sym,NULL));
 	return head;
 }
+obj_t *translate_if(obj_t *body)
+{
+	obj_t *list=CONS(&cond_sym,NULL);
+	obj_t *tail=list;
+	body=CDR(body);
+	obj_t *condition=CAR(body);
+	body=CDR(body);
+	obj_t *if_result=CAR(body);
+	body=CDR(body);
+	obj_t *else_result=body?CAR(body):NULL;
+	CDR(tail)=incr_refs(CONS(rpn(condition),NULL));
+	tail=CDR(tail);
+	CDR(tail)=incr_refs(CONS(rpn(if_result),NULL));
+	tail=CDR(tail);
+	if (else_result) {
+		CDR(tail)=incr_refs(CONS(CONS(&t_sym,NULL),NULL));
+		tail=CDR(tail);
+		CDR(tail)=incr_refs(CONS(rpn(else_result),NULL));
+		tail=CDR(tail);
+	}
+	CDR(tail)=incr_refs(CONS(&cond_end_sym,NULL));
+	return list;
+}
 obj_t *rpn(obj_t *body)
 {
 	if (!body||body->type!=CELL)
@@ -56,6 +79,8 @@ obj_t *rpn(obj_t *body)
 		return translate_progn(body);
 	if (CAR(body)==&list_sym)
 		return translate_list(body);
+	if (CAR(body)==&if_sym)
+		return translate_if(body);
 	obj_t *list=NULL;
 	obj_t *tail=NULL;
 	for (obj_t *o=CDR(body);o;o=CDR(o)) {
@@ -74,6 +99,6 @@ obj_t *rpn(obj_t *body)
 		tail=list;
 	}
 	for (;CDR(tail);tail=CDR(tail));
-	CDR(tail)=incr_refs(CONS(&exec_sym,NULL));
+	CDR(tail)=incr_refs(CONS(&execute_sym,NULL));
 	return list;
 }

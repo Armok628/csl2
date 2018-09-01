@@ -77,6 +77,7 @@ void insert_bucket(table_t *table,bucket_t *entry)
 				table->destructor(b->val);
 			b->val=entry->val;
 			free(entry);
+			return;
 		} else // Found end
 			b->cdr=entry;
 	} else // No buckets at location
