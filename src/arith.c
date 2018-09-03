@@ -53,7 +53,7 @@ STACK(name,2)
 FUNC_FROM_COMP(>,gt)
 FUNC_FROM_COMP(>=,gte)
 FUNC_FROM_COMP(<,lt)
-FUNC_FROM_COMP(>=,lte)
+FUNC_FROM_COMP(<=,lte)
 FUNC_FROM_COMP(==,eqn)
 #define FUNC_FROM_BOOLOP(op,name) \
 obj_t *name(obj_t *x,obj_t *y) \
