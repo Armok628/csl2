@@ -3,10 +3,18 @@ static obj_t *stack[STACK_SIZE];
 static int stack_index=0;
 void push(obj_t *obj)
 {
+	if (stack_index>=STACK_SIZE) {
+		fputs("Stack overflow\n",stderr);
+		exit(1);
+	}
 	stack[stack_index++]=incr_refs(obj);
 }
 obj_t *pop(void)
 { // Popped stack items must have a call to decr_refs after use
+	if (stack_index<=0) {
+		fputs("Stack underflow\n",stderr);
+		exit(1);
+	}
 	return stack[--stack_index];
 }
 obj_t *dpop(void)
