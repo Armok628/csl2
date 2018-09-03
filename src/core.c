@@ -54,9 +54,7 @@ obj_t *rplacd(obj_t *c,obj_t *v)
 STACK(rplacd,2)
 obj_t *atom(obj_t *obj)
 {
-	if (!obj||obj->type!=CELL)
-		return incr_refs(&t_sym);
-	return NULL;
+	return !obj||obj->type!=CELL?T:NULL;
 }
 STACK(atom,1)
 obj_t *set(obj_t *sym,obj_t *val)
@@ -83,10 +81,7 @@ obj_t *unset(obj_t *sym)
 STACK(unset,1)
 obj_t *eq(obj_t *a,obj_t *b)
 {
-	if (eq_objs(a,b))
-		return incr_refs(&t_sym);
-	else
-		return NULL;
+	return eq_objs(a,b)?T:NULL;
 }
 STACK(eq,2)
 obj_t *copy(obj_t *obj)
@@ -115,8 +110,7 @@ obj_t *lambda(obj_t *args,obj_t *body)
 STACK(lambda,2)
 obj_t *eval(obj_t *expr)
 {
-	obj_t *r=rpn(expr);
-	incr_refs(r);
+	obj_t *r=incr_refs(rpn(expr));
 	interpret(r);
 	decr_refs(r);
 	return dpop();
@@ -134,7 +128,7 @@ obj_t *lread(obj_t *n)
 STACK(lread,1)
 obj_t *null(obj_t *c)
 {
-	return !c?incr_refs(&t_sym):NULL;
+	return !c?T:NULL;
 }
 STACK(null,1)
 obj_t *quit(void)
@@ -313,7 +307,7 @@ obj_t *stack(void)
 STACK(stack,0)
 void init_core(void)
 {
-	insert(dict,"T",incr_refs(&t_sym));
+	insert(dict,"T",incr_refs(T));
 	INIT(APPEND,append)
 	INIT(ATOM,atom)
 	INIT(CAR,car)

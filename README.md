@@ -1,7 +1,7 @@
 # ispl
 A small garbage-collected LISP dialect based on compilation to postfix notation
 
-This is effectively a far superior rewrite of my previous LISP project, csl.
+Written from scratch in pure C using only the standard library.
 
 ## ISPL Front-End
 

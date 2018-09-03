@@ -22,8 +22,7 @@ typedef struct object {
 	type_t type;
 	union {
 		struct {
-			struct object *car;
-			struct object *cdr;
+			struct object *car,*cdr;
 		} cell;
 		struct {
 			bool lambda;
@@ -37,7 +36,7 @@ typedef struct object {
 		double d;
 		table_t *table;
 	} data;
-} obj_t;
+} obj_t; // (obj_t *)NULL represents NIL
 #include "new.h"
 #define CAR(x) ((x)->data.cell.car)
 #define CDR(x) ((x)->data.cell.cdr)

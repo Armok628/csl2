@@ -16,6 +16,7 @@ extern obj_t list_end_sym;
 extern obj_t progn_sym;
 extern obj_t quote_sym;
 extern obj_t t_sym;
+#define T &t_sym
 // Type Symbols
 extern obj_t cell_sym;
 extern obj_t double_sym;
