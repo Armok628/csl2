@@ -45,7 +45,7 @@ obj_t *name(obj_t *x,obj_t *y) \
 		return new_object(); \
 	double a=dub(x),b=dub(y); \
 	if (a op b) \
-		return &t_sym; \
+		return T; \
 	else \
 		return NULL; \
 } \
@@ -59,7 +59,7 @@ FUNC_FROM_COMP(==,eqn)
 obj_t *name(obj_t *x,obj_t *y) \
 { \
 	if (x op y) \
-		return &t_sym; \
+		return T; \
 	else \
 		return NULL; \
 } \

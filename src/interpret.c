@@ -31,7 +31,7 @@ void interpret(obj_t *list)
 		} else if (instr==&list_end_sym) {
 			obj_t *body=NULL;
 			while (stack_obj(0)!=&list_sym)
-				body=CONS(dpop(),body);
+				body=new_cell(dpop(),body);
 			drop();
 			push(body);
 		} else if (instr==&drop_sym) {

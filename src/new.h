@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include "hash.h"
 #include "object.h"
-#define CONS new_cell
 extern table_t *obtable;
 
 obj_t *new_object(void);

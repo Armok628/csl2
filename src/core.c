@@ -13,7 +13,7 @@ obj_t *terpri(void)
 STACK(terpri,0)
 obj_t *cons(obj_t *a,obj_t *b)
 {
-	return CONS(a,b);
+	return new_cell(a,b);
 }
 STACK(cons,2)
 obj_t *car(obj_t *c)
@@ -151,7 +151,7 @@ obj_t *tick(void)
 	last_tick=clock();
 	if (last_tick==-1)
 		return NULL;
-	return &t_sym;
+	return T;
 }
 STACK(tick,0)
 obj_t *tock(void)

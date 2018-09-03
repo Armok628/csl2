@@ -40,6 +40,9 @@ typedef struct object {
 #include "new.h"
 #define CAR(x) ((x)->data.cell.car)
 #define CDR(x) ((x)->data.cell.cdr)
+#define LIST3(a,b,c) new_cell(a,LIST2(b,c))
+#define LIST2(a,b) new_cell(a,LIST1(b))
+#define LIST1(a) new_cell(a,NULL)
 
 char *obj_type_name(obj_t *);
 bool type_check(obj_t *,type_t,const char *);

@@ -124,7 +124,7 @@ obj_t *read_list_str(char *str)
 			continue;
 		}
 		obj_t *r=read_str(tok);
-		r=dotted?r:CONS(r,NULL);
+		r=dotted?r:LIST1(r);
 		if (!ret) {
 			ret=r;
 			tail=ret;
@@ -139,7 +139,7 @@ obj_t *quote(obj_t *obj)
 {
 	if (obj&&obj->type!=CELL&&obj->type!=SYMBOL)
 		return obj;
-	return CONS(&quote_sym,CONS(obj,NULL));
+	return LIST2(&quote_sym,obj);
 }
 obj_t *read_splice_str(char *str)
 { // Accepts argument identical to read_list_str (no starting `)
@@ -170,7 +170,7 @@ obj_t *read_splice_str(char *str)
 			dotted=true;
 		if (!dotted) {
 			obj_t *s=splice?&append_sym:&cons_sym;
-			r=CONS(s,CONS(r,CONS(NULL,NULL)));
+			r=LIST3(s,r,NULL);
 		}
 		if (!ret) {
 			ret=r;
