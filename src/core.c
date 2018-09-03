@@ -151,20 +151,19 @@ obj_t *see(obj_t *func)
 	return func->data.func.rep.lisp;
 }
 STACK(see,1)
-static struct timespec last_tick;
+static clock_t then=-1;
 obj_t *tick(void)
 {
-	clock_gettime(CLOCK_MONOTONIC,&last_tick);
-	return NULL;
+	then=clock();
+	if (then==-1)
+		return NULL;
+	return &t_sym;
 }
 STACK(tick,0)
 obj_t *tock(void)
 {
-	struct timespec now;
-	clock_gettime(CLOCK_MONOTONIC,&now);
-	double dt=now.tv_sec-last_tick.tv_sec;
-	dt+=(now.tv_nsec-last_tick.tv_nsec)/1e9;
-	return new_double(dt);
+	clock_t now=clock();
+	return new_double((now-then)/(double)CLOCKS_PER_SEC);
 }
 STACK(tock,0)
 obj_t *uplevel(obj_t *n,obj_t *expr)
