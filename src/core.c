@@ -151,11 +151,11 @@ obj_t *see(obj_t *func)
 	return func->data.func.rep.lisp;
 }
 STACK(see,1)
-static clock_t then=-1;
+static clock_t last_tick=-1;
 obj_t *tick(void)
 {
-	then=clock();
-	if (then==-1)
+	last_tick=clock();
+	if (last_tick==-1)
 		return NULL;
 	return &t_sym;
 }
@@ -163,7 +163,9 @@ STACK(tick,0)
 obj_t *tock(void)
 {
 	clock_t now=clock();
-	return new_double((now-then)/(double)CLOCKS_PER_SEC);
+	if (now==-1)
+		return NULL;
+	return new_double((now-last_tick)/(double)CLOCKS_PER_SEC);
 }
 STACK(tock,0)
 obj_t *uplevel(obj_t *n,obj_t *expr)
