@@ -1,6 +1,6 @@
 #include "compile.h"
 obj_t *translate_progn(obj_t *body)
-{
+{ // (progn a b c) => (rpn(a) DROP rpn(b) DROP rpn(c))
 	obj_t *list=NULL;
 	obj_t *tail=NULL;
 	for (obj_t *f=CDR(body);f;f=CDR(f)) {
@@ -19,7 +19,7 @@ obj_t *translate_progn(obj_t *body)
 	return list;
 }
 obj_t *translate_cond(obj_t *body)
-{
+{ // (COND (a b) (c d)) => (COND (rpn(a)) (rpn(b)) (rpn(c)) (rpn(d)) COND_END)
 	obj_t *list=LIST1(CAR(body));
 	obj_t *tail=list;
 	for (obj_t *c=CDR(body);c;c=CDR(c)) {
@@ -34,7 +34,7 @@ obj_t *translate_cond(obj_t *body)
 	return list;
 }
 obj_t *translate_list(obj_t *body)
-{
+{ // (LIST a b c d) => (LIST rpn(a) rpn(b) rpn(c) rpn(d) LIST_END)
 	obj_t *head=LIST1(CAR(body));
 	obj_t *tail=head;
 	for (obj_t *o=CDR(body);o;o=CDR(o)) {
@@ -46,6 +46,8 @@ obj_t *translate_list(obj_t *body)
 }
 obj_t *translate_if(obj_t *body)
 {
+	// (IF a b c) => (COND (rpn(a)) (rpn(b)) (T) (rpn(c)) COND_END)
+	// (IF a b) => (COND (rpn(a)) (rpn(b)) COND_END)
 	obj_t *list=LIST1(&cond_sym);
 	obj_t *tail=list;
 	body=CDR(body);
@@ -68,7 +70,7 @@ obj_t *translate_if(obj_t *body)
 	return list;
 }
 obj_t *rpn(obj_t *body)
-{
+{ // (a b c d) => (rpn(b) rpn(c) rpn(d) rpn(a) EXECUTE)
 	if (!body||body->type!=CELL)
 		return LIST1(body);
 	if (CAR(body)==&quote_sym)

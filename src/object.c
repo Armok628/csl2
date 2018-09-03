@@ -78,7 +78,7 @@ void destroy(obj_t *o)
 	free(o);
 }
 obj_t *incr_refs(obj_t *o)
-{
+{ // Returns o for simplicity
 	if (!o)
 		return NULL;
 	o->refs++;
@@ -175,7 +175,7 @@ obj_t *copy_obj(obj_t *o)
 	}
 }
 void concatenate(obj_t *list,obj_t *item)
-{
+{ // Placed here because in use by multiple built-ins
 	for (;CDR(list);list=CDR(list));
 	CDR(list)=incr_refs(item);
 }
