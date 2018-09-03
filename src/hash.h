@@ -4,13 +4,13 @@
 #include <stdlib.h>
 #include <string.h>
 typedef void (*dtor_t)(void *);
-typedef struct bucket_s { // Linked list
+typedef struct bucket_s { /* Linked list */
 	unsigned long key;
 	void *val;
-	struct bucket_s *cdr; // Next node
+	struct bucket_s *cdr; /* Next node */
 } bucket_t;
 typedef struct {
-	int size; // Number of bucket locations
+	int size; /* Number of bucket locations */
 	int members;
 	int rehash;
 	bucket_t **pool;

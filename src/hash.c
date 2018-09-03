@@ -5,7 +5,8 @@ const unsigned long fnv_offset=0xcbf29ce484222325;
 unsigned long fnv_1a(char *str)
 {
 	unsigned long key=fnv_offset;
-	for (char c=*str++;c;c=*str++) {
+	char c;
+	for (c=*str++;c;c=*str++) {
 		key^=c;
 		key*=fnv_prime;
 	}
@@ -14,7 +15,8 @@ unsigned long fnv_1a(char *str)
 unsigned long nocase_fnv_1a(char *str)
 {
 	unsigned long key=fnv_offset;
-	for (char c=*str++;c;c=*str++) {
+	char c;
+	for (c=*str++;c;c=*str++) {
 		if ('a'<=c&&c<='z')
 			c+='A'-'a';
 		key^=c;
@@ -32,6 +34,7 @@ bucket_t *new_bucket(unsigned long key,void *val)
 void free_location(bucket_t *b,dtor_t d)
 {
 	bucket_t *t;
+
 	while (b) {
 		t=b->cdr;
 		if (d)
@@ -41,10 +44,11 @@ void free_location(bucket_t *b,dtor_t d)
 	}
 }
 table_t *new_table(int size,dtor_t d)
-{ // Negative size enables automatic resizing
+{ /* Negative size enables automatic resizing */
+	table_t *table;
 	if (!size)
 		return NULL;
-	table_t *table=calloc(1,sizeof(table_t));
+	table=calloc(1,sizeof(table_t));
 	if (size<=0) {
 		size=-size;
 		table->rehash=1;
@@ -56,35 +60,36 @@ table_t *new_table(int size,dtor_t d)
 }
 void free_table(table_t *table)
 {
-	for (int i=0;i<table->size;i++) // Check all locations
+	int i;
+	for (i=0;i<table->size;i++) /* Check all locations */
 		if (table->pool[i])
 			free_location(table->pool[i],table->destructor);
 	free(table->pool);
 	free(table);
 }
 void insert_bucket(table_t *table,bucket_t *entry)
-{ // Never triggers rehashing
+{ /* Never triggers rehashing */
 	unsigned long key=entry->key;
-	bucket_t **loc=&table->pool[key%table->size]; // : Bucket location in pool
-	if (*loc) { // Bucket(s) already in location
+	bucket_t **loc=&table->pool[key%table->size]; /* : Bucket location in pool */
+	if (*loc) { /* Bucket(s) already in location */
 		bucket_t *b=*loc;
-		while (b->cdr&&b->key!=key) // Look for identical bucket or end
+		while (b->cdr&&b->key!=key) /* Look for identical bucket or end */
 			b=b->cdr;
-		if (b->key==key) { // Found identical bucket
+		if (b->key==key) { /* Found identical bucket */
 			if (table->destructor)
 				table->destructor(b->val);
 			b->val=entry->val;
 			free(entry);
 			return;
-		} else // Found end
+		} else /* Found end */
 			b->cdr=entry;
-	} else // No buckets at location
+	} else /* No buckets at location */
 		*loc=entry;
 	entry->cdr=NULL;
 	table->members++;
 }
 void insert(table_t *table,char *str,void *val)
-{ // May trigger rehashing
+{ /* May trigger rehashing */
 	insert_bucket(table,new_bucket(hash_function(str),val));
 	if (table->rehash&&table->members>table->size)
 		rehash(table,table->size*2);
@@ -92,8 +97,8 @@ void insert(table_t *table,char *str,void *val)
 void *lookup(table_t *table,char *str)
 {
 	unsigned long key=hash_function(str);
-	bucket_t *b=table->pool[key%table->size]; // : Bucket in pool
-	while (b&&b->key!=key) // Look for identical bucket or end
+	bucket_t *b=table->pool[key%table->size]; /* : Bucket in pool */
+	while (b&&b->key!=key) /* Look for identical bucket or end */
 		b=b->cdr;
 	return b?b->val:NULL;
 }
@@ -102,13 +107,13 @@ void expunge(table_t *table,char *str)
 	unsigned long key=hash_function(str);
 	bucket_t **loc=&table->pool[key%table->size];
 	bucket_t *p=NULL,*b=*loc;
-	while (b&&b->key!=key) { // Look for entry
-		p=b; // Remember previous node
+	while (b&&b->key!=key) { /* Look for entry */
+		p=b; /* Remember previous node */
 		b=b->cdr;
 	}
-	if (!b) // Entry not found
+	if (!b) /* Entry not found */
 		return;
-	if (p) // Previous node
+	if (p) /* Previous node */
 		p->cdr=b->cdr;
 	else
 		*loc=b->cdr;
@@ -118,13 +123,13 @@ void expunge(table_t *table,char *str)
 }
 void rehash(table_t *table,int newsize)
 {
-	//fprintf(stderr,"Resizing table to %d\n",newsize);
 	bucket_t **oldpool=table->pool;
-	int oldsize=table->size;
+	int i,oldsize=table->size;
+	/*fprintf(stderr,"Resizing table to %d\n",newsize);*/
 	table->pool=calloc(newsize,sizeof(bucket_t *));
 	table->size=newsize;
 	table->members=0;
-	for (int i=0;i<oldsize;i++) {
+	for (i=0;i<oldsize;i++) {
 		bucket_t *l=oldpool[i];
 		while (l) {
 			bucket_t *t=l;
