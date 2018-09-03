@@ -1,7 +1,7 @@
 #include "namespace.h"
 table_t *dict=NULL;
 table_t *namespaces[STACK_SIZE];
-int level=-1; // Unlike stack_index, level is last *filled* slot
+int level=-1; // Last filled slot
 void init_dict(void)
 {
 	dict=new_table(NAMESPACE_SIZE,(dtor_t)&decr_refs);
