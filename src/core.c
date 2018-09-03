@@ -1,6 +1,6 @@
 #include "core.h"
 obj_t *print(obj_t *obj)
-{
+{ // No newline
 	print_obj(obj,stdout);
 	return obj;
 }
@@ -18,20 +18,16 @@ obj_t *cons(obj_t *a,obj_t *b)
 STACK(cons,2)
 obj_t *car(obj_t *c)
 {
-	if (!c)
-		return NULL;
-	if (!type_check(c,CELL,"CAR: "))
+	if (!type_check(c,NIL|CELL,"CAR: "))
 		return new_object();
-	return CAR(c);
+	return c?CAR(c):NULL;
 }
 STACK(car,1)
 obj_t *cdr(obj_t *c)
 {
-	if (!c)
-		return NULL;
-	if (!type_check(c,CELL,"CDR: "))
+	if (!type_check(c,NIL|CELL,"CDR: "))
 		return new_object();
-	return CDR(c);
+	return c?CDR(c):NULL;
 }
 STACK(cdr,1)
 obj_t *rplaca(obj_t *c,obj_t *v)
@@ -54,7 +50,7 @@ obj_t *rplacd(obj_t *c,obj_t *v)
 STACK(rplacd,2)
 obj_t *atom(obj_t *obj)
 {
-	return !obj||obj->type!=CELL?T:NULL;
+	return obj&&obj->type==CELL?NULL:T;
 }
 STACK(atom,1)
 obj_t *set(obj_t *sym,obj_t *val)
@@ -86,7 +82,8 @@ obj_t *eq(obj_t *a,obj_t *b)
 STACK(eq,2)
 obj_t *copy(obj_t *obj)
 {
-	return copy_obj(obj);
+	return copy_cell(obj);
+	// ^ Returns obj if obj->type!=CELL
 }
 STACK(copy,1)
 obj_t *length(obj_t *list)
@@ -102,7 +99,7 @@ obj_t *lambda(obj_t *args,obj_t *body)
 	type_err|=!type_check(args,NIL|CELL,"LAMBDA, args: ");
 	for (obj_t *o=args;o;o=CDR(o))
 		type_err|=!type_check(CAR(o),SYMBOL,"LAMBDA, arg: ");
-	type_err|=!type_check(body,CELL|SYMBOL,"LAMBDA, body: ");
+	type_err|=!type_check(body,CELL,"LAMBDA, body: ");
 	if (type_err)
 		return new_object();
 	return new_function(args,rpn(body));
@@ -163,7 +160,7 @@ obj_t *tock(void)
 }
 STACK(tock,0)
 obj_t *uplevel(obj_t *n,obj_t *expr)
-{
+{ // Evaluate expr in namespace n callers up
 	bool type_err=false;
 	type_err|=!type_check(n,INTEGER,"UPLEVEL, arg 1: ");
 	type_err|=!type_check(expr,CELL|SYMBOL,"UPLEVEL, arg 2: ");
@@ -231,13 +228,15 @@ obj_t *lfor(obj_t *init,obj_t *cond,obj_t *iter,obj_t *body)
 }
 STACK(lfor,4)
 obj_t *foreach(obj_t *name,obj_t *list,obj_t *body)
-{
+{ // Successively bind list objects to name in current context; eval body
 	bool type_err=false;
 	type_err|=!type_check(name,SYMBOL,"FOREACH, name: ");
-	type_err|=!type_check(list,CELL,"FOREACH, list: ");
+	type_err|=!type_check(list,NIL|CELL,"FOREACH, list: ");
 	type_err|=!type_check(body,CELL,"FOREACH, body: ");
 	if (type_err)
 		return new_object();
+	if (!list)
+		return NULL;
 	body=incr_refs(rpn(body));
 	obj_t *ret=NULL;
 	for (obj_t *o=list;o;o=CDR(o)) {
@@ -253,7 +252,7 @@ obj_t *foreach(obj_t *name,obj_t *list,obj_t *body)
 }
 STACK(foreach,3)
 obj_t *load(obj_t *file)
-{
+{ // Returns an object as if contents were given to READ
 	if (!type_check(file,SYMBOL,"LOAD: "))
 		return new_object();
 	obj_t *r=load_file(file->data.sym);
@@ -266,7 +265,7 @@ obj_t *namespace(void)
 }
 STACK(namespace,0)
 obj_t *inside(obj_t *namespace,obj_t *expr)
-{
+{ // Evaluate expr inside namespace
 	bool type_err=false;
 	type_err|=!type_check(namespace,NAMESPACE,"INSIDE, namespace: ");
 	type_err|=!type_check(expr,CELL|SYMBOL,"INSIDE, expression: ");
@@ -281,7 +280,7 @@ obj_t *inside(obj_t *namespace,obj_t *expr)
 }
 STACK(inside,2)
 obj_t *l_typeof(obj_t *obj)
-{
+{ // Returns interned symbol
 	return new_symbol(obj_type_name(obj));
 }
 STACK(l_typeof,1)
@@ -289,7 +288,7 @@ obj_t *append(obj_t *a,obj_t *b)
 {
 	if (!type_check(a,CELL,"APPEND: "))
 		return new_object();
-	a=copy_obj(a);
+	a=copy_cell(a);
 	concatenate(a,b);
 	return a;
 }

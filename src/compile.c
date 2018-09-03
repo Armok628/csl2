@@ -74,7 +74,7 @@ obj_t *rpn(obj_t *body)
 	if (!body||body->type!=CELL)
 		return LIST1(body);
 	if (CAR(body)==&quote_sym)
-		return copy_obj(body);
+		return copy_cell(body);
 	if (CAR(body)==&cond_sym)
 		return translate_cond(body);
 	if (CAR(body)==&progn_sym)

@@ -159,20 +159,13 @@ int list_length(obj_t *list)
 		l++;
 	return l;
 }
-obj_t *copy_obj(obj_t *o)
+obj_t *copy_cell(obj_t *o)
 {
 	if (!o)
 		return NULL;
-	switch (o->type) {
-	case INTEGER:
-		return new_integer(o->data.i);
-	case DOUBLE:
-		return new_double(o->data.d);
-	case CELL:
-		return new_cell(copy_obj(CAR(o)),copy_obj(CDR(o)));
-	default:
-		return o;
-	}
+	if (o->type==CELL)
+		return new_cell(copy_cell(CAR(o)),copy_cell(CDR(o)));
+	return o;
 }
 void concatenate(obj_t *list,obj_t *item)
 { // Placed here because in use by multiple built-ins

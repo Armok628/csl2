@@ -51,6 +51,6 @@ void decr_refs(obj_t *);
 void print_obj(obj_t *,FILE *);
 bool eq_objs(obj_t *,obj_t *);
 int list_length(obj_t *);
-obj_t *copy_obj(obj_t *);
+obj_t *copy_cell(obj_t *);
 void concatenate(obj_t *,obj_t *);
 #endif

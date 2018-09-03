@@ -213,7 +213,7 @@ obj_t *read_str(char *str)
 	return q?quote(obj):obj;
 }
 obj_t *load_file(char *filename)
-{
+{ // Pass filename's contents to read_str
 	FILE *fh=fopen(filename,"r");
 	if (!fh)
 		return NULL;
