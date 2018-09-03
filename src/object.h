@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "hash.h"
-typedef enum {false,true} bool;
 typedef enum {
 	CELL=1<<0,
 	DOUBLE=1<<1,
