@@ -82,6 +82,14 @@ int delimit(char *str)
 			tok=true;
 			str++;
 			break;
+		case '"':
+			if (!parens) {
+				for (str++;*str!='"';str++);
+				*(++str)='\0';
+				count++;
+				tok=false;
+			}
+			break;
 		case '(':
 			parens++;
 			break;
@@ -185,9 +193,9 @@ obj_t *read_splice_str(char *str)
 	return ret;
 }
 obj_t *read_str(char *str)
-{ // Error checking through infer_type
+{ // Warning: Input string will be badly mangled
 	obj_t *obj;
-	str=trim(str); // Trims input
+	str=trim(str); // Trim input
 	if (!*str||!strcasecmp(str,"NIL"))
 		return NULL;
 	if (*str=='`')
@@ -199,6 +207,11 @@ obj_t *read_str(char *str)
 		obj=read_list_str(str);
 		break;
 	case SYMBOL:
+		if (*str=='"') { // Remove quotation marks
+			char *c=(++str);
+			for (;*c!='"';c++);
+			*c='\0';
+		}
 		obj=new_symbol(str);
 		break;
 	case INTEGER:
@@ -209,7 +222,7 @@ obj_t *read_str(char *str)
 		break;
 	default:
 		return new_object();
-	} // String must be freed by caller if necessary
+	} // String should be freed by caller
 	return q?quote(obj):obj;
 }
 obj_t *load_file(char *filename)
