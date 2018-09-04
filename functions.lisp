@@ -25,4 +25,5 @@
 				(nconc (recurse (cdr l)) (cons (car l) nil)))))
   (set 'lprint (lambda '(l) '(progn (foreach 'sym l '(print sym))
 				    (terpri))))
+  (set 'while (lambda '(c b) '(uplevel 1 `(for nil (quote ,c) nil (quote ,b)))))
   t)
