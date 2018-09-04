@@ -23,4 +23,6 @@
 				    (t (assoc s (cdr l))))))
   (set 'reverse (lambda '(l) '(if (null (cdr l)) l
 				(nconc (recurse (cdr l)) (cons (car l) nil)))))
+  (set 'lprint (lambda '(l) '(progn (foreach 'sym l '(print sym))
+				    (terpri))))
   t)
