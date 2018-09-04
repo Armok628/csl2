@@ -8,7 +8,6 @@
 #include "src/object.h"
 #include "src/parser.h"
 #include "src/stack.h"
-#define REPL
 void bind_argv(int argc,char **argv)
 {
 	obj_t *l=NULL;
@@ -31,10 +30,7 @@ int main(int argc,char **argv)
 		drop();
 		goto QUIT_MAIN;
 	}
-#ifdef REPL
-	for (;;)
-#endif
-		{
+	for (;;) {
 		char buf[1000];
 		if (!fgets(buf,1000,stdin))
 			goto QUIT_MAIN;
