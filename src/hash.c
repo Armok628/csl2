@@ -27,6 +27,10 @@ unsigned long nocase_fnv_1a(char *str)
 bucket_t *new_bucket(unsigned long key,void *val)
 {
 	bucket_t *b=malloc(sizeof(bucket_t));
+	if (!b) {
+		fputs("new_bucket: Failed to allocate memory\n",stderr);
+		exit(1);
+	}
 	b->key=key;
 	b->val=val;
 	return b;
@@ -48,13 +52,21 @@ table_t *new_table(int size,dtor_t d)
 	table_t *table;
 	if (!size)
 		return NULL;
-	table=calloc(1,sizeof(table_t));
+	table=malloc(sizeof(table_t));
+	if (!table) {
+		fputs("new_table: Failed to allocate table memory\n",stderr);
+		exit(1);
+	}
 	if (size<=0) {
 		size=-size;
-		table->rehash=1;
+		table->rehash=true;
 	}
 	table->size=size;
 	table->pool=calloc(size,sizeof(bucket_t *));
+	if (!table->pool) {
+		fputs("new_table: Failed to allocate pool memory\n",stderr);
+		exit(1);
+	}
 	table->destructor=d;
 	return table;
 }
@@ -127,6 +139,10 @@ void rehash(table_t *table,int newsize)
 	int i,oldsize=table->size;
 	/*fprintf(stderr,"Resizing table to %d\n",newsize);*/
 	table->pool=calloc(newsize,sizeof(bucket_t *));
+	if (!table->pool) {
+		fputs("rehash: Failed to allocate memory\n",stderr);
+		exit(1);
+	}
 	table->size=newsize;
 	table->members=0;
 	for (i=0;i<oldsize;i++) {

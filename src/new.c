@@ -2,7 +2,11 @@
 table_t *obtable=NULL;
 obj_t *new_object(void)
 { // Returns uninitialized object with type ERROR
-	obj_t *obj=calloc(1,sizeof(obj_t));
+	obj_t *obj=malloc(sizeof(obj_t));
+	if (!obj) {
+		fputs("new_object: Failed to allocate memory",stderr);
+		exit(1);
+	}
 	obj->refs=0;
 	obj->type=ERROR;
 	return obj;
@@ -45,6 +49,10 @@ obj_t *new_symbol(char *str)
 	o=new_object();
 	o->type=SYMBOL;
 	o->data.sym=strdup(str);
+	if (!o->data.sym) {
+		fputs("new_symbol: Failed to allocate memory\n",stderr);
+		exit(1);
+	}
 	insert(obtable,str,o);
 	// ^ No incr_refs -- obtable has no destructor
 	return o;
