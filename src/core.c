@@ -113,16 +113,14 @@ obj_t *eval(obj_t *expr)
 	return dpop();
 }
 STACK(eval,1)
-obj_t *lread(obj_t *n)
+#define READ_BUF_LEN (80*24)
+obj_t *lread()
 {
-	if (!type_check(n,INTEGER,"READ: "))
-		return new_object();
-	int l=n->data.i;
-	char buf[l];
-	fgets(buf,l,stdin);
+	static char buf[READ_BUF_LEN];
+	fgets(buf,READ_BUF_LEN,stdin);
 	return read_str(buf);
 }
-STACK(lread,1)
+STACK(lread,0)
 obj_t *null(obj_t *c)
 {
 	return !c?T:NULL;
