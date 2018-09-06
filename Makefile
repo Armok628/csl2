@@ -1,5 +1,5 @@
 CC=clang
-CFLAGS=-s -O3 -std=gnu99 -Wall -pedantic
+CFLAGS=-O3 -std=gnu99 -Wall -pedantic
 
 ispl: src/hash*
 	$(CC) $(CFLAGS) -lm *.c src/*.c
