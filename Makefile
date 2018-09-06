@@ -1,8 +1,13 @@
 CC=clang
 CFLAGS=-s -O3 -std=gnu99 -Wall -pedantic
 
-ispl: *.c src/*
+ispl: src/hash*
 	$(CC) $(CFLAGS) -lm *.c src/*.c
 
-debug: *.c src/*
+debug: src/hash*
 	$(CC) -g -lm *.c src/*.c
+
+src/hash*:
+	git clone https://github.com/Armok628/semstable
+	cp semstable/src/hash* src/
+	rm -rf semstable
