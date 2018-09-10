@@ -25,14 +25,18 @@ with one minor difference: write `,@` as `@`.
 This feature is implemented as a special set of parser rules.
 In fact, ``` (quote `(,a @b c @d)) ``` yields `(CONS a (NCONC b (CONS (QUOTE c) d)))`.
 
-Special forms include `LIST`, `QUOTE`, `COND`, `IF`, and `PROGN`,
+Special forms include `LIST`, `QUOTE`, `COND`, `IF`, `PROGN`, and `PRINT`,
 where by "special form" I mean a quasi-function implemented as a special translation rule,
 and interpreted differently where encountered.
 
 This is done to circumvent the limitation that stack-based notations do not group their arguments.
 Therefore, this is done as a compromise to introduce otherwise-impossible variadic "functions."
 
-All of the special forms work the same as their equivalent in other dialects.
+All of the special forms work the same as their equivalent in other dialects,
+except for `PRINT`, which is not typically a special form.
+
+`PRINT` simply prints out all of its arguments without any added spaces or newlines, and returns `NIL`.
+For convenience, a variable called `\n` has been added, bound to a symbol containing only a newline.
 
 #### Inspiration from Tcl
 Some features of this language are heavily inspired by Tcl.
