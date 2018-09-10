@@ -80,7 +80,7 @@ obj_t *translate_print(obj_t *body)
 		tail=CDR(tail);
 	}
 	if (tail)
-		CDR(tail)=LIST1(NULL);
+		CDR(tail)=incr_refs(LIST1(NULL));
 	return list;
 }
 obj_t *rpn(obj_t *body)
