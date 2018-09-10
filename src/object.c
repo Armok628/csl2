@@ -149,7 +149,7 @@ bool eq_objs(obj_t *a,obj_t *b)
 {
 	if (a==b)
 		return true;
-	if (!a)
+	if (!a||!b)
 		return false;
 	switch (a->type) {
 	case SYMBOL:
