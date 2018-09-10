@@ -1,4 +1,4 @@
-#include "source.h"
+#include "example.h"
 // ^ Include this file in namespace.h
 obj_t *source(obj_t *filename)
 { // ^ Return types and arguments must be of type obj_t *.
@@ -20,7 +20,7 @@ obj_t *source(obj_t *filename)
 }
 STACK(source,1)
 // ^ Generate a stack-based function with 1 argument that uses the function above
-void init_source(void)
+void init_example(void)
 { // ^ Call this function from init_dict() in namespace.c
 	INIT(SOURCE,source);
 	// ^ Bind the SOURCE variable to the stack-based function

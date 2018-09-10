@@ -61,8 +61,8 @@ Perhaps a better comparison would be to `tcl::unsupported::disassemble proc`.)
 Also like Tcl, ISPL links identical symbols together by the same memory object to avoid redundancy.
 In ISPL, these symbols (and their strings) are also garbage-collected.
 
-The heavily annotated built-in example in source.c implements a function called `SOURCE`,
-which does the same thing as Tcl's source command.
+The heavily annotated built-in example in example.c implements a function called `SOURCE`,
+which does the same thing as Tcl's example.command.
 
 #### Namespace Management
 
@@ -123,7 +123,7 @@ Although complex, this system greatly reduces the amount of work required to add
 3. Make an init function at the bottom of the source file, and declare it in the header.
 2. Include your header in namespace.h and add a call to the new init function in `init_dict`.
 
-See source.h and arith.h as examples. See core.h for info about the included macros.
+See example.h and arith.h as examples. See core.h for info about the included macros.
 
 ##### To create a new built-in function:
 
@@ -132,7 +132,7 @@ See source.h and arith.h as examples. See core.h for info about the included mac
 2. Use the `STACK(cname,argc)` macro after the function definition to generate a stack-based function.
 3. Use the `INIT(lispname,cname)` macro in the init function to make the function available.
 
-See source.c for a heavily annotated example.
+See example.c for a heavily annotated example.
 See core.c for more complex examples. See arith.c for even more examples (and a ton of lazy macros).
 
 ##### Memory management guidelines for new built-in functions:
