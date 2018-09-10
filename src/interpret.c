@@ -48,6 +48,10 @@ void interpret(obj_t *list)
 				goto FATAL_INTERP_ERROR;
 			}
 #endif
+		} else if (instr==&print_sym) {
+			obj_t *o=pop();
+			print_obj(o,stdout);
+			decr_refs(o);
 		} else if (instr==&quote_sym) {
 			o=CDR(o);
 			push(CAR(o));

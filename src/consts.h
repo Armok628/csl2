@@ -13,11 +13,14 @@ extern obj_t execute_sym;
 extern obj_t if_sym;
 extern obj_t list_sym;
 extern obj_t list_end_sym;
+extern obj_t print_sym;
 extern obj_t progn_sym;
 extern obj_t quote_sym;
 extern obj_t t_sym;
 #define T &t_sym
+extern obj_t terpri_sym;
 // Type Symbols
+extern obj_t array_sym;
 extern obj_t cell_sym;
 extern obj_t double_sym;
 extern obj_t error_sym;

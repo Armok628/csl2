@@ -23,8 +23,6 @@
 				    (t (assoc s (cdr l))))))
   (set 'reverse (lambda '(l) '(if (null (cdr l)) l
 				(nconc (recurse (cdr l)) (cons (car l) nil)))))
-  (set 'lprint (lambda '(l) '(progn (foreach 'sym l '(print sym))
-				    (terpri))))
   (set 'while (lambda '(c b) '(uplevel 1 `(for nil (quote ,c) nil (quote ,b)))))
   (set 'do (lambda '(b while c) '(uplevel 1 `(progn ,b (,while (quote ,c) (quote ,b))))))
   (set 'incr (lambda '(s n) '(uplevel 1 `(set (quote ,s) (+ ,s ,n)))))

@@ -1,10 +1,4 @@
 #include "core.h"
-obj_t *print(obj_t *obj)
-{ // No newline
-	print_obj(obj,stdout);
-	return obj;
-}
-STACK(print,1)
 obj_t *terpri(void)
 {
 	putchar('\n');
@@ -366,6 +360,7 @@ STACK(aset,3)
 void init_core(void)
 {
 	insert(dict,"T",incr_refs(T));
+	insert(dict,"\\n",incr_refs(&terpri_sym));
 	INIT(ARRAY,array)
 	INIT(AGET,aget)
 	INIT(APPEND,append)
@@ -390,7 +385,6 @@ void init_core(void)
 	INIT(NCONC,nconc)
 	INIT(NOT,null)
 	INIT(NULL,null)
-	INIT(PRINT,print)
 	INIT(QUIT,quit)
 	INIT(READ,lread)
 	INIT(RPLACA,rplaca)
