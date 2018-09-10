@@ -23,7 +23,7 @@ Although longer, this allows for interesting code generation possibilities witho
 Speaking of code generation, a Common Lisp style backquote-unquote syntax is available,
 with one minor difference: write `,@` as `@`.
 This feature is implemented as a special set of parser rules.
-In fact, ``` (quote `(,a @b c @d)) ``` yields `(CONS a (NCONC b (CONS (QUOTE c) d)))`.
+In fact, ``` (quote `(,a @b c @d)) ``` yields `(CONS a (APPEND b (CONS (QUOTE c) d)))`.
 
 Special forms include `LIST`, `QUOTE`, `COND`, `IF`, `PROGN`, and `PRINT`,
 where by "special form" I mean a quasi-function implemented as a special translation rule,
