@@ -36,7 +36,8 @@ All of the special forms work the same as their equivalent in other dialects,
 except for `PRINT`, which is not typically a special form.
 
 `PRINT` simply prints out all of its arguments without any added spaces or newlines, and returns `NIL`.
-For convenience, a variable called `\n` has been added, bound to a symbol containing only a newline.
+For convenience, variables `\t` and `\n` have been added,
+which are bound to a symbol containing only their escape characters from C.
 
 #### Inspiration from Tcl
 Some features of this language are heavily inspired by Tcl.

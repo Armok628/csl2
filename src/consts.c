@@ -20,7 +20,9 @@ SYM_CONST(print_sym,"PRINT")
 SYM_CONST(progn_sym,"PROGN")
 SYM_CONST(quote_sym,"QUOTE")
 SYM_CONST(t_sym,"T")
-SYM_CONST(terpri_sym,"\n")
+// C escape characters
+SYM_CONST(newline_sym,"\n")
+SYM_CONST(tab_sym,"\t")
 // Type Symbols
 SYM_CONST(array_sym,"ARRAY")
 SYM_CONST(cell_sym,"CELL")

@@ -18,7 +18,9 @@ extern obj_t progn_sym;
 extern obj_t quote_sym;
 extern obj_t t_sym;
 #define T &t_sym
-extern obj_t terpri_sym;
+// Normally-escaped symbols
+extern obj_t newline_sym;
+extern obj_t tab_sym;
 // Type Symbols
 extern obj_t array_sym;
 extern obj_t cell_sym;

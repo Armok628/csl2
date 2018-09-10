@@ -360,7 +360,8 @@ STACK(aset,3)
 void init_core(void)
 {
 	insert(dict,"T",incr_refs(T));
-	insert(dict,"\\n",incr_refs(&terpri_sym));
+	insert(dict,"\\n",incr_refs(&newline_sym));
+	insert(dict,"\\t",incr_refs(&tab_sym));
 	INIT(ARRAY,array)
 	INIT(AGET,aget)
 	INIT(APPEND,append)
