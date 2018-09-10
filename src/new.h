@@ -7,6 +7,7 @@
 extern table_t *obtable;
 
 obj_t *new_object(void);
+obj_t *new_array(int);
 obj_t *new_cell(obj_t *,obj_t *);
 obj_t *new_double(double);
 obj_t *new_integer(long);

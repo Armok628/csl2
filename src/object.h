@@ -8,19 +8,24 @@
 #include <stdbool.h>
 #include "hash.h"
 typedef enum {
-	CELL=1<<0,
-	DOUBLE=1<<1,
-	ERROR=1<<2,
-	FUNCTION=1<<3,
-	NAMESPACE=1<<4,
-	INTEGER=1<<5,
-	NIL=1<<6, // Pseudo-type for use in type_check
-	SYMBOL=1<<7,
+	ARRAY=1<<0,
+	CELL=1<<1,
+	DOUBLE=1<<2,
+	ERROR=1<<3,
+	FUNCTION=1<<4,
+	NAMESPACE=1<<5,
+	INTEGER=1<<6,
+	NIL=1<<7, // Pseudo-type for use in type_check
+	SYMBOL=1<<8,
 } type_t; // Formatted as bit flags for type_check
 typedef struct object {
 	int refs;
 	type_t type;
 	union {
+		struct {
+			int size;
+			struct object **mem;
+		} arr;
 		struct {
 			struct object *car,*cdr;
 		} cell;

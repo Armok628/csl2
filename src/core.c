@@ -86,11 +86,12 @@ obj_t *copy(obj_t *obj)
 	// ^ Returns obj if obj->type!=CELL
 }
 STACK(copy,1)
-obj_t *length(obj_t *list)
+obj_t *length(obj_t *coll)
 {
-	if (!type_check(list,NIL|CELL,"LENGTH: "))
-		return new_object();
-	return new_integer(list_length(list));
+	if (!type_check(coll,NIL|ARRAY|CELL,"LENGTH: "))
+	if (!coll||coll->type==CELL)
+		return new_integer(list_length(coll));
+	return new_integer(coll->data.arr.size);
 }
 STACK(length,1)
 obj_t *lambda(obj_t *args,obj_t *body)
@@ -225,27 +226,50 @@ obj_t *lfor(obj_t *init,obj_t *cond,obj_t *iter,obj_t *body)
 	return ret;
 }
 STACK(lfor,4)
-obj_t *foreach(obj_t *name,obj_t *list,obj_t *body)
-{ // Successively bind list objects to name in current context; eval body
-	bool type_err=false;
-	type_err|=!type_check(name,SYMBOL,"FOREACH, name: ");
-	type_err|=!type_check(list,NIL|CELL,"FOREACH, list: ");
-	type_err|=!type_check(body,CELL,"FOREACH, body: ");
-	if (type_err)
-		return new_object();
-	if (!list)
-		return NULL;
-	body=incr_refs(rpn(body));
+obj_t *foreach_in_list(obj_t *name,obj_t *list,obj_t *sbe)
+{
 	obj_t *ret=NULL;
 	for (obj_t *o=list;o;o=CDR(o)) {
 		set_binding(name->data.sym,CAR(o));
-		interpret(body);
+		interpret(sbe);
 		decr_refs(ret);
 		ret=pop();
 	}
-	decr_refs(body);
 	if (ret)
 		ret->refs--;
+	return ret;
+}
+obj_t *foreach_in_arr(obj_t *name,obj_t *arr,obj_t *sbe)
+{
+	obj_t *ret=NULL;
+	int size=arr->data.arr.size;
+	for (int i=0;i<size;i++) {
+		set_binding(name->data.sym,arr->data.arr.mem[i]);
+		interpret(sbe);
+		decr_refs(ret);
+		ret=pop();
+	}
+	if (ret)
+		ret->refs--;
+	return ret;
+}
+obj_t *foreach(obj_t *name,obj_t *coll,obj_t *body)
+{ // Bind each collection object to name in current context and eval body
+	bool type_err=false;
+	type_err|=!type_check(name,SYMBOL,"FOREACH, name: ");
+	type_err|=!type_check(coll,NIL|ARRAY|CELL,"FOREACH, collection: ");
+	type_err|=!type_check(body,CELL,"FOREACH, body: ");
+	if (type_err)
+		return new_object();
+	if (!coll)
+		return NULL;
+	body=incr_refs(rpn(body));
+	obj_t *ret;
+	if (!coll||coll->type==CELL)
+		ret=foreach_in_list(name,coll,body);
+	else
+		ret=foreach_in_arr(name,coll,body);
+	decr_refs(body);
 	return ret;
 }
 STACK(foreach,3)
@@ -302,10 +326,50 @@ obj_t *stack(void)
 	return new_integer(print_stack());
 }
 STACK(stack,0)
+obj_t *array(obj_t *n)
+{
+	if (!type_check(n,INTEGER,"ARRAY: "))
+		return new_object();
+	return new_array(n->data.i);
+}
+STACK(array,1)
+obj_t *aget(obj_t *a,obj_t *n)
+{
+	bool type_err=false;
+	type_err|=!type_check(a,ARRAY,"AGET, array: ");
+	type_err|=!type_check(n,INTEGER,"AGET, index: ");
+	if (type_err)
+		return new_object();
+	if (n->data.i>=a->data.arr.size) {
+		fputs("AGET: Out of bounds\n",stderr);
+		return new_object();
+	}
+	return a->data.arr.mem[n->data.i];
+}
+STACK(aget,2)
+obj_t *aset(obj_t *a,obj_t *n,obj_t *o)
+{
+	bool type_err=false;
+	type_err|=!type_check(a,ARRAY,"ASET, array: ");
+	type_err|=!type_check(n,INTEGER,"ASET, index: ");
+	if (type_err)
+		return new_object();
+	if (n->data.i>=a->data.arr.size) {
+		fputs("ASET: Out of bounds\n",stderr);
+		return new_object();
+	}
+	decr_refs(a->data.arr.mem[n->data.i]);
+	a->data.arr.mem[n->data.i]=incr_refs(o);
+	return o;
+}
+STACK(aset,3)
 void init_core(void)
 {
 	insert(dict,"T",incr_refs(T));
+	INIT(ARRAY,array)
+	INIT(AGET,aget)
 	INIT(APPEND,append)
+	INIT(ASET,aset)
 	INIT(ATOM,atom)
 	INIT(CAR,car)
 	INIT(CDR,cdr)

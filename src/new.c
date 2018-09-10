@@ -11,6 +11,14 @@ obj_t *new_object(void)
 	obj->type=ERROR;
 	return obj;
 }
+obj_t *new_array(int size)
+{
+	obj_t *a=new_object();
+	a->type=ARRAY;
+	a->data.arr.size=size;
+	a->data.arr.mem=calloc(size,sizeof(obj_t *));
+	return a;
+}
 obj_t *new_cell(obj_t *a,obj_t *b)
 {
 	obj_t *c=new_object();

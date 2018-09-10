@@ -2,6 +2,8 @@
 char *type_name(type_t type)
 {
 	switch (type) {
+	case ARRAY:
+		return "ARRAY";
 	case CELL:
 		return "CELL";
 	case DOUBLE:
@@ -54,6 +56,11 @@ void destroy(obj_t *o)
 { // Argument is assumed to be destroyable
 	//printf("Destroying "); print_obj(o,stdout); printf(" {%p}\n",(void *)o);
 	switch (o->type) {
+	case ARRAY:
+		for (int i=0;i<o->data.arr.size;i++)
+			decr_refs(o->data.arr.mem[i]);
+		free(o->data.arr.mem);
+		break;
 	case SYMBOL:
 		expunge(obtable,o->data.sym);
 		// ^ No double-destroy; obtable has no destructor
