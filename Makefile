@@ -13,4 +13,9 @@ src/hash*:
 	rm -rf semstable
 
 clean:
-	rm src/hash*
+	rm a.out src/hash*
+
+update:
+	make clean
+	git pull
+	make
