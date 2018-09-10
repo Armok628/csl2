@@ -62,7 +62,7 @@ Also like Tcl, ISPL links identical symbols together by the same memory object t
 In ISPL, these symbols (and their strings) are also garbage-collected.
 
 The heavily annotated built-in example in example.c implements a function called `SOURCE`,
-which does the same thing as Tcl's example.command.
+which does the same thing as Tcl's source command.
 
 #### Namespace Management
 
