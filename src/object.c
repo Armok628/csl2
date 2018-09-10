@@ -121,6 +121,9 @@ void print_obj(obj_t *obj,FILE *fs)
 		return;
 	}
 	switch (obj->type) {
+	case ARRAY:
+		fprintf(fs,"{ARRAY[%d]:%p}",obj->data.arr.size,(void *)obj);
+		break;
 	case CELL:
 		print_cell(obj,fs);
 		break;
