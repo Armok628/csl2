@@ -221,7 +221,7 @@ obj_t *read_str(char *str)
 		obj=new_double(strtod(str,NULL));
 		break;
 	default:
-		return new_object();
+		return error;
 	} // String should be freed by caller
 	return q?quote(obj):obj;
 }

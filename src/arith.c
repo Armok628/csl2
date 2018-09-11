@@ -6,7 +6,7 @@ static inline double dub(obj_t *n)
 obj_t *l_random(obj_t *n)
 {
 	if (!type_check(n,DOUBLE|INTEGER,"RANDOM: "))
-		return new_object();
+		return error;
 	switch (n->type) {
 	case INTEGER:
 		return new_integer(rand()%n->data.i);
@@ -24,7 +24,7 @@ obj_t *name(obj_t *x,obj_t *y) \
 	type_err|=!type_check(x,INTEGER|DOUBLE,#op", arg 1: "); \
 	type_err|=!type_check(y,INTEGER|DOUBLE,#op", arg 2: "); \
 	if (type_err) \
-		return new_object(); \
+		return error; \
 	if (x->type==INTEGER&&y->type==INTEGER) \
 		return new_integer(x->data.i op y->data.i); \
 	double a=dub(x),b=dub(y); \
@@ -42,7 +42,7 @@ obj_t *name(obj_t *x,obj_t *y) \
 	type_err|=!type_check(x,INTEGER|DOUBLE,#op", arg 1: "); \
 	type_err|=!type_check(y,INTEGER|DOUBLE,#op", arg 2: "); \
 	if (type_err) \
-		return new_object(); \
+		return error; \
 	double a=dub(x),b=dub(y); \
 	if (a op b) \
 		return T; \

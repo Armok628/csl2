@@ -13,21 +13,21 @@ STACK(cons,2)
 obj_t *car(obj_t *c)
 {
 	if (!type_check(c,NIL|CELL,"CAR: "))
-		return new_object();
+		return error;
 	return c?CAR(c):NULL;
 }
 STACK(car,1)
 obj_t *cdr(obj_t *c)
 {
 	if (!type_check(c,NIL|CELL,"CDR: "))
-		return new_object();
+		return error;
 	return c?CDR(c):NULL;
 }
 STACK(cdr,1)
 obj_t *rplaca(obj_t *c,obj_t *v)
 {
 	if (!type_check(c,CELL,"RPLACA: "))
-		return new_object();
+		return error;
 	decr_refs(CAR(c));
 	CAR(c)=incr_refs(v);
 	return c;
@@ -36,7 +36,7 @@ STACK(rplaca,2)
 obj_t *rplacd(obj_t *c,obj_t *v)
 {
 	if (!type_check(c,CELL,"RPLACD: "))
-		return new_object();
+		return error;
 	decr_refs(CDR(c));
 	CDR(c)=incr_refs(v);
 	return c;
@@ -50,7 +50,7 @@ STACK(atom,1)
 obj_t *set(obj_t *sym,obj_t *val)
 {
 	if (!type_check(sym,SYMBOL,"SET: "))
-		return new_object();
+		return error;
 	set_binding(sym->data.sym,val);
 	return val;
 }
@@ -64,8 +64,9 @@ obj_t *get(obj_t *sym)
 STACK(get,1)
 obj_t *unset(obj_t *sym)
 {
-	if (type_check(sym,SYMBOL,"UNSET: "))
-		unset_binding(sym->data.sym);
+	if (!type_check(sym,SYMBOL,"UNSET: "))
+		return error;
+	unset_binding(sym->data.sym);
 	return NULL;
 }
 STACK(unset,1)
@@ -83,7 +84,7 @@ STACK(copy,1)
 obj_t *length(obj_t *coll)
 {
 	if (!type_check(coll,NIL|ARRAY|CELL,"LENGTH: "))
-		return new_object();
+		return error;
 	if (!coll||coll->type==CELL)
 		return new_integer(list_length(coll));
 	return new_integer(coll->data.arr.size);
@@ -97,7 +98,7 @@ obj_t *lambda(obj_t *args,obj_t *body)
 		type_err|=!type_check(CAR(o),SYMBOL,"LAMBDA, arg: ");
 	type_err|=!type_check(body,CELL,"LAMBDA, body: ");
 	if (type_err)
-		return new_object();
+		return error;
 	return new_function(args,rpn(body));
 }
 STACK(lambda,2)
@@ -130,7 +131,7 @@ STACK(quit,0)
 obj_t *see(obj_t *func)
 {
 	if (!type_check(func,FUNCTION,"SEE: "))
-		return new_object();
+		return error;
 	if (!func->data.func.lambda)
 		return NULL;
 	return func->data.func.rep.lisp;
@@ -159,10 +160,10 @@ obj_t *uplevel(obj_t *n,obj_t *expr)
 	type_err|=!type_check(n,INTEGER,"UPLEVEL, arg 1: ");
 	type_err|=!type_check(expr,CELL|SYMBOL,"UPLEVEL, arg 2: ");
 	if (type_err)
-		return new_object();
+		return error;
 	if (level<1) {
 		puts("UPLEVEL: No higher level");
-		return new_object();
+		return error;
 	}
 	table_t *loc=pop_namespace();
 	obj_t *t=incr_refs(rpn(expr));
@@ -175,7 +176,7 @@ STACK(uplevel,2)
 obj_t *nconc(obj_t *a,obj_t *b)
 {
 	if (!type_check(a,CELL,"NCONC: "))
-		return new_object();
+		return error;
 	concatenate(a,b);
 	return a;
 }
@@ -188,7 +189,7 @@ obj_t *lfor(obj_t *init,obj_t *cond,obj_t *iter,obj_t *body)
 	type_err|=!type_check(iter,NIL|CELL,"FOR, iteration: ");
 	type_err|=!type_check(body,CELL,"FOR, body: ");
 	if (type_err)
-		return new_object();
+		return error;
 	init=incr_refs(rpn(init));
 	cond=incr_refs(rpn(cond));
 	iter=incr_refs(rpn(iter));
@@ -255,7 +256,7 @@ obj_t *foreach(obj_t *name,obj_t *coll,obj_t *body)
 	type_err|=!type_check(coll,NIL|ARRAY|CELL,"FOREACH, collection: ");
 	type_err|=!type_check(body,CELL,"FOREACH, body: ");
 	if (type_err)
-		return new_object();
+		return error;
 	if (!coll)
 		return NULL;
 	body=incr_refs(rpn(body));
@@ -271,7 +272,7 @@ STACK(foreach,3)
 obj_t *load(obj_t *file)
 { // Returns an object as if contents were given to READ
 	if (!type_check(file,SYMBOL,"LOAD: "))
-		return new_object();
+		return error;
 	obj_t *r=load_file(file->data.sym);
 	return r?r:new_object();
 }
@@ -287,7 +288,7 @@ obj_t *inside(obj_t *namespace,obj_t *expr)
 	type_err|=!type_check(namespace,NAMESPACE,"INSIDE, namespace: ");
 	type_err|=!type_check(expr,CELL|SYMBOL,"INSIDE, expression: ");
 	if (type_err)
-		return new_object();
+		return error;
 	obj_t *t=incr_refs(rpn(expr));
 	push_namespace(namespace->data.table);
 	interpret(t);
@@ -304,7 +305,7 @@ STACK(l_typeof,1)
 obj_t *append(obj_t *a,obj_t *b)
 {
 	if (!type_check(a,CELL,"APPEND: "))
-		return new_object();
+		return error;
 	a=copy_cell(a);
 	concatenate(a,b);
 	return a;
@@ -324,7 +325,7 @@ STACK(stack,0)
 obj_t *array(obj_t *n)
 {
 	if (!type_check(n,INTEGER,"ARRAY: "))
-		return new_object();
+		return error;
 	return new_array(n->data.i);
 }
 STACK(array,1)
@@ -334,10 +335,10 @@ obj_t *aget(obj_t *a,obj_t *n)
 	type_err|=!type_check(a,ARRAY,"AGET, array: ");
 	type_err|=!type_check(n,INTEGER,"AGET, index: ");
 	if (type_err)
-		return new_object();
+		return error;
 	if (n->data.i>=a->data.arr.size) {
 		fputs("AGET: Out of bounds\n",stderr);
-		return new_object();
+		return error;
 	}
 	return a->data.arr.mem[n->data.i];
 }
@@ -348,10 +349,10 @@ obj_t *aset(obj_t *a,obj_t *n,obj_t *o)
 	type_err|=!type_check(a,ARRAY,"ASET, array: ");
 	type_err|=!type_check(n,INTEGER,"ASET, index: ");
 	if (type_err)
-		return new_object();
+		return error;
 	if (n->data.i>=a->data.arr.size) {
 		fputs("ASET: Out of bounds\n",stderr);
-		return new_object();
+		return error;
 	}
 	decr_refs(a->data.arr.mem[n->data.i]);
 	a->data.arr.mem[n->data.i]=incr_refs(o);

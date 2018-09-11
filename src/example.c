@@ -4,7 +4,7 @@ obj_t *source(obj_t *filename)
 { // ^ Return types and arguments must be of type obj_t *.
 	if (!type_check(filename,SYMBOL,"SOURCE: "))
 		// ^ Prints an error message if argument is of bad type
-		return new_object();
+		return error;
 		// ^ Returns an uninitialized object with type ERROR
 	obj_t *r=incr_refs(load_file(filename->data.sym));
 	// ^ Increase references because it is generated for temporary use

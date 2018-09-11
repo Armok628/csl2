@@ -4,6 +4,7 @@
 #define CONSTS_H
 #include "object.h"
 
+extern obj_t *error;
 extern obj_t append_sym;
 extern obj_t cond_sym;
 extern obj_t cond_end_sym;

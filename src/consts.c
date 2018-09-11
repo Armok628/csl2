@@ -7,6 +7,11 @@ obj_t name={ \
 	.data={.sym=symbol}, \
 	.refs=1, \
 };
+obj_t error_obj={
+	.type=ERROR,
+	.refs=1,
+};
+obj_t *error=&error_obj;
 SYM_CONST(append_sym,"APPEND")
 SYM_CONST(cond_sym,"COND")
 SYM_CONST(cond_end_sym,"COND_END")
