@@ -11,6 +11,7 @@ src/hash*:
 	git clone https://github.com/Armok628/semstable
 	cp semstable/src/hash* src/
 	rm -rf semstable
+	chmod -w src/hash*
 
 clean:
 	rm a.out src/hash*
