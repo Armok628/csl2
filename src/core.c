@@ -83,6 +83,7 @@ STACK(copy,1)
 obj_t *length(obj_t *coll)
 {
 	if (!type_check(coll,NIL|ARRAY|CELL,"LENGTH: "))
+		return new_object();
 	if (!coll||coll->type==CELL)
 		return new_integer(list_length(coll));
 	return new_integer(coll->data.arr.size);
