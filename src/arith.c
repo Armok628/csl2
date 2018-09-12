@@ -77,6 +77,13 @@ obj_t *mod(obj_t *x,obj_t *y)
 	return new_double(fmod(obj2double(x),obj2double(y)));
 }
 STACK(mod,2)
+obj_t *l_float(obj_t *x)
+{
+	if (!type_check(x,INTEGER,"FLOAT: "))
+		return error;
+	return new_double(x->data.i);
+}
+STACK(l_float,1)
 void init_arith(void)
 {
 	srand(time(NULL));
@@ -94,4 +101,5 @@ void init_arith(void)
 	INIT(OR,or)
 	INIT(XOR,xor)
 	INIT(MOD,mod)
+	INIT(FLOAT,l_float)
 }
