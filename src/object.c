@@ -184,8 +184,3 @@ obj_t *copy_cell(obj_t *o)
 		return new_cell(copy_cell(CAR(o)),copy_cell(CDR(o)));
 	return o;
 }
-void concatenate(obj_t *list,obj_t *item)
-{ // Placed here because in use by multiple built-ins
-	for (;CDR(list);list=CDR(list));
-	CDR(list)=incr_refs(item);
-}

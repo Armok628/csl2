@@ -177,7 +177,9 @@ obj_t *nconc(obj_t *a,obj_t *b)
 {
 	if (!type_check(a,CELL,"NCONC: "))
 		return error;
-	concatenate(a,b);
+	obj_t *o;
+	for (o=a;CDR(o);o=CDR(o));
+	CDR(o)=incr_refs(b);
 	return a;
 }
 STACK(nconc,2)
@@ -307,7 +309,9 @@ obj_t *append(obj_t *a,obj_t *b)
 	if (!type_check(a,CELL,"APPEND: "))
 		return error;
 	a=copy_cell(a);
-	concatenate(a,b);
+	obj_t *o;
+	for (o=a;CDR(o);o=CDR(o));
+	CDR(o)=incr_refs(b);
 	return a;
 }
 STACK(append,2)
