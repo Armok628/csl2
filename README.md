@@ -42,8 +42,8 @@ which are bound to a symbol containing only their escape characters from C.
 #### Inspiration from Tcl
 Some features of this language are heavily inspired by Tcl.
 
-Functions which act as equivalents to Tcl operations include
-`FOR`, `FOREACH`, `INSIDE` (compare with `namespace eval`), `SET`, `UNSET`, and `UPLEVEL`.
+Functions which act similarly to Tcl operations include
+`FOR`, `FOREACH`, `INSIDE` (`namespace eval`), `SET`, `UNSET`, `UPLEVEL`, `ASSIGN` (`lassign`), `ASET` (`lset`), and `AGET` (`lindex`).
 
 In fact, like Tcl, `FOR` and `FOREACH` compile their script arguments only once, but interpret them many times.
 

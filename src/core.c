@@ -389,12 +389,30 @@ obj_t *l_close(obj_t *fs)
 	return NULL;
 }
 STACK(l_close,1)
+obj_t *assign(obj_t *list,obj_t *vars)
+{
+	bool type_err=false;
+	type_err|=!type_check(list,CELL,"ASSIGN, list: ");
+	type_err|=!type_check(vars,CELL,"ASSIGN, variables: ");
+	if (type_err)
+		return error;
+	while (list&&vars) {
+		if (!type_check(CAR(vars),SYMBOL,"ASSIGN, variable: "))
+			return error;
+		set_binding(CAR(vars)->data.sym,CAR(list));
+		vars=CDR(vars);
+		list=CDR(list);
+	}
+	return list;
+}
+STACK(assign,2)
 void init_core(void)
 {
 	INIT(ARRAY,array)
 	INIT(AGET,aget)
 	INIT(APPEND,append)
 	INIT(ASET,aset)
+	INIT(ASSIGN,assign)
 	INIT(ATOM,atom)
 	INIT(CAR,car)
 	INIT(CDR,cdr)
