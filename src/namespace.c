@@ -12,6 +12,7 @@ void init_dict(void)
 	// Calls to init functions go here:
 	init_core();
 	init_arith();
+	init_math();
 	init_example(); // See example.c
 }
 void push_namespace(table_t *env)

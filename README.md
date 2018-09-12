@@ -124,7 +124,7 @@ Although complex, this system greatly reduces the amount of work required to add
 3. Make an init function at the bottom of the source file, and declare it in the header.
 2. Include your header in namespace.h and add a call to the new init function in `init_dict`.
 
-See example.h and arith.h as examples. See core.h for info about the included macros.
+See example.h, arith.h, and lmath.h as examples. See core.h for info about the included macros.
 
 ##### To create a new built-in function:
 
@@ -134,7 +134,9 @@ See example.h and arith.h as examples. See core.h for info about the included ma
 3. Use the `INIT(lispname,cname)` macro in the init function to make the function available.
 
 See example.c for a heavily annotated example.
-See core.c for more complex examples. See arith.c for even more examples (and a ton of lazy macros).
+See core.c for more complex examples.
+See arith.c for even more examples (and a ton of lazy macros).
+See lmath.c for bindings to C's standard math library.
 
 ##### Memory management guidelines for new built-in functions:
 

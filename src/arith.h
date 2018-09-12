@@ -1,8 +1,8 @@
-// Mathematical built-ins; bindings to math.h
+// Arithmetic built-ins
 #ifndef ARITH_H
 #define ARITH_H
 #include <math.h>
-#include "core.h" // Includes all other prereqs
+#include "core.h"
 
 void init_arith(void);
 #endif
