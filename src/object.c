@@ -122,6 +122,16 @@ void print_cell(obj_t *o,FILE *fs)
 	}
 	fputc(')',fs);
 }
+void print_array(obj_t *o,FILE *fs)
+{
+	fputc('[',fs);
+	for (int i=0;i<o->data.arr.size;) {
+		print_obj(o->data.arr.mem[i],fs);
+		if (++i<o->data.arr.size)
+			fputc(' ',fs);
+	}
+	fputc(']',fs);
+}
 void print_obj(obj_t *obj,FILE *fs)
 {
 	if (!obj) {
@@ -130,7 +140,7 @@ void print_obj(obj_t *obj,FILE *fs)
 	}
 	switch (obj->type) {
 	case ARRAY:
-		fprintf(fs,"{ARRAY[%d]:%p}",obj->data.arr.size,(void *)obj);
+		print_array(obj,fs);
 		break;
 	case CELL:
 		print_cell(obj,fs);
