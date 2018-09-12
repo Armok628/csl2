@@ -1,4 +1,4 @@
-// Mathematical built-in functions
+// Mathematical built-ins; bindings to math.h
 #ifndef ARITH_H
 #define ARITH_H
 #include <math.h>

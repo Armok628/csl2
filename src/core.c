@@ -321,11 +321,11 @@ obj_t *l_interpret(obj_t *sbe)
 	return NULL;
 }
 STACK(l_interpret,1)
-obj_t *stack(void)
+obj_t *l_print_stack(void)
 { // Returns number of stack items
 	return new_integer(print_stack());
 }
-STACK(stack,0)
+STACK(l_print_stack,0)
 obj_t *array(obj_t *n)
 {
 	if (!type_check(n,INTEGER,"ARRAY: "))
@@ -396,6 +396,7 @@ void init_core(void)
 	insert(dict,"\\t",incr_refs(&tab_sym));
 	insert(dict,"STDOUT",incr_refs(new_filestream(stdout)));
 	insert(dict,"STDERR",incr_refs(new_filestream(stderr)));
+	insert(dict,"ERROR",incr_refs(error));
 	INIT(ARRAY,array)
 	INIT(AGET,aget)
 	INIT(APPEND,append)
@@ -428,7 +429,7 @@ void init_core(void)
 	INIT(RPLACD,rplacd)
 	INIT(SEE,see)
 	INIT(SET,set)
-	INIT(STACK,stack)
+	INIT(STACK,l_print_stack)
 	INIT(TERPRI,terpri)
 	INIT(TICK,tick)
 	INIT(TOCK,tock)

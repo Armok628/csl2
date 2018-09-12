@@ -14,7 +14,7 @@ void bind_args(obj_t *argl)
 {
 	int l=list_length(argl);
 	for (int i=l-1;i>=0;i--) {
-		set_binding(CAR(argl)->data.sym,stack_obj(i));
+		set_binding(CAR(argl)->data.sym,stack[tos-i]);
 		argl=CDR(argl);
 	}
 	for (int i=0;i<l;i++)

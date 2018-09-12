@@ -1,48 +1,44 @@
 #include "stack.h"
-static obj_t *stack[STACK_SIZE];
-static int stack_index=-1; // Last filled slot
+obj_t *stack[STACK_SIZE];
+int tos=-1; // "Top of stack" -- Last filled slot
 void push(obj_t *obj)
 {
-	if (stack_index>=STACK_SIZE) {
+	if (tos>=STACK_SIZE) {
 		fputs("Stack overflow\n",stderr);
 		exit(1);
 	}
-	stack[++stack_index]=incr_refs(obj);
+	stack[++tos]=incr_refs(obj);
 }
 obj_t *pop(void)
 { // Popped stack items must have a call to decr_refs after use
-	if (stack_index<0) {
+	if (tos<0) {
 		fputs("Stack underflow\n",stderr);
 		exit(1);
 	}
-	return stack[stack_index--];
+	return stack[tos--];
 }
 obj_t *dpop(void)
 { // Decreases reference counter without destroying
-	obj_t *r=stack[stack_index--];
+	obj_t *r=stack[tos--];
 	if (r)
 		r->refs--;
 	return r;
 }
 void drop(void)
 {
-	decr_refs(stack[stack_index--]);
-}
-obj_t *stack_obj(int n)
-{
-	return stack[stack_index-n];
+	decr_refs(stack[tos--]);
 }
 int print_stack(void)
 { // Returns number of stack items
-	if (stack_index==-1) {
+	if (tos==-1) {
 		fputs("Empty stack\n",stderr);
 		return 0;
 	}
-	fprintf(stderr,"Stack (%d):\n",stack_index);
-	for (int i=stack_index;i>=0;i--) {
+	fprintf(stderr,"Stack (%d):\n",tos);
+	for (int i=tos;i>=0;i--) {
 		fprintf(stderr,"%d: ",i);
 		print_obj(stack[i],stderr);
 		fputc('\n',stderr);
 	}
-	return stack_index;
+	return tos;
 }

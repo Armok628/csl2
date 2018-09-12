@@ -69,6 +69,11 @@ FUNC_FROM_BOOLOP(&&,and)
 #define FUNC_FROM_MATHFUNC_2(func) \
 obj_t *l_##func(obj_t *x,obj_t *y) \
 { \
+	bool type_err=false; \
+	type_err|=!type_check(x,INTEGER|DOUBLE,#func"(), arg 1: "); \
+	type_err|=!type_check(y,INTEGER|DOUBLE,#func"(), arg 2: "); \
+	if (type_err) \
+		return error; \
 	double a=dub(x),b=dub(y); \
 	double d=func(a,b); \
 	if (fmod(d,1.0)<1e-6) \
@@ -81,6 +86,8 @@ FUNC_FROM_MATHFUNC_2(fmod)
 #define FUNC_FROM_MATHFUNC_1(func) \
 obj_t *l_##func(obj_t *x) \
 { \
+	if (!type_check(x,INTEGER|DOUBLE,#func"(): ")) \
+		return error; \
 	double d=dub(x); \
 	d=func(d); \
 	if (fmod(d,1.0)<1e-6) \

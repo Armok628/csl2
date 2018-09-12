@@ -31,7 +31,7 @@ void interpret(obj_t *list)
 			push(instr);
 		} else if (instr==&list_end_sym) {
 			obj_t *body=NULL;
-			while (stack_obj(0)!=&list_sym)
+			while (stack[tos]!=&list_sym)
 				body=new_cell(dpop(),body);
 			drop();
 			push(body);
@@ -43,7 +43,7 @@ void interpret(obj_t *list)
 				goto FATAL_INTERP_ERROR;
 			decr_refs(f);
 #ifdef ALL_ERRORS_FATAL
-			obj_t *r=stack_obj(0);
+			obj_t *r=stack[tos];
 			if (r&&r->type==ERROR) {
 				drop();
 				goto FATAL_INTERP_ERROR;
