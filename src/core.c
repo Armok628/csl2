@@ -382,8 +382,10 @@ obj_t *l_close(obj_t *fs)
 {
 	if (!type_check(fs,FILESTREAM,"CLOSE: "))
 		return error;
-	fclose(fs->data.fs);
-	fs->data.fs=NULL;
+	if (fs->data.fs) {
+		fclose(fs->data.fs);
+		fs->data.fs=NULL;
+	}
 	return NULL;
 }
 STACK(l_close,1)

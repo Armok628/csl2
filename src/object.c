@@ -75,7 +75,8 @@ void destroy(obj_t *o)
 		decr_refs(CDR(o));
 		break;
 	case FILESTREAM:
-		fclose(o->data.fs);
+		if (o->data.fs)
+			fclose(o->data.fs);
 		break;
 	case FUNCTION:
 		if (o->data.func.lambda)
