@@ -9,6 +9,12 @@ void init_dict(void)
 	// Miscellaneous dictionary setup tasks here:
 	hash_function=&nocase_fnv_1a;
 	insert(dict,"DICTIONARY",incr_refs(new_namespace(dict)));
+	insert(dict,"T",incr_refs(T));
+	insert(dict,"\\n",incr_refs(&newline_sym));
+	insert(dict,"\\t",incr_refs(&tab_sym));
+	insert(dict,"STDOUT",incr_refs(new_filestream(stdout)));
+	insert(dict,"STDERR",incr_refs(new_filestream(stderr)));
+	insert(dict,"ERROR",incr_refs(error));
 	// Calls to init functions go here:
 	init_core();
 	init_arith();

@@ -391,12 +391,6 @@ obj_t *l_close(obj_t *fs)
 STACK(l_close,1)
 void init_core(void)
 {
-	insert(dict,"T",incr_refs(T));
-	insert(dict,"\\n",incr_refs(&newline_sym));
-	insert(dict,"\\t",incr_refs(&tab_sym));
-	insert(dict,"STDOUT",incr_refs(new_filestream(stdout)));
-	insert(dict,"STDERR",incr_refs(new_filestream(stderr)));
-	insert(dict,"ERROR",incr_refs(error));
 	INIT(ARRAY,array)
 	INIT(AGET,aget)
 	INIT(APPEND,append)
