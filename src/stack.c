@@ -34,11 +34,11 @@ int print_stack(void)
 		fputs("Empty stack\n",stderr);
 		return 0;
 	}
-	fprintf(stderr,"Stack (%d):\n",tos);
+	fprintf(stderr,"Stack (%d):\n",tos+1);
 	for (int i=tos;i>=0;i--) {
 		fprintf(stderr,"%d: ",i);
 		print_obj(stack[i],stderr);
 		fputc('\n',stderr);
 	}
-	return tos;
+	return tos+1;
 }
