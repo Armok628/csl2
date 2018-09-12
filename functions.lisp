@@ -1,5 +1,5 @@
 (progn
-  (set 'mapcar (lambda '(f l) '(cond (l (cons (f (car l)) (recurse f (cdr l)))))))
+  (set 'mapcar (lambda '(f l) '(if l (cons (f (car l)) (recurse f (cdr l))))))
   (set 'reduce (lambda '(f l) `(,(lambda '(f l a) '(if (null l) a (recurse f (cdr l) (f a (car l)))))
 				 f (cdr (cdr l)) (f (car l) (car (cdr l))))))
   (set 'range (lambda '(stt stp end) '(if (or (and (> stt end) (> stp 0)) (and (< stt end) (< stp 0))) nil
