@@ -359,11 +359,37 @@ obj_t *aset(obj_t *a,obj_t *n,obj_t *o)
 	return o;
 }
 STACK(aset,3)
+obj_t *l_open(obj_t *path,obj_t *mode)
+{
+	bool type_err=false;
+	type_err|=!type_check(path,SYMBOL,"OPEN, path: ");
+	type_err|=!type_check(mode,SYMBOL,"OPEN, mode: ");
+	if (type_err)
+		return error;
+	FILE *fs=fopen(path->data.sym,mode->data.sym);
+	if (!fs) {
+		fputs("OPEN: Failed to open filestream\n",stderr);
+		return error;
+	}
+	return new_filestream(fs);
+}
+STACK(l_open,2)
+obj_t *l_close(obj_t *fs)
+{
+	if (!type_check(fs,FILESTREAM,"CLOSE: "))
+		return error;
+	fclose(fs->data.fs);
+	fs->data.fs=NULL;
+	return NULL;
+}
+STACK(l_close,1)
 void init_core(void)
 {
 	insert(dict,"T",incr_refs(T));
 	insert(dict,"\\n",incr_refs(&newline_sym));
 	insert(dict,"\\t",incr_refs(&tab_sym));
+	insert(dict,"STDOUT",incr_refs(new_filestream(stdout)));
+	insert(dict,"STDERR",incr_refs(new_filestream(stderr)));
 	INIT(ARRAY,array)
 	INIT(AGET,aget)
 	INIT(APPEND,append)
@@ -371,6 +397,7 @@ void init_core(void)
 	INIT(ATOM,atom)
 	INIT(CAR,car)
 	INIT(CDR,cdr)
+	INIT(CLOSE,l_close)
 	INIT(CONS,cons)
 	INIT(COPY,copy)
 	INIT(EQ,eq)
@@ -388,6 +415,7 @@ void init_core(void)
 	INIT(NCONC,nconc)
 	INIT(NOT,null)
 	INIT(NULL,null)
+	INIT(OPEN,l_open)
 	INIT(QUIT,quit)
 	INIT(READ,lread)
 	INIT(RPLACA,rplaca)

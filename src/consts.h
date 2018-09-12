@@ -15,6 +15,7 @@ extern obj_t if_sym;
 extern obj_t list_sym;
 extern obj_t list_end_sym;
 extern obj_t print_sym;
+extern obj_t print_end_sym;
 extern obj_t progn_sym;
 extern obj_t quote_sym;
 extern obj_t t_sym;

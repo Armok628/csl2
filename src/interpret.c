@@ -20,6 +20,7 @@ obj_t *interpret_cond(obj_t *l)
 }
 void interpret(obj_t *list)
 { // Requires RPN list as argument
+	obj_t *fs=NULL;
 	for (obj_t *o=list;o;o=CDR(o)) {
 		obj_t *instr=CAR(o);
 		if (!instr) {
@@ -50,8 +51,15 @@ void interpret(obj_t *list)
 #endif
 		} else if (instr==&print_sym) {
 			obj_t *o=pop();
-			print_obj(o,stdout);
-			decr_refs(o);
+			if (o&&o->type==FILESTREAM&&o->data.fs)
+				fs=o;
+			else {
+				print_obj(o,fs?fs->data.fs:stdout);
+				decr_refs(o);
+			}
+		} else if (instr==&print_end_sym) {
+			decr_refs(fs);
+			fs=NULL;
 		} else if (instr==&quote_sym) {
 			o=CDR(o);
 			push(CAR(o));

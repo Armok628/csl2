@@ -34,6 +34,13 @@ obj_t *new_double(double d)
 	o->data.d=d;
 	return o;
 }
+obj_t *new_filestream(FILE *fs)
+{
+	obj_t *o=new_object();
+	o->type=FILESTREAM;
+	o->data.fs=fs;
+	return o;
+}
 obj_t *new_integer(long i)
 {
 	obj_t *o=new_object();

@@ -10,6 +10,8 @@ char *type_name(type_t type)
 		return "DOUBLE";
 	case ERROR:
 		return "ERROR";
+	case FILESTREAM:
+		return "FILESTREAM";
 	case FUNCTION:
 		return "FUNCTION";
 	case NAMESPACE:
@@ -32,10 +34,12 @@ char *obj_type_name(obj_t *obj)
 }
 bool type_check(obj_t *obj,type_t types,const char *err_prefix)
 { // Returns true if obj is of one of the types specified by bitmask type
+	// If err_prefix is NULL, type_check will not report any errors
 	if ((obj&&obj->type&types)||(!obj&&types&NIL))
 		return true;
-	if (err_prefix)
-		fputs(err_prefix,stderr);
+	if (!err_prefix)
+		return false;
+	fputs(err_prefix,stderr);
 	fputs("Expected ",stderr);
 	for (int i=0;types>>i>0;i++) {
 		if (!((types>>i)&1))
@@ -69,6 +73,9 @@ void destroy(obj_t *o)
 	case CELL:
 		decr_refs(CAR(o));
 		decr_refs(CDR(o));
+		break;
+	case FILESTREAM:
+		fclose(o->data.fs);
 		break;
 	case FUNCTION:
 		if (o->data.func.lambda)

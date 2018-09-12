@@ -12,11 +12,12 @@ typedef enum {
 	CELL=1<<1,
 	DOUBLE=1<<2,
 	ERROR=1<<3,
-	FUNCTION=1<<4,
-	NAMESPACE=1<<5,
-	INTEGER=1<<6,
-	NIL=1<<7, // Pseudo-type for use in type_check
-	SYMBOL=1<<8,
+	FILESTREAM=1<<4,
+	FUNCTION=1<<5,
+	NAMESPACE=1<<6,
+	INTEGER=1<<7,
+	NIL=1<<8, // Pseudo-type for use in type_check
+	SYMBOL=1<<9,
 } type_t; // Formatted as bit flags for type_check
 typedef struct object {
 	int refs;
@@ -36,6 +37,7 @@ typedef struct object {
 				struct object *lisp;
 			} rep;
 		} func;
+		FILE *fs;
 		char *sym;
 		long i;
 		double d;
