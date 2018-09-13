@@ -340,11 +340,12 @@ obj_t *aget(obj_t *a,obj_t *n)
 	type_err|=!type_check(n,INTEGER,"AGET, index: ");
 	if (type_err)
 		return error;
-	if (n->data.i>=a->data.arr.size) {
+	int i=n->data.i;
+	if (i<0||i>=a->data.arr.size) {
 		fputs("AGET: Out of bounds\n",stderr);
 		return error;
 	}
-	return a->data.arr.mem[n->data.i];
+	return a->data.arr.mem[i];
 }
 STACK(aget,2)
 obj_t *aset(obj_t *a,obj_t *n,obj_t *o)
@@ -354,12 +355,13 @@ obj_t *aset(obj_t *a,obj_t *n,obj_t *o)
 	type_err|=!type_check(n,INTEGER,"ASET, index: ");
 	if (type_err)
 		return error;
-	if (n->data.i>=a->data.arr.size) {
+	int i=n->data.i;
+	if (i<0||i>=a->data.arr.size) {
 		fputs("ASET: Out of bounds\n",stderr);
 		return error;
 	}
-	decr_refs(a->data.arr.mem[n->data.i]);
-	a->data.arr.mem[n->data.i]=incr_refs(o);
+	decr_refs(a->data.arr.mem[i]);
+	a->data.arr.mem[i]=incr_refs(o);
 	return o;
 }
 STACK(aset,3)
