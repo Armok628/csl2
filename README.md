@@ -39,6 +39,9 @@ except for `PRINT`, which is not typically a special form.
 For convenience, variables `\t` and `\n` have been added,
 which are bound to a symbol containing only their escape characters from C.
 
+Another such standard variable, `ERROR`, is bound to the error object,
+which is normally returned when a nonfatal error has occurred.
+
 #### Inspiration from Tcl
 Some features of this language are heavily inspired by Tcl.
 
