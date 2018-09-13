@@ -141,7 +141,7 @@ static clock_t last_tick=-1;
 obj_t *tick(void)
 {
 	last_tick=clock();
-	if (last_tick==-1)
+	if (last_tick==(clock_t)-1)
 		return NULL;
 	return T;
 }
@@ -149,7 +149,7 @@ STACK(tick,0)
 obj_t *tock(void)
 {
 	clock_t now=clock();
-	if (now==-1)
+	if (now==(clock_t)-1)
 		return NULL;
 	return new_double((now-last_tick)/(double)CLOCKS_PER_SEC);
 }
@@ -406,6 +406,21 @@ obj_t *assign(obj_t *list,obj_t *vars)
 	return list;
 }
 STACK(assign,2)
+#ifdef linux
+#include <termios.h>
+obj_t *key(void)
+{
+	struct termios term;
+	tcgetattr(0,&term);
+	term.c_lflag&=~(ICANON|ECHO);
+	tcsetattr(0,TCSANOW,&term);
+	obj_t *o=new_integer(fgetc(stdin));
+	term.c_lflag|=(ICANON|ECHO);
+	tcsetattr(0,TCSANOW,&term);
+	return o;
+}
+STACK(key,0)
+#endif
 void init_core(void)
 {
 	INIT(ARRAY,array)
@@ -448,4 +463,7 @@ void init_core(void)
 	INIT(TYPEOF,l_typeof)
 	INIT(UNSET,unset)
 	INIT(UPLEVEL,uplevel)
+#ifdef linux
+	INIT(KEY,key)
+#endif
 }
