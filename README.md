@@ -130,6 +130,8 @@ See example.h, arith.h, and lmath.h as examples. See core.h for info about the i
 
 1. Write the C function. It must take only object pointers (or void) and return an object pointer.
    * The C function must follow the memory management guidelines below to ensure memory safety.
+   * The C function is expected to `return error` if a nonfatal error has occurred,
+   or to report the error to `stderr` and `exit(1)` if the error is necessarily fatal.
 2. Use the `STACK(cname,argc)` macro after the function definition to generate a stack-based function.
 3. Use the `INIT(lispname,cname)` macro in the init function to make the function available.
 
