@@ -59,7 +59,7 @@ obj_t *new_symbol(char *str)
 { // Returns identical symbol object if one already exists
 	obj_t *o=lookup(obtable,str);
 	// ^ Symbol table initialized by main
-	if (o)
+	if (o!=(void *)-1)
 		return o;
 	o=new_object();
 	o->type=SYMBOL;

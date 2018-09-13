@@ -36,8 +36,12 @@ void drop_namespace(void)
 obj_t *get_binding(char *str)
 {
 	obj_t *l=lookup(namespaces[level],str);
-	if (!l)
+	if (l==(void *)-1)
 		l=lookup(dict,str);
+	if (l==(void *)-1) {
+		fprintf(stderr,"get_binding: Variable %s is unbound\n",str);
+		return error;
+	}
 	return l;
 }
 void set_binding(char *str,obj_t *val)
