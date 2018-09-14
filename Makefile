@@ -1,7 +1,7 @@
 CC=clang
 CFLAGS=-O3 -std=gnu99 -Wall -Wextra -Wpedantic
 
-a.out: src/hash* src/* main.c
+a.*: src/hash* src/* main.c
 	$(CC) $(CFLAGS) -lm *.c src/*.c
 
 debug: src/hash* src/* main.c
@@ -19,8 +19,8 @@ update:
 	git pull
 	make
 
-install: a.out
-	sudo ln -sf `pwd`/a.out /usr/local/bin/ispl
+install: a.*
+	sudo ln -sf `pwd`/a.* /usr/local/bin/ispl
 
 uninstall:
 	sudo rm -f /usr/local/bin/ispl
