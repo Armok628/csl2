@@ -1,10 +1,10 @@
 CC=clang
 CFLAGS=-O3 -std=gnu99 -Wall -Wextra -Wpedantic
 
-a.out: src/hash*
+a.out: src/hash* src/* main.c
 	$(CC) $(CFLAGS) -lm *.c src/*.c
 
-debug: src/hash*
+debug: src/hash* src/* main.c
 	$(CC) -g -lm *.c src/*.c
 
 src/hash*:
