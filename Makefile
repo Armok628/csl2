@@ -8,9 +8,8 @@ debug: src/hash*
 	$(CC) -g -lm *.c src/*.c
 
 src/hash*:
-	git clone https://github.com/Armok628/semstable
-	cp semstable/src/hash* src/
-	rm -rf semstable
+	curl https://raw.githubusercontent.com/Armok628/semstable/master/src/hash.c > src/hash.c
+	curl https://raw.githubusercontent.com/Armok628/semstable/master/src/hash.h > src/hash.h
 
 clean:
 	rm -f a.* src/hash*
