@@ -30,4 +30,8 @@
 				     (for '(set 'i 0) '(< i n) '(set 'i (+ i 1))
 					  '(progn (aset a i (car l)) (set 'l (cdr l))))
 				     a)))
+  (set 'acopy (lambda '(a) '(progn (set 'n (length a)) (set 'b (array n))
+				   (for '(set 'i 0) '(< i n) '(set 'i (+ i 1))
+					'(aset b i (aget a i)))
+				   b)))
   t)
