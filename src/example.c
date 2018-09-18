@@ -22,10 +22,10 @@ STACK(source,1)
 // ^ Generate a stack-based function with 1 argument that uses the function above
 obj_t *incr(obj_t *var)
 {
-	if (!type_check(var,SYMBOL,"INCR, variable: "))
+	if (!type_check(var,SYMBOL,"++, variable: "))
 		return error;
 	obj_t *o=incr_refs(get_binding(var->data.sym));
-	if (!type_check(o,DOUBLE|INTEGER,"INCR, value: "))
+	if (!type_check(o,DOUBLE|INTEGER,"++, value: "))
 		return o;
 	obj_t *n;
 	switch (o->type) {
