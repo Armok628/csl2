@@ -99,6 +99,10 @@ Its source file, object.c, contains C functions only for direct use *inside the 
 As a result, they generally avoid returning object pointers in favor of ordinary C types.
 Such functions include those for memory management and type checking.
 
+The object data type is treated as if its contents are immutable, with the exception of the cell and array data types.
+For this reason, the built-in function `COPY` will not truly copy other data types,
+but will instead return its argument "verbatim" if it is not a cell or array.
+
 Built-in functions (such as those in core.c and arith.c)
 are intended only for direct use *inside the language environment.*
 As such, I have made a point of not declaring core functions in any headers.
