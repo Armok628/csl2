@@ -84,6 +84,37 @@ obj_t *l_float(obj_t *x)
 	return new_double(x->data.i);
 }
 STACK(l_float,1)
+obj_t *incr(obj_t *var,obj_t *amt)
+{
+	bool type_err=false;
+	type_err|=!type_check(var,SYMBOL,"+=, name: ");
+	type_err|=!type_check(amt,DOUBLE|INTEGER,"+=, increment: ");
+	if (type_err)
+		return error;
+	obj_t *o=incr_refs(get_binding(var->data.sym));
+	if (o==error) {
+		set_binding(var->data.sym,amt);
+		decr_refs(o);
+		return amt;
+	}
+	if (!type_check(o,DOUBLE|INTEGER,"+=, value: "))
+		return o;
+	obj_t *n;
+	if (o->type==DOUBLE)
+		if (amt->type==DOUBLE)
+			n=new_double(o->data.d+amt->data.d);
+		else
+			n=new_double(o->data.d+amt->data.i);
+	else
+		if (amt->type==DOUBLE)
+			n=new_double(o->data.i+amt->data.d);
+		else
+			n=new_integer(o->data.i+amt->data.i);
+	decr_refs(o);
+	set_binding(var->data.sym,n);
+	return n;
+}
+STACK(incr,2)
 void init_arith(void)
 {
 	srand(time(NULL));
@@ -102,4 +133,5 @@ void init_arith(void)
 	INIT(XOR,xor)
 	INIT(MOD,mod)
 	INIT(FLOAT,l_float)
+	INIT(+=,incr)
 }
