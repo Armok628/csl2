@@ -191,7 +191,15 @@ obj_t *copy_cell(obj_t *o)
 {
 	if (!o)
 		return NULL;
-	if (o->type==CELL)
-		return new_cell(copy_cell(CAR(o)),copy_cell(CDR(o)));
-	return o;
+	if (o->type!=CELL)
+		return o;
+	return new_cell(copy_cell(CAR(o)),copy_cell(CDR(o)));
+}
+obj_t *copy_array(obj_t *o)
+{
+	int n=o->data.arr.size;
+	obj_t *c=new_array(n);
+	for (int i=0;i<n;i++)
+		c->data.arr.mem[i]=incr_refs(o->data.arr.mem[i]);
+	return c;
 }

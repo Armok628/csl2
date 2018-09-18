@@ -77,17 +77,32 @@ obj_t *eq(obj_t *a,obj_t *b)
 STACK(eq,2)
 obj_t *copy(obj_t *obj)
 {
-	return copy_cell(obj);
-	// ^ Returns obj if obj->type!=CELL
+	switch (obj->type) {
+	case ARRAY:
+		return copy_array(obj);
+	case CELL:
+		return copy_cell(obj);
+	default:
+		// Other objects are never modified anyway.
+		// To actually copy them would be redundant.
+		return obj;
+	}
 }
 STACK(copy,1)
 obj_t *length(obj_t *coll)
 {
 	if (!type_check(coll,NIL|ARRAY|CELL,"LENGTH: "))
 		return error;
-	if (!coll||coll->type==CELL)
+	if (!coll)
+		return new_integer(0);
+	switch (coll->type) {
+	case ARRAY:
+		return new_integer(coll->data.arr.size);
+	case CELL:
 		return new_integer(list_length(coll));
-	return new_integer(coll->data.arr.size);
+	default: // Suppress warnings of unhandled cases
+		return NULL;
+	}
 }
 STACK(length,1)
 obj_t *lambda(obj_t *args,obj_t *body)

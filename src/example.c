@@ -20,8 +20,33 @@ obj_t *source(obj_t *filename)
 }
 STACK(source,1)
 // ^ Generate a stack-based function with 1 argument that uses the function above
+obj_t *incr(obj_t *var)
+{
+	if (!type_check(var,SYMBOL,"INCR, variable: "))
+		return error;
+	obj_t *o=incr_refs(get_binding(var->data.sym));
+	if (!type_check(o,DOUBLE|INTEGER,"INCR, value: "))
+		return o;
+	obj_t *n;
+	switch (o->type) {
+	case DOUBLE:
+		n=new_double(o->data.d+1);
+		break;
+	case INTEGER:
+		n=new_integer(o->data.i+1);
+		break;
+	default: // Silence warnings about unchecked cases
+		n=NULL;
+		break;
+	}
+	decr_refs(o);
+	set_binding(var->data.sym,n);
+	return n;
+}
+STACK(incr,1)
 void init_example(void)
 { // ^ Call this function from init_dict() in namespace.c
 	INIT(SOURCE,source);
+	INIT(++,incr);
 	// ^ Bind the SOURCE variable to the stack-based function
 }

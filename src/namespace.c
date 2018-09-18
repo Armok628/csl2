@@ -45,7 +45,7 @@ obj_t *get_binding(char *str)
 	return l;
 }
 void set_binding(char *str,obj_t *val)
-{
+{ // Does not handle previous value
 	insert(namespaces[level],str,incr_refs(val));
 }
 void unset_binding(char *str)

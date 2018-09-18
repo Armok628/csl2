@@ -59,4 +59,5 @@ void print_obj(obj_t *,FILE *);
 bool eq_objs(obj_t *,obj_t *);
 int list_length(obj_t *);
 obj_t *copy_cell(obj_t *);
+obj_t *copy_array(obj_t *);
 #endif
