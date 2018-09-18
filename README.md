@@ -46,7 +46,7 @@ which is normally returned when a nonfatal error has occurred.
 Some features of this language are heavily inspired by Tcl.
 
 Functions which act similarly to Tcl operations include
-`FOR`, `FOREACH`, `INSIDE` (`namespace eval`), `SET`, `UNSET`, `UPLEVEL`, `ASSIGN` (`lassign`), `ASET` (`lset`), and `AGET` (`lindex`).
+`+=`, `SOURCE`, `FOR`, `FOREACH`, `INSIDE` (`namespace eval`), `SET`, `UNSET`, `UPLEVEL`, `ASSIGN` (`lassign`), `ASET` (`lset`), and `AGET` (`lindex`).
 
 In fact, like Tcl, `FOR` and `FOREACH` compile their script arguments only once, but interpret them many times.
 

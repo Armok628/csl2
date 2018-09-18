@@ -20,33 +20,40 @@ obj_t *source(obj_t *filename)
 }
 STACK(source,1)
 // ^ Generate a stack-based function with 1 argument that uses the function above
-obj_t *incr(obj_t *var)
+obj_t *incr_by(obj_t *var,obj_t *amt)
 {
-	if (!type_check(var,SYMBOL,"++, variable: "))
+	bool type_err=false;
+	type_err|=!type_check(var,SYMBOL,"+=, name: ");
+	type_err|=!type_check(amt,DOUBLE|INTEGER,"+=, increment: ");
+	if (type_err)
 		return error;
 	obj_t *o=incr_refs(get_binding(var->data.sym));
-	if (!type_check(o,DOUBLE|INTEGER,"++, value: "))
+	if (o==error) {
+		set_binding(var->data.sym,amt);
+		decr_refs(o);
+		return amt;
+	}
+	if (!type_check(o,DOUBLE|INTEGER,"+=, value: "))
 		return o;
 	obj_t *n;
-	switch (o->type) {
-	case DOUBLE:
-		n=new_double(o->data.d+1);
-		break;
-	case INTEGER:
-		n=new_integer(o->data.i+1);
-		break;
-	default: // Silence warnings about unchecked cases
-		n=NULL;
-		break;
-	}
+	if (o->type==DOUBLE)
+		if (amt->type==DOUBLE)
+			n=new_double(o->data.d+amt->data.d);
+		else
+			n=new_double(o->data.d+amt->data.i);
+	else
+		if (amt->type==DOUBLE)
+			n=new_double(o->data.i+amt->data.d);
+		else
+			n=new_integer(o->data.i+amt->data.i);
 	decr_refs(o);
 	set_binding(var->data.sym,n);
 	return n;
 }
-STACK(incr,1)
+STACK(incr_by,2)
 void init_example(void)
 { // ^ Call this function from init_dict() in namespace.c
 	INIT(SOURCE,source);
-	INIT(++,incr);
+	INIT(+=,incr_by);
 	// ^ Bind the SOURCE variable to the stack-based function
 }
