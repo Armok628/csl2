@@ -343,9 +343,19 @@ obj_t *l_print_stack(void)
 STACK(l_print_stack,0)
 obj_t *array(obj_t *n)
 {
-	if (!type_check(n,INTEGER,"ARRAY: "))
+	if (!type_check(n,CELL|INTEGER,"ARRAY: "))
 		return error;
-	return new_array(n->data.i);
+	if (n->type==INTEGER)
+		return new_array(n->data.i);
+	else {
+		int s=list_length(n);
+		obj_t *a=new_array(s);
+		for (int i=0;i<s;i++) {
+			a->data.arr.mem[i]=incr_refs(CAR(n));
+			n=CDR(n);
+		}
+		return a;
+	}
 }
 STACK(array,1)
 obj_t *aget(obj_t *a,obj_t *n)
