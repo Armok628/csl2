@@ -70,6 +70,13 @@ obj_t *unset(obj_t *sym)
 	return NULL;
 }
 STACK(unset,1)
+obj_t *exists(obj_t *sym)
+{
+	if (!type_check(sym,SYMBOL,"EXISTS: "))
+		return error;
+	return is_bound(sym->data.sym)?T:NULL;
+}
+STACK(exists,1)
 obj_t *eq(obj_t *a,obj_t *b)
 {
 	return eq_objs(a,b)?T:NULL;
@@ -463,6 +470,7 @@ void init_core(void)
 	INIT(COPY,copy)
 	INIT(EQ,eq)
 	INIT(EVAL,eval)
+	INIT(EXISTS,exists)
 	INIT(EXIT,quit)
 	INIT(FOR,lfor)
 	INIT(FOREACH,foreach)

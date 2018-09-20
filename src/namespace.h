@@ -16,6 +16,7 @@ void init_dict(void);
 void push_namespace(table_t *);
 table_t *pop_namespace(void);
 void drop_namespace(void);
+bool is_bound(char *);
 obj_t *get_binding(char *);
 void set_binding(char *,obj_t *);
 void unset_binding(char *);

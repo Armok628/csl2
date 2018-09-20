@@ -33,6 +33,13 @@ void drop_namespace(void)
 {
 	free_table(namespaces[level--]);
 }
+bool is_bound(char *str)
+{
+	obj_t *l=lookup(namespaces[level],str);
+	if (l==(void *)-1)
+		l=lookup(dict,str);
+	return l!=(void *)-1;
+}
 obj_t *get_binding(char *str)
 {
 	obj_t *l=lookup(namespaces[level],str);
@@ -45,7 +52,7 @@ obj_t *get_binding(char *str)
 	return l;
 }
 void set_binding(char *str,obj_t *val)
-{ // Does not handle previous value
+{
 	insert(namespaces[level],str,incr_refs(val));
 }
 void unset_binding(char *str)
