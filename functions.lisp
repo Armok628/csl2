@@ -26,7 +26,7 @@
   (set 'while (lambda '(c b) '(uplevel 1 `(for nil (quote ,c) nil (quote ,b)))))
   (set 'do (lambda '(b while c) '(uplevel 1 `(progn ,b (,while (quote ,c) (quote ,b))))))
   (set 'lrepeat (lambda '(n x) '(progn (set 'l nil)
-				       (for nil '(> n 0) '(set 'n (- n 1))
+				       (for nil '(> n 0) '(+= 'n -1)
 					    '(set 'l (cons x l)))
 				       l)))
   t)
