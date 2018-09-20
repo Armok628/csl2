@@ -298,7 +298,7 @@ obj_t *load(obj_t *file)
 	if (!type_check(file,SYMBOL,"LOAD: "))
 		return error;
 	obj_t *r=load_file(file->data.sym);
-	return r?r:new_object();
+	return r?r:error;
 }
 STACK(load,1)
 obj_t *namespace(void)
