@@ -6,6 +6,7 @@
 #include "arith.h"
 #include "core.h"
 #include "lmath.h"
+#include "libvar.h"
 #include "example.h" // This file contains an example
 #define NAMESPACE_SIZE 100
 #define LOCAL_NAMESPACE_SIZE 1
