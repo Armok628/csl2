@@ -9,10 +9,10 @@ debug: src/hash* src/libfilename.h src/* main.c
 	$(CC) -g -lm *.c src/*.c
 
 src/libfilename.h:
-ifdef $(LIBFILE)
-	echo "#define LIBRARY_FILE \"$(LIBFILE)\"" > src/libfilename.h
-else
+ifeq ($(strip $(LIBFILE)),)
 	echo "" > src/libfilename.h
+else
+	echo "#define LIBRARY_FILE \"$(LIBFILE)\"" > src/libfilename.h
 endif
 
 src/hash*:
