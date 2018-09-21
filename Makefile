@@ -2,10 +2,10 @@ CC=clang
 CFLAGS=-O3 -std=gnu99 -Wall -Wextra -Wpedantic
 LIBFILE=`pwd`/functions.lisp
 
-a.*: src/hash* src/* main.c src/libfilename.h
+a.*: src/hash* src/libfilename.h src/* main.c 
 	$(CC) $(CFLAGS) -lm *.c src/*.c
 
-debug: src/hash* src/* main.c
+debug: src/hash* src/libfilename.h src/* main.c
 	$(CC) -g -lm *.c src/*.c
 
 src/libfilename.h:
