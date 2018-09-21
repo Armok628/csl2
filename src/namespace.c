@@ -11,11 +11,14 @@ void init_dict(void)
 	insert(dict,"DICTIONARY",incr_refs(new_namespace(dict)));
 	insert(dict,"T",incr_refs(T));
 	insert(dict,"\\n",incr_refs(&newline_sym));
+	insert(dict,"\\\"",incr_refs(&quotation_sym));
 	insert(dict,"\\t",incr_refs(&tab_sym));
-	insert(dict,"LIB",incr_refs(&libvar));
 	insert(dict,"STDOUT",incr_refs(new_filestream(stdout)));
 	insert(dict,"STDERR",incr_refs(new_filestream(stderr)));
 	insert(dict,"ERROR",incr_refs(error));
+#ifdef LIBRARY_FILE
+	insert(dict,"LIB",incr_refs(&libvar));
+#endif
 	// Calls to init functions go here:
 	init_core();
 	init_arith();

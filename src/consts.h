@@ -22,6 +22,7 @@ extern obj_t t_sym;
 #define T &t_sym
 // Normally-escaped symbols
 extern obj_t newline_sym;
+extern obj_t quotation_sym;
 extern obj_t tab_sym;
 // Type Symbols
 extern obj_t array_sym;

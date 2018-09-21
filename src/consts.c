@@ -28,6 +28,7 @@ SYM_CONST(quote_sym,"QUOTE")
 SYM_CONST(t_sym,"T")
 // C escape characters
 SYM_CONST(newline_sym,"\n")
+SYM_CONST(quotation_sym,"\"")
 SYM_CONST(tab_sym,"\t")
 // Type Symbols
 SYM_CONST(array_sym,"ARRAY")
