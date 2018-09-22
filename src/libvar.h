@@ -1,8 +1,7 @@
 #ifndef LIBVAR_H
 #define LIBVAR_H
 #include "object.h"
-#include "libfilename.h"
-#ifdef LIBRARY_FILE
+#ifdef LIBFILE
 extern obj_t libvar;
 #endif
 #endif

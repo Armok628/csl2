@@ -16,7 +16,7 @@ void init_dict(void)
 	insert(dict,"STDOUT",incr_refs(new_filestream(stdout)));
 	insert(dict,"STDERR",incr_refs(new_filestream(stderr)));
 	insert(dict,"ERROR",incr_refs(error));
-#ifdef LIBRARY_FILE
+#ifdef LIBFILE
 	insert(dict,"LIB",incr_refs(&libvar));
 #endif
 	// Calls to init functions go here:

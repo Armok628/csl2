@@ -1,8 +1,8 @@
 #include "libvar.h"
-#ifdef LIBRARY_FILE
+#ifdef LIBFILE
 obj_t libvar={
 	.type=SYMBOL,
-	.data={.sym=LIBRARY_FILE},
+	.data={.sym=LIBFILE},
 	.refs=1,
 };
 #endif
