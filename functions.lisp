@@ -9,7 +9,7 @@
 				   ((eq (car o) 'd) (recurse (cdr o) (cdr l)))
 				   (t (recurse (cdr o) l)))))
   (set 'nth (lambda '(n l) '(if (> n 0) (recurse (- n 1) (cdr l)) (car l))))
-  (set 'apply (lambda '(f l) '(uplevel 1 `(,f @l))))
+  (set 'randelt (lambda '(l) '(nth (random (length l)) l)))
   (set 'zip (lambda '(a b) '(if (or (null a) (null b)) nil
 			      (cons (cons (car a) (car b)) (recurse (cdr a) (cdr b))))))
   (set 'flatten (lambda '(l) '(cond ((null l) nil)
