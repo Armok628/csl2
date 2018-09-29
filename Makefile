@@ -22,7 +22,7 @@ update:
 	make
 
 install: a.*
-	sudo ln -sf `pwd`/a.* /usr/local/bin/ispl
+	ln -sf `pwd`/a.* /usr/local/bin/ispl
 
 uninstall:
-	sudo rm -f /usr/local/bin/ispl
+	rm -f /usr/local/bin/ispl
