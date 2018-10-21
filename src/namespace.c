@@ -1,4 +1,11 @@
 #include "namespace.h"
+#ifdef LIBFILE
+obj_t lib={
+	.type=SYMBOL,
+	.refs=1,
+	.data={.sym=LIBFILE},
+};
+#endif
 table_t *dict=NULL;
 table_t *namespaces[STACK_SIZE];
 int level=-1; // Last filled slot
@@ -17,7 +24,7 @@ void init_dict(void)
 	insert(dict,"STDERR",incr_refs(new_filestream(stderr)));
 	insert(dict,"ERROR",incr_refs(error));
 #ifdef LIBFILE
-	insert(dict,"LIB",incr_refs(&libvar));
+	insert(dict,"LIB",incr_refs(&lib));
 #endif
 	// Calls to init functions go here:
 	init_core();
