@@ -10,7 +10,8 @@
 				   ((eq (car o) 'a) (recurse (cdr o) (car l)))
 				   ((eq (car o) 'd) (recurse (cdr o) (cdr l)))
 				   (t (recurse (cdr o) l)))))
-  (set 'nth (lambda '(n l) '(if (> n 0) (recurse (- n 1) (cdr l)) (car l))))
+  (set 'nthcdr (lambda '(n l) '(if (> n 0) (recurse (- n 1) (cdr l)) l)))
+  (set 'nth (lambda '(n l) '(car (nthcdr n l))))
   (set 'randelt (lambda '(l) '(nth (random (length l)) l)))
   (set 'zip (lambda '(a b) '(if (or (null a) (null b)) nil
 			      (cons (cons (car a) (car b)) (recurse (cdr a) (cdr b))))))
