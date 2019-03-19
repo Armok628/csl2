@@ -40,4 +40,5 @@
 				     ((f (cdr l)) '(d))
 				     ((set 'y (recurse f (car l))) (cons 'a y))
 				     ((set 'y (recurse f (cdr l))) (cons 'd y)))))
+  (set '++ (lambda '(s) '(uplevel 1 `(set (quote ,s) (+ ,s 1)))))
   t)

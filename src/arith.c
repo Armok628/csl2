@@ -9,8 +9,12 @@ obj_t *l_random(obj_t *n)
 		return error;
 	switch (n->type) {
 	case INTEGER:
+		if (n->data.i<=0)
+			return error;
 		return new_integer(rand()%n->data.i);
 	case DOUBLE:
+		if (n->data.d<=0.0)
+			return error;
 		return new_double((rand()/(double)RAND_MAX)*n->data.d);
 	default:
 		return NULL;
